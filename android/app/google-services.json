@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "519997951805",
+    "firebase_url": "https://virtualsongbook.firebaseio.com",
+    "project_id": "virtualsongbook",
+    "storage_bucket": "virtualsongbook.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:519997951805:android:74cc65230acfb8ea6abf54",
+        "android_client_info": {
+          "package_name": "com.jackson_siro.visongbook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "519997951805-4i378rar27qqa23vmotaoj0adot2vr1p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jackson_siro.visongbook",
+            "certificate_hash": "3559f8c57f3f886d376fdc060921b901b16a4e82"
+          }
+        },
+        {
+          "client_id": "519997951805-l8ap28i0do1cdqmrprms3ab3ag15conn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxQ87qYngIKviv9whig08nZxr5zG4phzU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "519997951805-l8ap28i0do1cdqmrprms3ab3ag15conn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
