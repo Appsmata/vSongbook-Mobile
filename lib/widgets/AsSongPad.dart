@@ -56,7 +56,6 @@ class AsSongPadState extends State<AsSongPad> {
             padding: const EdgeInsets.symmetric(horizontal: 10),
             margin: EdgeInsets.only(top: 60),
             child: ListView.builder(
-              physics: BouncingScrollPhysics(),
               itemCount: songs.length,
               itemBuilder: songListView,
             ),

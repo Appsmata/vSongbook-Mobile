@@ -61,7 +61,6 @@ class AsFavoritesState extends State<AsFavorites> {
             margin: EdgeInsets.only(top: 60),
 
             child: ListView.builder(
-              physics: BouncingScrollPhysics(),
               itemCount: songs.length,
               itemBuilder: songListView,
             ),

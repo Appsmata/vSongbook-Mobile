@@ -127,12 +127,22 @@ class EeSongViewState extends State<EeSongView> {
 
   Widget songViewer() {
     return VerticalTabs(
-        tabsWidth: 50,
+        tabsWidth: 75,
         contentScrollAxis: Axis.vertical,
         tabs: List<Tab>.generate(
           verseInfos.length,
           (int index) {
-            return new Tab(text: verseInfos[index]);
+            return new Tab(
+              child: Center(
+                child: Text(
+                  verseInfos[index], 
+                  style: new TextStyle(
+                    fontSize: 35, 
+                    fontWeight: FontWeight.bold
+                  )
+                ),
+              ),
+            );
           },
         ),
         contents: List<Widget>.generate(
@@ -302,7 +312,7 @@ class EeSongViewState extends State<EeSongView> {
           "\n\n" +
           songContent +
           "\n\nvia #vSongBook " +
-          "https://appsmata.com/vsongbook",
+          "https://Appsmata.com/vSongBook",
       subject: "Share the song: " + songTitle,
     );
   }

@@ -5,6 +5,9 @@ import 'package:vsongbook/models/SongModel.dart';
 import 'package:vsongbook/helpers/SqliteHelper.dart';
 import 'package:vsongbook/screens/EeSongView.dart';
 //import 'package:vsongbook/utils/Preferences.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html/html_parser.dart';
+import 'package:flutter_html/style.dart';
 import 'package:vsongbook/utils/constants.dart';
 import 'package:vsongbook/widgets/AsProgressWidget.dart';
 import 'package:vsongbook/widgets/AsTextView.dart';
@@ -80,7 +83,6 @@ class AsSearchSongsState extends State<AsSearchSongs> {
             padding: const EdgeInsets.symmetric(horizontal: 5),
             margin: EdgeInsets.only(top: 150),
             child: ListView.builder(
-              physics: BouncingScrollPhysics(),
               itemCount: songs.length,
               itemBuilder: songListView,
             ),
@@ -100,6 +102,7 @@ class AsSearchSongsState extends State<AsSearchSongs> {
         ),
         decoration: InputDecoration(
             prefixIcon: Icon(Icons.search),
+            suffixIcon: Icon(Icons.clear),
             hintText: Texts.SearchNow,
             hintStyle: TextStyle(fontSize: 18)),
         onChanged: (value) {
@@ -159,38 +162,47 @@ class AsSearchSongsState extends State<AsSearchSongs> {
 
   Widget songListView(BuildContext context, int index) {
     int category = songs[index].bookid;
-    String songbook = "";
-    String songTitle = songs[index].title;
+    String songBook = "Songs of Worship";
+    String songTitle = songs[index].number.toString() + ". " + songs[index].title;
+    String strContent = '<h2>' + songTitle + '</h2>';
 
     var verses = songs[index].content.split("\\n\\n");
     var songConts = songs[index].content.split("\\n");
-    String songContent = songConts[0] + ' ' + songConts[1] + " ...";
+    strContent = strContent + songConts[0] + ' ' + songConts[1] + " ... <br><small><i>";
 
     try {
       BookModel curbook = books.firstWhere((i) => i.categoryid == category);
-      songContent = songContent + "\n" + curbook.title + "; ";
-      songbook = curbook.title;
+      strContent = strContent + "\n" + curbook.title + "; ";
+      songBook = curbook.title;
     } catch (Exception) {
-      songContent = songContent + "\n";
+      strContent = strContent + "\n";
     }
 
     if (songs[index].content.contains("CHORUS")) {
-      songContent = songContent + Texts.HasChorus;
-      songContent = songContent + verses.length.toString() + Texts.Verses;
+      strContent = strContent + Texts.HasChorus;
+      strContent = strContent + verses.length.toString() + Texts.Verses;
     } else {
-      songContent = songContent + Texts.NoChorus;
-      songContent = songContent + verses.length.toString() + Texts.Verses;
+      strContent = strContent + Texts.NoChorus;
+      strContent = strContent + verses.length.toString() + Texts.Verses;
     }
 
     return Card(
       elevation: 2,
-      child: ListTile(
-        title: Text(songTitle,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-        subtitle: Text(songContent, style: TextStyle(fontSize: 18)),
+      child: GestureDetector(
+        child: Html(
+                data: strContent + '</i></small>',
+                style: {
+                  "html": Style(
+                    fontSize: FontSize(20.0),
+                  ),
+                  "ul": Style(
+                    fontSize: FontSize(18.0),
+                  ),
+                },
+              ),
         onTap: () {
           navigateToSong(songs[index], songTitle,
-              "Song #" + songs[index].number.toString() + " - " + songbook);
+              "Song #" + songs[index].number.toString() + " - " + songBook);
         },
       ),
     );
