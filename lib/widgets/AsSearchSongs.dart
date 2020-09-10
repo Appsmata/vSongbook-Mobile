@@ -8,7 +8,7 @@ import 'package:vsongbook/screens/EeSongView.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/html_parser.dart';
 import 'package:flutter_html/style.dart';
-import 'package:vsongbook/utils/constants.dart';
+import 'package:vsongbook/utils/Constants.dart';
 import 'package:vsongbook/widgets/AsProgressWidget.dart';
 import 'package:vsongbook/widgets/AsTextView.dart';
 
@@ -84,7 +84,7 @@ class AsSearchSongsState extends State<AsSearchSongs> {
             margin: EdgeInsets.only(top: 150),
             child: ListView.builder(
               itemCount: songs.length,
-              itemBuilder: songListView,
+              itemBuilder: listView,
             ),
           ),
         ],
@@ -160,15 +160,17 @@ class AsSearchSongsState extends State<AsSearchSongs> {
     );
   }
 
-  Widget songListView(BuildContext context, int index) {
+  Widget listView(BuildContext context, int index) {
     int category = songs[index].bookid;
     String songBook = "Songs of Worship";
-    String songTitle = songs[index].number.toString() + ". " + songs[index].title;
+    String songTitle =
+        songs[index].number.toString() + ". " + songs[index].title;
     String strContent = '<h2>' + songTitle + '</h2>';
 
     var verses = songs[index].content.split("\\n\\n");
     var songConts = songs[index].content.split("\\n");
-    strContent = strContent + songConts[0] + ' ' + songConts[1] + " ... <br><small><i>";
+    strContent =
+        strContent + songConts[0] + ' ' + songConts[1] + " ... <br><small><i>";
 
     try {
       BookModel curbook = books.firstWhere((i) => i.categoryid == category);
@@ -190,16 +192,16 @@ class AsSearchSongsState extends State<AsSearchSongs> {
       elevation: 2,
       child: GestureDetector(
         child: Html(
-                data: strContent + '</i></small>',
-                style: {
-                  "html": Style(
-                    fontSize: FontSize(20.0),
-                  ),
-                  "ul": Style(
-                    fontSize: FontSize(18.0),
-                  ),
-                },
-              ),
+          data: strContent + '</i></small>',
+          style: {
+            "html": Style(
+              fontSize: FontSize(20.0),
+            ),
+            "ul": Style(
+              fontSize: FontSize(18.0),
+            ),
+          },
+        ),
         onTap: () {
           navigateToSong(songs[index], songTitle,
               "Song #" + songs[index].number.toString() + " - " + songBook);

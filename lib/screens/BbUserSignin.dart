@@ -7,7 +7,7 @@ import 'package:vsongbook/models/base/EventObject.dart';
 import 'package:vsongbook/screens/AppStart.dart';
 import 'package:vsongbook/screens/BbUserSignup.dart';
 import 'package:vsongbook/utils/Preferences.dart';
-import 'package:vsongbook/utils/constants.dart';
+import 'package:vsongbook/utils/Constants.dart';
 
 class BbUserSignin extends StatefulWidget {
   @override
@@ -16,10 +16,11 @@ class BbUserSignin extends StatefulWidget {
 
 class BbUserSigninState extends State<BbUserSignin> {
   final globalKey = new GlobalKey<ScaffoldState>();
-  AsProgressDialog progressDialog = AsProgressDialog.getAsProgressDialog(AsProgressDialogTitles.User_Signin);
+  AsProgressDialog progressDialog =
+      AsProgressDialog.getAsProgressDialog(AsProgressDialogTitles.User_Signin);
   TextEditingController phoneController = new TextEditingController(text: "");
   TextStyle textStyle;
-  Country userCountry = new Country(    
+  Country userCountry = new Country(
     asset: "assets/flags/ke_flag.png",
     dialingCode: "254",
     isoCode: "KE",
@@ -30,11 +31,11 @@ class BbUserSigninState extends State<BbUserSignin> {
 
   @override
   Widget build(BuildContext context) {
-		textStyle = Theme.of(context).textTheme.title;
+    textStyle = Theme.of(context).textTheme.title;
 
     return Scaffold(
       key: globalKey,
-      appBar: AppBar( 
+      appBar: AppBar(
         title: Text('Welcome to vSongBook'),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.check), onPressed: _signinButtonAction)
@@ -44,11 +45,12 @@ class BbUserSigninState extends State<BbUserSignin> {
         child: Container(
           constraints: BoxConstraints.expand(),
           decoration: BoxDecoration(
-            image: DecorationImage( image: new AssetImage("assets/images/bg.jpg"), fit: BoxFit.cover )
-          ),
+              image: DecorationImage(
+                  image: new AssetImage("assets/images/bg.jpg"),
+                  fit: BoxFit.cover)),
           child: new Stack(
             children: <Widget>[
-              _formContainer(), 
+              _formContainer(),
               progressDialog,
             ],
           ),
@@ -58,7 +60,7 @@ class BbUserSigninState extends State<BbUserSignin> {
         onPressed: _signinButtonAction,
         tooltip: 'Proceed',
         child: Icon(Icons.check),
-      ), 
+      ),
     );
   }
 
@@ -73,75 +75,71 @@ class BbUserSigninState extends State<BbUserSignin> {
       ),
       child: new Form(
           child: new Theme(
-            data: new ThemeData(primarySwatch: Colors.orange),
-              child: new Column(
-                children: <Widget>[
-                  _signinFormContainer(),
-                  _signinButtonContainer(),
-                ],
-            ),
-          )
+        data: new ThemeData(primarySwatch: Colors.orange),
+        child: new Column(
+          children: <Widget>[
+            _signinFormContainer(),
+            _signinButtonContainer(),
+          ],
         ),
+      )),
       margin: EdgeInsets.only(top: 20, left: 25, right: 25),
     );
   }
 
   Widget _signinFormContainer() {
     return new Container(
-        child:
-          new Column(
-            children: <Widget>[
-              new Padding(
-                padding: new EdgeInsets.all(10),
-                child: new Center(
-                  child: CountryPicker(
-                    showDialingCode: true,
-                    selectedCountry: userCountry,
-                    onChanged: (Country country) { setState(() { userCountry = country; }); },
-                  ),
-                ),
+      child: new Column(
+        children: <Widget>[
+          new Padding(
+            padding: new EdgeInsets.all(10),
+            child: new Center(
+              child: CountryPicker(
+                showDialingCode: true,
+                selectedCountry: userCountry,
+                onChanged: (Country country) {
+                  setState(() {
+                    userCountry = country;
+                  });
+                },
               ),
-              
-              new Center(
-                child: new TextFormField(
+            ),
+          ),
+          new Center(
+            child: new TextFormField(
                 controller: phoneController,
                 decoration: InputDecoration(
-                  labelText: Texts.Mobile,
-                  labelStyle: TextStyle(fontSize: 22),
-                  border: OutlineInputBorder( borderRadius: BorderRadius.circular(5) )
-                ),
-                keyboardType: TextInputType.phone
-                ),
-              ),
-
-            ],
+                    labelText: Texts.Mobile,
+                    labelStyle: TextStyle(fontSize: 22),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5))),
+                keyboardType: TextInputType.phone),
           ),
-          padding: const EdgeInsets.all(0),
-          alignment: Alignment.center,
-      );
+        ],
+      ),
+      padding: const EdgeInsets.all(0),
+      alignment: Alignment.center,
+    );
   }
 
   Widget _signinButtonContainer() {
     return new Padding(
-      padding: new EdgeInsets.all(25),
-      child: new Container(
-        width: double.infinity,
-        decoration: new BoxDecoration(
-          color: Colors.deepOrange,
-          borderRadius: BorderRadius.circular(5)
-        ),
-        child: new MaterialButton(
-          textColor: Colors.white,
-          padding: EdgeInsets.all(15),
-          onPressed: _signinButtonAction,
-          child: new Text(
-            Texts.Proceed,
-            style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        padding: new EdgeInsets.all(25),
+        child: new Container(
+          width: double.infinity,
+          decoration: new BoxDecoration(
+              color: Colors.deepOrange, borderRadius: BorderRadius.circular(5)),
+          child: new MaterialButton(
+            textColor: Colors.white,
+            padding: EdgeInsets.all(15),
+            onPressed: _signinButtonAction,
+            child: new Text(
+              Texts.Proceed,
+              style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
           ),
-        ),
-        margin: EdgeInsets.only(bottom: 30),
-        )
-      );
+          margin: EdgeInsets.only(bottom: 30),
+        ));
   }
 
   void _signinButtonAction() {
@@ -153,8 +151,9 @@ class BbUserSigninState extends State<BbUserSignin> {
     }
     int mobile = int.parse(phoneController.text);
     String mobileno = userCountry.dialingCode + mobile.toString();
-    
-    Preferences.setCountryPhone(userCountry.name, userCountry.isoCode, userCountry.dialingCode, mobileno);
+
+    Preferences.setCountryPhone(userCountry.name, userCountry.isoCode,
+        userCountry.dialingCode, mobileno);
     FocusScope.of(context).requestFocus(new FocusNode());
     progressDialog.showProgress();
 
@@ -170,7 +169,8 @@ class BbUserSigninState extends State<BbUserSignin> {
           setState(() {
             Preferences.setUserLoggedIn(true);
             Preferences.setUserProfile(eventObject.object);
-            globalKey.currentState.showSnackBar(new SnackBar(content: new Text(SnackBarText.Signin_Successful)));
+            globalKey.currentState.showSnackBar(new SnackBar(
+                content: new Text(SnackBarText.Signin_Successful)));
             progressDialog.hideProgress();
             _goToHomeScreen();
           });
@@ -199,7 +199,7 @@ class BbUserSigninState extends State<BbUserSignin> {
           });
         }
         break;
-      
+
       case EventConstants.No_Internet_Connection:
         {
           setState(() {
@@ -210,16 +210,16 @@ class BbUserSigninState extends State<BbUserSignin> {
           });
         }
         break;
-        
     }
   }
 
   void _goToHomeScreen() {
-    Navigator.pushReplacement( context, new MaterialPageRoute(builder: (context) => new AppStart()));
+    Navigator.pushReplacement(
+        context, new MaterialPageRoute(builder: (context) => new AppStart()));
   }
 
   void _goToSignupScreen() {
-    Navigator.pushReplacement( context, new MaterialPageRoute(builder: (context) => new BbUserSignup()));
+    Navigator.pushReplacement(context,
+        new MaterialPageRoute(builder: (context) => new BbUserSignup()));
   }
-
 }
