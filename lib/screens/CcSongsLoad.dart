@@ -36,7 +36,7 @@ class CcSongsLoadState extends State<CcSongsLoad> {
       case EventConstants.Request_Successful:
         {
           setState(() {
-            //globalKey.currentState.showSnackBar(new SnackBar(content: new Text(SnackBarText.Request_Successful)));
+            //globalKey.currentState.showSnackBar(new SnackBar(content: new Text(LangStrings.Request_Successful)));
             //progressDialog.hideProgress();
             songs = eventObject.object;
             _goToNextScreen();
@@ -47,7 +47,7 @@ class CcSongsLoadState extends State<CcSongsLoad> {
       case EventConstants.Request_Unsuccessful:
         {
           setState(() {
-            //globalKey.currentState.showSnackBar(new SnackBar(content: new Text(SnackBarText.Request_Unsuccessful)));
+            //globalKey.currentState.showSnackBar(new SnackBar(content: new Text(LangStrings.Request_Unsuccessful)));
             //progressDialog.hideProgress();
           });
         }
@@ -56,7 +56,7 @@ class CcSongsLoadState extends State<CcSongsLoad> {
       case EventConstants.No_Internet_Connection:
         {
           setState(() {
-            //globalKey.currentState.showSnackBar(new SnackBar(content: new Text(SnackBarText.No_Internet_Connection)));
+            //globalKey.currentState.showSnackBar(new SnackBar(content: new Text(LangStrings.No_Internet_Connection)));
             //progressDialog.hideProgress();
           });
         }

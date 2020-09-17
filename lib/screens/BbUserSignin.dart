@@ -17,7 +17,7 @@ class BbUserSignin extends StatefulWidget {
 class BbUserSigninState extends State<BbUserSignin> {
   final globalKey = new GlobalKey<ScaffoldState>();
   AsProgressDialog progressDialog =
-      AsProgressDialog.getAsProgressDialog(AsProgressDialogTitles.User_Signin);
+      AsProgressDialog.getAsProgressDialog(LangStrings.User_Signin);
   TextEditingController phoneController = new TextEditingController(text: "");
   TextStyle textStyle;
   Country userCountry = new Country(
@@ -109,7 +109,7 @@ class BbUserSigninState extends State<BbUserSignin> {
             child: new TextFormField(
                 controller: phoneController,
                 decoration: InputDecoration(
-                    labelText: Texts.Mobile,
+                    labelText: LangStrings.Mobile,
                     labelStyle: TextStyle(fontSize: 22),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5))),
@@ -134,7 +134,7 @@ class BbUserSigninState extends State<BbUserSignin> {
             padding: EdgeInsets.all(15),
             onPressed: _signinButtonAction,
             child: new Text(
-              Texts.Proceed,
+              LangStrings.Proceed,
               style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
           ),
@@ -145,7 +145,7 @@ class BbUserSigninState extends State<BbUserSignin> {
   void _signinButtonAction() {
     if (phoneController.text.length < 9) {
       globalKey.currentState.showSnackBar(new SnackBar(
-        content: new Text(SnackBarText.Enter_Phone),
+        content: new Text(LangStrings.Enter_Phone),
       ));
       return;
     }
@@ -169,8 +169,8 @@ class BbUserSigninState extends State<BbUserSignin> {
           setState(() {
             Preferences.setUserLoggedIn(true);
             Preferences.setUserProfile(eventObject.object);
-            globalKey.currentState.showSnackBar(new SnackBar(
-                content: new Text(SnackBarText.Signin_Successful)));
+            globalKey.currentState.showSnackBar(
+                new SnackBar(content: new Text(LangStrings.Signin_Successful)));
             progressDialog.hideProgress();
             _goToHomeScreen();
           });
@@ -181,7 +181,7 @@ class BbUserSigninState extends State<BbUserSignin> {
         {
           setState(() {
             globalKey.currentState.showSnackBar(new SnackBar(
-              content: new Text(SnackBarText.User_Not_Found),
+              content: new Text(LangStrings.User_Not_Found),
             ));
             progressDialog.hideProgress();
             _goToSignupScreen();
@@ -193,7 +193,7 @@ class BbUserSigninState extends State<BbUserSignin> {
         {
           setState(() {
             globalKey.currentState.showSnackBar(new SnackBar(
-              content: new Text(SnackBarText.Signin_Unsuccessful),
+              content: new Text(LangStrings.Signin_Unsuccessful),
             ));
             progressDialog.hideProgress();
           });
@@ -204,7 +204,7 @@ class BbUserSigninState extends State<BbUserSignin> {
         {
           setState(() {
             globalKey.currentState.showSnackBar(new SnackBar(
-              content: new Text(SnackBarText.No_Internet_Connection),
+              content: new Text(LangStrings.No_Internet_Connection),
             ));
             progressDialog.hideProgress();
           });

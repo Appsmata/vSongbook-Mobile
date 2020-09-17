@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:provider/provider.dart';
+import 'package:vsongbook/helpers/AppSettings.dart';
 import 'package:vsongbook/models/SongModel.dart';
 import 'package:vsongbook/helpers/SqliteHelper.dart';
 import 'package:vsongbook/screens/EeSongEdit.dart';
@@ -15,7 +17,7 @@ class AsSongPad extends StatefulWidget {
 
 class AsSongPadState extends State<AsSongPad> {
   AsProgressWidget progressWidget =
-      AsProgressWidget.getProgressWidget(AsProgressDialogTitles.Sis_Patience);
+      AsProgressWidget.getProgressWidget(LangStrings.Sis_Patience);
   TextEditingController txtSearch = new TextEditingController(text: "");
   SqliteHelper db = SqliteHelper();
 
@@ -29,10 +31,12 @@ class AsSongPadState extends State<AsSongPad> {
       updateListView();
     }
     return new Container(
-      decoration: BoxDecoration(
-          image: DecorationImage(
-              image: new AssetImage("assets/images/bg.jpg"),
-              fit: BoxFit.cover)),
+      decoration: Provider.of<AppSettings>(context).isDarkMode
+          ? BoxDecoration()
+          : BoxDecoration(
+              image: DecorationImage(
+                  image: new AssetImage("assets/images/bg.jpg"),
+                  fit: BoxFit.cover)),
       child: new Stack(
         children: <Widget>[
           new Container(

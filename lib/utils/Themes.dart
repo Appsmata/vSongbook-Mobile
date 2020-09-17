@@ -38,8 +38,8 @@ ThemeData _buildLightTheme() {
 }
 
 ThemeData _buildDarkTheme() {
-  const Color primaryColor = Colors.deepOrange;
-  const Color secondaryColor = Colors.orange;
+  const Color primaryColor = Colors.grey;
+  const Color secondaryColor = Colors.black;
   final ColorScheme colorScheme = const ColorScheme.dark().copyWith(
     primary: primaryColor,
     secondary: secondaryColor,
@@ -47,9 +47,9 @@ ThemeData _buildDarkTheme() {
   final ThemeData base = ThemeData(
     brightness: Brightness.dark,
     accentColorBrightness: Brightness.dark,
-    primaryColor: primaryColor,
-    primaryColorDark: const Color(0xFFff5722),
-    primaryColorLight: secondaryColor,
+    //primaryColor: primaryColor,
+    //primaryColorDark: Colors.grey,
+    //primaryColorLight: secondaryColor,
     buttonColor: primaryColor,
     indicatorColor: Colors.white,
     toggleableActiveColor: const Color(0xFFfafafa),

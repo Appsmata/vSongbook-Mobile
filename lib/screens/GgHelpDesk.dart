@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:backdrop/backdrop.dart';
-import 'package:vsongbook/screens/FfSettingsQuick.dart';
-import 'package:vertical_tabs/vertical_tabs.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html/style.dart';
+import 'package:vsongbook/helpers/AppSettings.dart';
 import 'package:vsongbook/utils/Constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class GgHelpDesk extends StatefulWidget {
   @override
@@ -11,112 +13,92 @@ class GgHelpDesk extends StatefulWidget {
 
 class GgHelpDeskState extends State<GgHelpDesk> {
   final globalKey = new GlobalKey<ScaffoldState>();
-  List<String> titles, details, images;
 
-
- Future<void> setContent() async {
-  titles = [];
-  details = [];
-  images = [];
-
-  titles.add("Support");
-  titles.add("App Reviews");
-  titles.add("Open Source");
-
-  images.add("support");
-  images.add("review");
-  images.add("github");
-
-  details.add("PHONE: +2547 -\nEMAIL: appsmatake [at] gmail.com\nWebiste: https://Appsmata.com/vSongBook");
-  details.add("Whether you are happy with our app or not please let us know by leaving a rating as well as review on the Google Play Store or Apple Store.");
-  details.add("If you are a software developer, the source code for this app is freely available on the GitHub:\n\n Https://GitHub.com/Appsmata/vSongFlut");
-
- }
-
-@override
+  @override
   Widget build(BuildContext context) {
-
-    if (titles == null) {
-      titles = List<String>();
-      details = List<String>();
-      images = List<String>();
-      setContent();
-    }
+    final tabPages = <Widget>[
+      tabContent("help1", LangStrings.helpTab1Content),
+      tabContent("help2", LangStrings.helpTab2Content),
+      tabContent("help3", LangStrings.helpTab3Content),
+    ];
+    final tabTitles = <Tab>[
+      Tab(text: LangStrings.helpTab1Title),
+      Tab(text: LangStrings.helpTab2Title),
+      Tab(text: LangStrings.helpTab3Title),
+    ];
 
     return WillPopScope(
       onWillPop: () {
         moveToLastScreen();
       },
-      child: BackdropScaffold(
-        title: Text('Help & Feedback'),
-        iconPosition: BackdropIconPosition.action,
-        headerHeight: 120,
-        frontLayer: Center(
-          child: Container(
-            constraints: BoxConstraints.expand(),
-            child: Scaffold(
-              key: globalKey,
-              body: Center(
-                child: Container(
-                  constraints: BoxConstraints.expand(),
-                  child: bodyView(),
-                ),
-              ),
+      child: DefaultTabController(
+        length: tabTitles.length,
+        child: Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text(LangStrings.helpTabPage),
+            bottom: TabBar(
+              tabs: tabTitles,
             ),
           ),
+          body: TabBarView(
+            children: tabPages,
+          ),
         ),
-        backLayer: FfSettingsQuick(),
       ),
     );
   }
 
-  Widget bodyView() {
-    return VerticalTabs(
-        tabsWidth: 100,
-        contentScrollAxis: Axis.vertical,
-        tabs: List<Tab>.generate(
-          titles.length,
-          (int index) {
-            return new Tab(child: Text(titles[index], style: new TextStyle(fontSize: 20),));
-          },
-        ),
-        contents: List<Widget>.generate( titles.length,
-           (int index) {
-            return new Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: new AssetImage("assets/images/bg.jpg"),
-                    fit: BoxFit.cover
-                )
+  Widget tabContent(String image, String strText) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: Provider.of<AppSettings>(context).isDarkMode
+          ? BoxDecoration()
+          : BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Colors.white, Colors.cyan, Colors.indigo]),
+            ),
+      child: ListView(
+        children: <Widget>[
+          Card(
+            elevation: 10,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              child: Image(
+                image: new AssetImage("assets/images/" + image + ".png"),
+                height: 200.0,
               ),
-              child: new Container(
-                height: MediaQuery.of(context).size.height - 180,
-                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                child: Card(
-                  elevation: 5,
-                  child: new Column(
-                    children: <Widget>[
-                      Image(
-                        image: new AssetImage("assets/images/" + images[index] + ".png"),                          
-                        height: 150.0,
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),                        
-                        child: Text(
-                          details[index],
-                          style: new TextStyle(fontSize: 30),
-                        ),
-                      )
-                    ],
-                  ),
-                )
+            ),
+          ),
+          Card(
+            elevation: 10,
+            child: GestureDetector(
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: Html(
+                  data: strText,
+                  style: {
+                    "html": Style(
+                      fontSize: FontSize(30.0),
+                    ),
+                  },
+                  onLinkTap: (url) => launchURL(url),
+                ),
               ),
-            );
-          },
-        )
-      );
+            ),
+          ),
+        ],
+      ),
+    );
   }
-  
+
+  launchURL(String url) async {
+    if (await canLaunch(url)) await launch(url);
+  }
+
   void moveToLastScreen() {
     Navigator.pop(context, true);
   }

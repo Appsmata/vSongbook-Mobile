@@ -52,6 +52,7 @@ dev_dependencies:
   swipedetector: ^1.2.0
   sqflite: ^1.3.1
   vertical_tabs: ^0.2.0
+  url_launcher: ^5.4.2
 
 flutter_icons:
   android: "launcher_icon"
@@ -69,11 +70,14 @@ flutter:
     - assets/images/appsmata.png
     - assets/images/book.jpg
     - assets/images/bg.jpg
-    - assets/images/donation_airtel.png
-    - assets/images/donation_equitel.png
-    - assets/images/donation_mpesa.png
-    - assets/images/donation_paypal.png
-    - assets/images/donation_visa_mastercard.png
+    - assets/images/donation1.png
+    - assets/images/donation2.png
+    - assets/images/donation3.png
+    - assets/images/donation4.png
+    - assets/images/donation5.png
+    - assets/images/help1.png
+    - assets/images/help2.png
+    - assets/images/help3.png
     - assets/images/header.png
     - assets/images/ic_arrow_back_white.png
     - assets/images/ic_books.png
@@ -88,6 +92,3 @@ flutter:
     - assets/images/ic_font_smaller.png
     - assets/images/ic_home.png
     - assets/images/splash.jpg
-    - assets/images/review.png
-    - assets/images/support.png
-    - assets/images/github.png

@@ -18,4 +18,13 @@ class AppSettings extends ChangeNotifier {
     notifyListeners();
   }
 
+  void switchDarkMode() {
+    bool val = isDarkMode;
+    if (isDarkMode)
+      val = false;
+    else
+      val = true;
+    _pref?.setBool(SharedPreferenceKeys.DarkMode, val);
+    notifyListeners();
+  }
 }

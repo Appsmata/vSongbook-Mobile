@@ -3,11 +3,11 @@ import 'dart:math';
 import 'package:animated_floatactionbuttons/animated_floatactionbuttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:vsongbook/helpers/AppSettings.dart';
 import 'package:vsongbook/helpers/SqliteHelper.dart';
 import 'package:vsongbook/models/SongModel.dart';
-import 'package:backdrop/backdrop.dart';
 import 'package:vsongbook/screens/EeSongEdit.dart';
-import 'package:vsongbook/screens/FfSettingsQuick.dart';
 import 'package:vertical_tabs/vertical_tabs.dart';
 import 'package:share/share.dart';
 import 'package:vsongbook/utils/Constants.dart';
@@ -62,35 +62,77 @@ class EeSongViewState extends State<EeSongView> {
       onWillPop: () {
         moveToLastScreen();
       },
-      child: BackdropScaffold(
-        title: Text(songtitle),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              isFavourited(song.isfav) ? Icons.star : Icons.star_border,
-            ),
-            onPressed: () => favoriteSong(),
-          )
-        ],
-        iconPosition: BackdropIconPosition.action,
-        headerHeight: 120,
-        frontLayer: Center(
-          child: Container(
-            constraints: BoxConstraints.expand(),
-            child: Scaffold(
-              key: globalKey,
-              body: mainBody(),
-              floatingActionButton: AnimatedFloatingActionButton(
-                fabButtons: floatingButtons(),
-                colorStartAnimation: Colors.deepOrange,
-                colorEndAnimation: Colors.red,
-                animatedIconData: AnimatedIcons.menu_close,
+      child: Scaffold(
+        key: globalKey,
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(songtitle),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                isFavourited(song.isfav) ? Icons.star : Icons.star_border,
               ),
+              onPressed: () => favoriteSong(),
             ),
+            IconButton(
+              icon: Icon(Icons.settings),
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) => settingsDialog());
+              },
+            ),
+          ],
+        ),
+        body: mainBody(),
+        floatingActionButton: AnimatedFloatingActionButton(
+          fabButtons: floatingButtons(),
+          animatedIconData: AnimatedIcons.menu_close,
+        ),
+      ),
+    );
+  }
+
+  Widget settingsDialog() {
+    return new AlertDialog(
+      title: new Text(
+        LangStrings.DisplaySettings,
+        style: new TextStyle(color: Colors.deepOrange, fontSize: 25),
+      ),
+      content: new Container(
+        height: 50,
+        width: double.maxFinite,
+        child: ListView(children: <Widget>[
+          Consumer<AppSettings>(builder: (context, AppSettings settings, _) {
+            return ListTile(
+              onTap: () {},
+              leading: Icon(settings.isDarkMode
+                  ? Icons.brightness_4
+                  : Icons.brightness_7),
+              title: Text(LangStrings.DarkMode),
+              trailing: Switch(
+                onChanged: (bool value) => settings.setDarkMode(value),
+                value: settings.isDarkMode,
+              ),
+            );
+          }),
+          Divider(),
+        ]),
+      ),
+      actions: <Widget>[
+        new Container(
+          margin: EdgeInsets.all(5),
+          child: FlatButton(
+            child:
+                Text(LangStrings.OkayDone, style: new TextStyle(fontSize: 20)),
+            color: Colors.deepOrange,
+            //textColor: Colors.white,
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
         ),
-        backLayer: FfSettingsQuick(),
-      ),
+      ],
     );
   }
 
@@ -119,7 +161,9 @@ class EeSongViewState extends State<EeSongView> {
           style: new TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 20,
-              color: Colors.deepOrange),
+              color: Provider.of<AppSettings>(context).isDarkMode
+                  ? Colors.white
+                  : Colors.deepOrange),
         ),
       ),
     );
@@ -134,13 +178,11 @@ class EeSongViewState extends State<EeSongView> {
           (int index) {
             return new Tab(
               child: Center(
-                child: Text(
-                  verseInfos[index], 
-                  style: new TextStyle(
-                    fontSize: 35, 
-                    fontWeight: FontWeight.bold
-                  )
-                ),
+                child: Text(verseInfos[index],
+                    style: new TextStyle(
+                        fontSize: 35,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black)),
               ),
             );
           },
@@ -150,10 +192,12 @@ class EeSongViewState extends State<EeSongView> {
           (int index) {
             return new Container(
               child: tabsContent(index),
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: new AssetImage("assets/images/bg.jpg"),
-                      fit: BoxFit.cover)),
+              decoration: Provider.of<AppSettings>(context).isDarkMode
+                  ? BoxDecoration()
+                  : BoxDecoration(
+                      image: DecorationImage(
+                          image: new AssetImage("assets/images/bg.jpg"),
+                          fit: BoxFit.cover)),
             );
           },
         ));
@@ -201,8 +245,10 @@ class EeSongViewState extends State<EeSongView> {
                   width: 200,
                   height: 50,
                   decoration: new BoxDecoration(
-                      color: Colors.orangeAccent,
-                      border: Border.all(color: Colors.orange),
+                      color: Provider.of<AppSettings>(context).isDarkMode
+                          ? Colors.black
+                          : Colors.orange,
+                      border: Border.all(color: Colors.white),
                       boxShadow: [BoxShadow(blurRadius: 5)],
                       borderRadius:
                           new BorderRadius.all(new Radius.circular(5))),
@@ -228,19 +274,19 @@ class EeSongViewState extends State<EeSongView> {
       FloatingActionButton(
         heroTag: null,
         child: Icon(Icons.content_copy),
-        tooltip: Tooltips.CopySong,
+        tooltip: LangStrings.CopySong,
         onPressed: copySong,
       ),
       FloatingActionButton(
         heroTag: null,
         child: Icon(Icons.share),
-        tooltip: Tooltips.ShareSong,
+        tooltip: LangStrings.ShareSong,
         onPressed: shareSong,
       ),
       FloatingActionButton(
         heroTag: null,
         child: Icon(Icons.edit),
-        tooltip: Tooltips.EditSong,
+        tooltip: LangStrings.EditSong,
         onPressed: editSong,
       ),
     ];
@@ -251,7 +297,7 @@ class EeSongViewState extends State<EeSongView> {
       return FloatingActionButton(
         heroTag: null,
         child: Icon(Icons.delete),
-        tooltip: Tooltips.EditSong,
+        tooltip: LangStrings.EditSong,
         onPressed: deleteSong,
       );
     else
@@ -302,7 +348,7 @@ class EeSongViewState extends State<EeSongView> {
   void copySong() {
     Clipboard.setData(ClipboardData(text: songTitle + "\n\n" + songContent));
     globalKey.currentState.showSnackBar(new SnackBar(
-      content: new Text(SnackBarText.Song_Copied),
+      content: new Text(LangStrings.Song_Copied),
     ));
   }
 
@@ -334,7 +380,7 @@ class EeSongViewState extends State<EeSongView> {
     else
       db.favouriteSong(song, true);
     globalKey.currentState.showSnackBar(new SnackBar(
-      content: new Text(songTitle + " " + SnackBarText.Song_Liked),
+      content: new Text(songTitle + " " + LangStrings.Song_Liked),
     ));
     //notifyListeners();
   }

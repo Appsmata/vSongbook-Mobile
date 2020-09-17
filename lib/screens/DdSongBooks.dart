@@ -21,10 +21,10 @@ class DdSongBooks extends StatefulWidget {
 class DdSongBooksState extends State<DdSongBooks> {
   var appBar = AppBar();
   final globalKey = new GlobalKey<ScaffoldState>();
-  AsProgressDialog progressDialog = AsProgressDialog.getAsProgressDialog(
-      AsProgressDialogTitles.Getting_Ready);
+  AsProgressDialog progressDialog =
+      AsProgressDialog.getAsProgressDialog(LangStrings.Getting_Ready);
   AsProgressWidget progressWidget =
-      AsProgressWidget.getProgressWidget(AsProgressDialogTitles.Getting_Ready);
+      AsProgressWidget.getProgressWidget(LangStrings.Getting_Ready);
 
   SqliteHelper databaseHelper = SqliteHelper();
   List<BookItem<Book>> selected = [];
@@ -44,7 +44,7 @@ class DdSongBooksState extends State<DdSongBooks> {
       case EventConstants.Request_Successful:
         {
           setState(() {
-            //globalKey.currentState.showSnackBar(new SnackBar(content: new Text(SnackBarText.Request_Successful)));
+            //globalKey.currentState.showSnackBar(new SnackBar(content: new Text(LangStrings.Request_Successful)));
             progressWidget.hideProgress();
             books = eventObject.object;
             populateData();
@@ -55,7 +55,7 @@ class DdSongBooksState extends State<DdSongBooks> {
       case EventConstants.Request_Unsuccessful:
         {
           setState(() {
-            //globalKey.currentState.showSnackBar(new SnackBar(content: new Text(SnackBarText.Request_Unsuccessful)));
+            //globalKey.currentState.showSnackBar(new SnackBar(content: new Text(LangStrings.Request_Unsuccessful)));
             progressWidget.hideProgress();
           });
         }
@@ -64,7 +64,7 @@ class DdSongBooksState extends State<DdSongBooks> {
       case EventConstants.No_Internet_Connection:
         {
           setState(() {
-            //globalKey.currentState.showSnackBar(new SnackBar(content: new Text(SnackBarText.No_Internet_Connection)));
+            //globalKey.currentState.showSnackBar(new SnackBar(content: new Text(LangStrings.No_Internet_Connection)));
             progressWidget.hideProgress();
           });
         }

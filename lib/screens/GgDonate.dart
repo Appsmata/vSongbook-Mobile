@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:backdrop/backdrop.dart';
-import 'package:vsongbook/screens/FfSettingsQuick.dart';
-import 'package:vertical_tabs/vertical_tabs.dart';
+import 'package:provider/provider.dart';
+import 'package:vsongbook/helpers/AppSettings.dart';
 import 'package:vsongbook/utils/Constants.dart';
 
 class GgDonate extends StatefulWidget {
@@ -11,118 +10,84 @@ class GgDonate extends StatefulWidget {
 
 class GgDonateState extends State<GgDonate> {
   final globalKey = new GlobalKey<ScaffoldState>();
-  List<String> titles, details, images;
 
-
- Future<void> setContent() async {
-  titles = [];
-  details = [];
-  images = [];
-
-  titles.add("M-Pesa");
-  titles.add("Equitel");
-  titles.add("Airtel");
-  titles.add("PayPal");
-  titles.add("VisaCard");
-
-  images.add("mpesa");
-  images.add("equitel");
-  images.add("airtel");
-  images.add("paypal");
-  images.add("visa_mastercard");
-
-  details.add("DIAL:\n* 483 * 57 * 33112 #\n\n\n\nPAYBILL: 891300\n\nACCOUNT: 33112");
-  details.add("BUSINESS NUMBER: 891300\n\nACCOUNT NUMBER: 33112");
-  details.add("BUSINESS NAME: MCHANGA\n\nREFERENCE: 33112");
-  details.add("ADDRESS:\n\tappsmatake [at] gmail.com");
-  details.add("Will be available soon");
-
- }
-
-@override
+  @override
   Widget build(BuildContext context) {
-
-    if (titles == null) {
-      titles = List<String>();
-      details = List<String>();
-      images = List<String>();
-      setContent();
-    }
+    final tabPages = <Widget>[
+      tabContent("donation1", LangStrings.donateTab1Content),
+      tabContent("donation2", LangStrings.donateTab2Content),
+      tabContent("donation3", LangStrings.donateTab3Content),
+      tabContent("donation4", LangStrings.donateTab4Content),
+    ];
+    final tabTitles = <Tab>[
+      Tab(text: LangStrings.donateTab1Title),
+      Tab(text: LangStrings.donateTab2Title),
+      Tab(text: LangStrings.donateTab3Title),
+      Tab(text: LangStrings.donateTab4Title),
+    ];
 
     return WillPopScope(
       onWillPop: () {
         moveToLastScreen();
       },
-      child: BackdropScaffold(
-        title: Text('Support Us, Donate'),
-        iconPosition: BackdropIconPosition.action,
-        headerHeight: 120,
-        frontLayer: Center(
-          child: Container(
-            constraints: BoxConstraints.expand(),
-            child: Scaffold(
-              key: globalKey,
-              body: Center(
-                child: Container(
-                  constraints: BoxConstraints.expand(),
-                  child: bodyView(),
-                ),
-              ),
+      child: DefaultTabController(
+        length: tabTitles.length,
+        child: Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text(LangStrings.donateTabPage),
+            bottom: TabBar(
+              tabs: tabTitles,
             ),
           ),
+          body: TabBarView(
+            children: tabPages,
+          ),
         ),
-        backLayer: FfSettingsQuick(),
       ),
     );
   }
 
-  Widget bodyView() {
-    return VerticalTabs(
-        tabsWidth: 100,
-        contentScrollAxis: Axis.vertical,
-        tabs: List<Tab>.generate(
-          titles.length,
-          (int index) {
-            return new Tab(child: Text(titles[index], style: new TextStyle(fontSize: 20),));
-          },
-        ),
-        contents: List<Widget>.generate( titles.length,
-           (int index) {
-            return new Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: new AssetImage("assets/images/bg.jpg"),
-                    fit: BoxFit.cover
-                )
+  Widget tabContent(String image, String strText) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: Provider.of<AppSettings>(context).isDarkMode
+          ? BoxDecoration()
+          : BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Colors.white, Colors.cyan, Colors.indigo]),
+            ),
+      child: ListView(
+        children: <Widget>[
+          Card(
+            elevation: 10,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              child: Image(
+                image: new AssetImage("assets/images/" + image + ".png"),
               ),
-              child: new Container(
-                height: MediaQuery.of(context).size.height - 180,
-                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                child: Card(
-                  elevation: 5,
-                  child: new Column(
-                    children: <Widget>[
-                      Image(
-                        image: new AssetImage("assets/images/donation_" + images[index] + ".png"),                          
-                        height: 150.0,
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),                        
-                        child: Text(
-                          details[index],
-                          style: new TextStyle(fontSize: 30),
-                        ),
-                      )
-                    ],
-                  ),
-                )
+            ),
+          ),
+          Card(
+            elevation: 10,
+            child: GestureDetector(
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: Text(
+                  strText,
+                  style: new TextStyle(fontSize: 30),
+                ),
               ),
-            );
-          },
-        )
-      );
+            ),
+          ),
+        ],
+      ),
+    );
   }
-  
+
   void moveToLastScreen() {
     Navigator.pop(context, true);
   }

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:provider/provider.dart';
+import 'package:vsongbook/helpers/AppSettings.dart';
 import 'package:vsongbook/models/BookModel.dart';
 import 'package:vsongbook/models/SongModel.dart';
 import 'package:vsongbook/helpers/SqliteHelper.dart';
 import 'package:vsongbook/screens/EeSongView.dart';
-//import 'package:vsongbook/utils/Preferences.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/html_parser.dart';
 import 'package:flutter_html/style.dart';
 import 'package:vsongbook/utils/Constants.dart';
 import 'package:vsongbook/widgets/AsProgressWidget.dart';
@@ -28,9 +28,9 @@ class AsSearchSongs extends StatefulWidget {
 
 class AsSearchSongsState extends State<AsSearchSongs> {
   AsProgressWidget progressWidget =
-      AsProgressWidget.getProgressWidget(AsProgressDialogTitles.Sis_Patience);
+      AsProgressWidget.getProgressWidget(LangStrings.Sis_Patience);
   TextEditingController txtSearch = new TextEditingController(text: "");
-  AsTextView textResult = AsTextView.setUp(Texts.SearchResult, 18, false);
+  AsTextView textResult = AsTextView.setUp(LangStrings.SearchResult, 18, false);
   SqliteHelper db = SqliteHelper();
 
   AsSearchSongsState({this.book});
@@ -49,10 +49,12 @@ class AsSearchSongsState extends State<AsSearchSongs> {
     }
 
     return new Container(
-      decoration: BoxDecoration(
-          image: DecorationImage(
-              image: new AssetImage("assets/images/bg.jpg"),
-              fit: BoxFit.cover)),
+      decoration: Provider.of<AppSettings>(context).isDarkMode
+          ? BoxDecoration()
+          : BoxDecoration(
+              image: DecorationImage(
+                  image: new AssetImage("assets/images/bg.jpg"),
+                  fit: BoxFit.cover)),
       child: new Stack(
         children: <Widget>[
           new Container(
@@ -103,7 +105,7 @@ class AsSearchSongsState extends State<AsSearchSongs> {
         decoration: InputDecoration(
             prefixIcon: Icon(Icons.search),
             suffixIcon: Icon(Icons.clear),
-            hintText: Texts.SearchNow,
+            hintText: LangStrings.SearchNow,
             hintStyle: TextStyle(fontSize: 18)),
         onChanged: (value) {
           searchSong();
@@ -181,11 +183,11 @@ class AsSearchSongsState extends State<AsSearchSongs> {
     }
 
     if (songs[index].content.contains("CHORUS")) {
-      strContent = strContent + Texts.HasChorus;
-      strContent = strContent + verses.length.toString() + Texts.Verses;
+      strContent = strContent + LangStrings.HasChorus;
+      strContent = strContent + verses.length.toString() + LangStrings.Verses;
     } else {
-      strContent = strContent + Texts.NoChorus;
-      strContent = strContent + verses.length.toString() + Texts.Verses;
+      strContent = strContent + LangStrings.NoChorus;
+      strContent = strContent + verses.length.toString() + LangStrings.Verses;
     }
 
     return Card(
@@ -252,7 +254,7 @@ class AsSearchSongsState extends State<AsSearchSongs> {
       });
     } else {
       updateSongList();
-      textResult.setText(Texts.SearchResult);
+      textResult.setText(LangStrings.SearchResult);
     }
   }
 

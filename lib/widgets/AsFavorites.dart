@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:provider/provider.dart';
+import 'package:vsongbook/helpers/AppSettings.dart';
 import 'package:vsongbook/models/BookModel.dart';
 import 'package:vsongbook/models/SongModel.dart';
 import 'package:vsongbook/helpers/SqliteHelper.dart';
@@ -14,7 +16,7 @@ class AsFavorites extends StatefulWidget {
 
 class AsFavoritesState extends State<AsFavorites> {
   AsProgressWidget progressWidget =
-      AsProgressWidget.getProgressWidget(AsProgressDialogTitles.Sis_Patience);
+      AsProgressWidget.getProgressWidget(LangStrings.Sis_Patience);
   TextEditingController txtSearch = new TextEditingController(text: "");
   SqliteHelper db = SqliteHelper();
 
@@ -31,10 +33,12 @@ class AsFavoritesState extends State<AsFavorites> {
       updateSongList();
     }
     return new Container(
-      decoration: BoxDecoration(
-          image: DecorationImage(
-              image: new AssetImage("assets/images/bg.jpg"),
-              fit: BoxFit.cover)),
+      decoration: Provider.of<AppSettings>(context).isDarkMode
+          ? BoxDecoration()
+          : BoxDecoration(
+              image: DecorationImage(
+                  image: new AssetImage("assets/images/bg.jpg"),
+                  fit: BoxFit.cover)),
       child: new Stack(
         children: <Widget>[
           new Container(
@@ -78,7 +82,7 @@ class AsFavoritesState extends State<AsFavorites> {
         style: TextStyle(fontSize: 18),
         decoration: InputDecoration(
             prefixIcon: Icon(Icons.search),
-            hintText: Texts.SearchNow,
+            hintText: LangStrings.SearchNow,
             hintStyle: TextStyle(fontSize: 18)),
         onChanged: (value) {
           searchSong();
@@ -105,11 +109,11 @@ class AsFavoritesState extends State<AsFavorites> {
     }
 
     if (songs[index].content.contains("CHORUS")) {
-      songContent = songContent + Texts.HasChorus;
-      songContent = songContent + verses.length.toString() + Texts.Verses;
+      songContent = songContent + LangStrings.HasChorus;
+      songContent = songContent + verses.length.toString() + LangStrings.Verses;
     } else {
-      songContent = songContent + Texts.NoChorus;
-      songContent = songContent + verses.length.toString() + Texts.Verses;
+      songContent = songContent + LangStrings.NoChorus;
+      songContent = songContent + verses.length.toString() + LangStrings.Verses;
     }
 
     return Card(

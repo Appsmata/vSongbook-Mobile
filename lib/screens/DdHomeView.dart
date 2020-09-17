@@ -5,19 +5,19 @@ import 'package:vsongbook/widgets/AsSongPad.dart';
 import 'package:vsongbook/widgets/AsNavDrawer.dart';
 
 class DdHomeView extends StatefulWidget {
-	final String bookstr;
+  final String bookstr;
 
-	DdHomeView(this.bookstr);
+  DdHomeView(this.bookstr);
 
-	@override
+  @override
   State<StatefulWidget> createState() {
     return DdHomeViewState(this.bookstr);
   }
 }
 
 class DdHomeViewState extends State<DdHomeView> {
-	DdHomeViewState(this.bookstr);
-  
+  DdHomeViewState(this.bookstr);
+
   final globalKey = new GlobalKey<ScaffoldState>();
   AsSongPad drafts = AsSongPad();
   AsNavDrawer navDrawer;
@@ -36,11 +36,11 @@ class DdHomeViewState extends State<DdHomeView> {
       //Center(child: Container()),
     ];
 
-    final appTabs = <Tab>[ 
-      Tab(text: 'HOME'), 
-      Tab(text: 'LIKES'), 
+    final appTabs = <Tab>[
+      Tab(text: 'HOME'),
+      Tab(text: 'LIKES'),
       Tab(text: 'DRAFTS'),
-      //Tab(text: 'SERMONPAD') 
+      //Tab(text: 'SERMONPAD')
     ];
 
     if (navDrawer == null) navDrawer = AsNavDrawer();
@@ -48,13 +48,13 @@ class DdHomeViewState extends State<DdHomeView> {
       length: appTabs.length,
       child: Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           title: Text('vSongBook'),
-          bottom: TabBar( tabs: appTabs ),
+          bottom: TabBar(tabs: appTabs),
         ),
-        body: TabBarView( children: appPages ),        
-        drawer: Drawer( child: navDrawer ),
+        body: TabBarView(children: appPages),
+        drawer: Drawer(child: navDrawer),
       ),
     );
   }
-
 }

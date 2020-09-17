@@ -1,12 +1,12 @@
-import 'package:sqflite/sqflite.dart';
-import 'dart:async';
-import 'dart:io';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:vsongbook/helpers/AppBase.dart';
-import 'package:vsongbook/models/BookModel.dart';
-import 'package:vsongbook/models/SongModel.dart';
-import 'package:vsongbook/utils/Constants.dart';
+import "package:sqflite/sqflite.dart";
+import "dart:async";
+import "dart:io";
+import "package:path/path.dart";
+import "package:path_provider/path_provider.dart";
+import "package:vsongbook/helpers/AppBase.dart";
+import "package:vsongbook/models/BookModel.dart";
+import "package:vsongbook/models/SongModel.dart";
+import "package:vsongbook/utils/Constants.dart";
 
 class SqliteHelper {
   static SqliteHelper sqliteHelper; // Singleton DatabaseHelper
@@ -32,7 +32,7 @@ class SqliteHelper {
   Future<Database> initializeDatabase() async {
     // Get the directory path for both Android and iOS to store database.
     Directory docsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(docsDirectory.path, "vSongBook.db");
+    String path = join(docsDirectory.path, 'vSongBook.db');
 
     // Open/create the database at a given path
     var vsbDatabase = await openDatabase(path, version: 1, onCreate: _createDb);
@@ -50,13 +50,13 @@ class SqliteHelper {
     Database db = await this.database;
 
     var result =
-        await db.query(Tables.books, orderBy: Columns.position + ' ASC');
+        await db.query(Tables.books, orderBy: Columns.position + " ASC");
     return result;
   }
 
   Future<int> insertBook(BookModel book) async {
     Database db = await this.database;
-    book.created = book.updated = '';
+    book.created = book.updated = "";
     var result = await db.insert(Tables.books, book.toMap());
     return result;
   }
@@ -64,28 +64,28 @@ class SqliteHelper {
   Future<int> updateBook(BookModel book) async {
     var db = await this.database;
     var result = await db.update(Tables.books, book.toMap(),
-        where: Columns.bookid + ' = ?', whereArgs: [book.bookid]);
+        where: Columns.bookid + " = ?", whereArgs: [book.bookid]);
     return result;
   }
 
   Future<int> updateBookCompleted(BookModel book) async {
     var db = await this.database;
     var result = await db.update(Tables.books, book.toMap(),
-        where: Columns.bookid + ' = ?', whereArgs: [book.bookid]);
+        where: Columns.bookid + " = ?", whereArgs: [book.bookid]);
     return result;
   }
 
   Future<int> deleteBook(int id) async {
     var db = await this.database;
     int result = await db.rawDelete(
-        'DELETE FROM ' + Tables.books + ' WHERE ' + Columns.bookid + ' = $id');
+        "DELETE FROM " + Tables.books + " WHERE " + Columns.bookid + " = $id");
     return result;
   }
 
   Future<int> getBookCount() async {
     Database db = await this.database;
     List<Map<String, dynamic>> x =
-        await db.rawQuery('SELECT COUNT (*) from ' + Tables.books);
+        await db.rawQuery("SELECT COUNT (*) from " + Tables.books);
     int result = Sqflite.firstIntValue(x);
     return result;
   }
@@ -106,7 +106,7 @@ class SqliteHelper {
   Future<int> insertSong(SongModel song) async {
     Database db = await this.database;
     song.updated = song.basetype = song.notes =
-        song.metawhat = song.metawhen = song.metawhere = song.metawho = '';
+        song.metawhat = song.metawhen = song.metawhere = song.metawho = "";
     song.views = song.isfav = song.netthumbs = song.acount = 0;
 
     var result = await db.insert(Tables.songs, song.toMap());
@@ -116,7 +116,7 @@ class SqliteHelper {
   Future<int> updateSong(SongModel song) async {
     var db = await this.database;
     var result = await db.update(Tables.songs, song.toMap(),
-        where: Columns.songid + ' = ?', whereArgs: [song.songid]);
+        where: Columns.songid + " = ?", whereArgs: [song.songid]);
     return result;
   }
 
@@ -126,26 +126,26 @@ class SqliteHelper {
       song.isfav = 1;
     else
       song.isfav = 0;
-    var result = await db.rawUpdate('UPDATE ' +
+    var result = await db.rawUpdate("UPDATE " +
         Tables.songs +
-        ' SET ' +
+        " SET " +
         Columns.isfav +
-        '=' +
+        "=" +
         song.isfav.toString() +
-        ' WHERE ' +
+        " WHERE " +
         Columns.songid +
-        '=' +
+        "=" +
         song.songid.toString());
     return result;
   }
 
   Future<int> deleteSong(int songID) async {
     var db = await this.database;
-    int result = await db.rawDelete('DELETE FROM ' +
+    int result = await db.rawDelete("DELETE FROM " +
         Tables.songs +
-        ' WHERE ' +
+        " WHERE " +
         Columns.songid +
-        '=' +
+        "=" +
         songID.toString());
     return result;
   }
@@ -153,7 +153,7 @@ class SqliteHelper {
   Future<int> getSongCount() async {
     Database db = await this.database;
     List<Map<String, dynamic>> x =
-        await db.rawQuery('SELECT COUNT (*) from ' + Tables.songs);
+        await db.rawQuery("SELECT COUNT (*) from " + Tables.songs);
     int result = Sqflite.firstIntValue(x);
     return result;
   }
@@ -162,7 +162,7 @@ class SqliteHelper {
   Future<List<Map<String, dynamic>>> getSongMapList(int book) async {
     Database db = await this.database;
     var result =
-        db.query(Tables.songs, where: Columns.bookid + ' = ' + book.toString());
+        db.query(Tables.songs, where: Columns.bookid + " = " + book.toString());
     return result;
   }
 
@@ -180,23 +180,25 @@ class SqliteHelper {
       String searchThis) async {
     Database db = await this.database;
     String bookQuery =
-        'AND ' + Columns.bookid + '!=' + Columns.ownsongs.toString() + ' ';
-    String sqlQuery = Columns.title +
-        ' LIKE "%' +
-        searchThis +
-        '%" ' +
-        bookQuery +
-        'OR ' +
+        "AND " + Columns.bookid + "!=" + Columns.ownsongs.toString() + " ";
+
+    String sqlQuery =
+        Columns.title + " LIKE ''" + searchThis + "%' " + bookQuery;
+
+    sqlQuery = sqlQuery +
+        "OR " +
         Columns.alias +
-        ' LIKE "%' +
+        " LIKE '" +
         searchThis +
-        '%" ' +
-        bookQuery +
-        'OR ' +
+        "%' " +
+        bookQuery;
+
+    sqlQuery = sqlQuery +
+        "OR " +
         Columns.content +
-        ' LIKE "%' +
+        " LIKE ''" +
         searchThis +
-        '%" ' +
+        "%' " +
         bookQuery;
 
     var result;
@@ -205,7 +207,7 @@ class SqliteHelper {
         int searchno = int.parse(searchThis);
         if (searchno > 0)
           result = db.query(Tables.songs,
-              where: Columns.number + '=' + searchno.toString());
+              where: Columns.number + "=" + searchno.toString());
         else
           result = db.query(Tables.songs, where: sqlQuery);
       } catch (Exception) {
@@ -220,7 +222,7 @@ class SqliteHelper {
     var songMapList = await getSongSearchMapList(searchThis);
 
     List<SongModel> songList = List<SongModel>();
-    // For loop to create a 'song List' from a 'Map List'
+    // For loop to create a "song List" from a "Map List"
     for (int i = 0; i < songMapList.length; i++) {
       songList.add(SongModel.fromMapObject(songMapList[i]));
     }
@@ -230,7 +232,7 @@ class SqliteHelper {
   //FAVOURITES LISTS
   Future<List<Map<String, dynamic>>> getFavoritesList() async {
     Database db = await this.database;
-    var result = db.query(Tables.songs, where: Columns.isfav + '=1');
+    var result = db.query(Tables.songs, where: Columns.isfav + "=1");
     return result;
   }
 
@@ -249,23 +251,23 @@ class SqliteHelper {
   Future<List<Map<String, dynamic>>> getFavSearchMapList(
       String searchThis) async {
     Database db = await this.database;
-    String bookQuery = 'AND ' + Columns.isfav + '=1 ';
+    String bookQuery = "AND " + Columns.isfav + "=1 ";
     String sqlQuery = Columns.title +
-        ' LIKE "%' +
+        " LIKE '%" +
         searchThis +
-        '%" ' +
+        "%' " +
         bookQuery +
-        'OR ' +
+        "OR " +
         Columns.alias +
-        ' LIKE "%' +
+        " LIKE '%" +
         searchThis +
-        '%" ' +
+        "%' " +
         bookQuery +
-        'OR ' +
+        "OR " +
         Columns.content +
-        ' LIKE "%' +
+        " LIKE '%" +
         searchThis +
-        '%" ' +
+        "%' " +
         bookQuery;
 
     var result;
@@ -274,7 +276,7 @@ class SqliteHelper {
         int searchno = int.parse(searchThis);
         if (searchno > 0)
           result = db.query(Tables.songs,
-              where: Columns.number + '=' + searchno.toString());
+              where: Columns.number + "=" + searchno.toString());
         else
           result = db.query(Tables.songs, where: sqlQuery);
       } catch (Exception) {
@@ -289,7 +291,7 @@ class SqliteHelper {
     var songMapList = await getFavSearchMapList(searchThis);
 
     List<SongModel> songList = List<SongModel>();
-    // For loop to create a 'song List' from a 'Map List'
+    // For loop to create a "song List" from a "Map List"
     for (int i = 0; i < songMapList.length; i++) {
       songList.add(SongModel.fromMapObject(songMapList[i]));
     }
@@ -301,23 +303,23 @@ class SqliteHelper {
       String searchThis) async {
     Database db = await this.database;
     String bookQuery =
-        'AND ' + Columns.bookid + '=' + Columns.ownsongs.toString() + ' ';
+        "AND " + Columns.bookid + "=" + Columns.ownsongs.toString() + " ";
     String sqlQuery = Columns.title +
-        ' LIKE "%' +
+        " LIKE '%" +
         searchThis +
-        '%" ' +
+        "%' " +
         bookQuery +
-        'OR ' +
+        "OR " +
         Columns.alias +
-        ' LIKE "%' +
+        " LIKE '%" +
         searchThis +
-        '%" ' +
+        "%' " +
         bookQuery +
-        'OR ' +
+        "OR " +
         Columns.content +
-        ' LIKE "%' +
+        " LIKE '%" +
         searchThis +
-        '%" ' +
+        "%' " +
         bookQuery;
 
     var result = db.query(Tables.songs, where: sqlQuery);
@@ -328,7 +330,7 @@ class SqliteHelper {
     var songMapList = await getDraftSearchMapList(searchThis);
 
     List<SongModel> songList = List<SongModel>();
-    // For loop to create a 'song List' from a 'Map List'
+    // For loop to create a "song List" from a "Map List"
     for (int i = 0; i < songMapList.length; i++) {
       songList.add(SongModel.fromMapObject(songMapList[i]));
     }

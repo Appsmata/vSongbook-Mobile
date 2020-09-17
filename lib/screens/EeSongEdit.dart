@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:vsongbook/helpers/AppSettings.dart';
 import 'package:vsongbook/helpers/SqliteHelper.dart';
 import 'package:vsongbook/models/SongModel.dart';
 import 'package:vsongbook/utils/Constants.dart';
@@ -44,6 +46,7 @@ class EeSongEditState extends State<EeSongEdit> {
       },
       child: Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           title: Text(appBarTitle),
           leading: IconButton(
               icon: Icon(Icons.arrow_back), onPressed: moveToLastScreen),
@@ -60,10 +63,12 @@ class EeSongEditState extends State<EeSongEdit> {
   Widget mainBody() {
     return Container(
       constraints: BoxConstraints.expand(),
-      decoration: BoxDecoration(
-          image: DecorationImage(
-              image: new AssetImage("assets/images/bg.jpg"),
-              fit: BoxFit.cover)),
+      decoration: Provider.of<AppSettings>(context).isDarkMode
+          ? BoxDecoration()
+          : BoxDecoration(
+              image: DecorationImage(
+                  image: new AssetImage("assets/images/bg.jpg"),
+                  fit: BoxFit.cover)),
       child: ListView(
         padding: EdgeInsets.all(8.0),
         children: <Widget>[
@@ -91,8 +96,8 @@ class EeSongEditState extends State<EeSongEdit> {
                     updateTitle();
                   },
                   decoration: InputDecoration(
-                      labelText: Texts.SongTitle,
-                      hintText: Texts.SongTitle,
+                      labelText: LangStrings.SongTitle,
+                      hintText: LangStrings.SongTitle,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0))),
                 ),
@@ -106,9 +111,9 @@ class EeSongEditState extends State<EeSongEdit> {
                     updateContent();
                   },
                   decoration: InputDecoration(
-                      labelText: Texts.SongContent,
-                      hintText: Texts.SongContent,
-                      //helperText: Texts.SongContent,
+                      labelText: LangStrings.SongContent,
+                      hintText: LangStrings.SongContent,
+                      //helperText: LangStrings.SongContent,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0))),
                   maxLines: 15,
@@ -145,8 +150,8 @@ class EeSongEditState extends State<EeSongEdit> {
                     updateKey();
                   },
                   decoration: InputDecoration(
-                      labelText: Texts.SongKey,
-                      hintText: Texts.SongKey,
+                      labelText: LangStrings.SongKey,
+                      hintText: LangStrings.SongKey,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0))),
                 ),
@@ -160,9 +165,9 @@ class EeSongEditState extends State<EeSongEdit> {
                     updateContent();
                   },
                   decoration: InputDecoration(
-                      labelText: Texts.SongNotes,
-                      hintText: Texts.SongNotes,
-                      //helperText: Texts.SongContent,
+                      labelText: LangStrings.SongNotes,
+                      hintText: LangStrings.SongNotes,
+                      //helperText: LangStrings.SongContent,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0))),
                   maxLines: 3,
@@ -177,8 +182,8 @@ class EeSongEditState extends State<EeSongEdit> {
                     updateAlias();
                   },
                   decoration: InputDecoration(
-                      labelText: Texts.SongNotes,
-                      hintText: Texts.SongNotes,
+                      labelText: LangStrings.SongNotes,
+                      hintText: LangStrings.SongNotes,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0))),
                 ),

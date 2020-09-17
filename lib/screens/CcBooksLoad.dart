@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vsongbook/helpers/AppSettings.dart';
-import 'package:backdrop/backdrop.dart';
 import 'package:vsongbook/models/BookModel.dart';
 import 'package:vsongbook/widgets/AsProgressDialog.dart';
 import 'package:vsongbook/widgets/AsProgressWidget.dart';
@@ -13,7 +12,6 @@ import 'package:vsongbook/utils/Preferences.dart';
 import 'package:vsongbook/utils/Constants.dart';
 import 'package:vsongbook/helpers/SqliteHelper.dart';
 import 'package:vsongbook/screens/CcSongsLoad.dart';
-import 'package:vsongbook/screens/FfSettingsQuick.dart';
 
 class CcBooksLoad extends StatefulWidget {
   @override
@@ -25,10 +23,10 @@ class CcBooksLoad extends StatefulWidget {
 class CcBooksLoadState extends State<CcBooksLoad> {
   var appBar = AppBar();
   final globalKey = new GlobalKey<ScaffoldState>();
-  AsProgressDialog progressDialog = AsProgressDialog.getAsProgressDialog(
-      AsProgressDialogTitles.Getting_Ready);
+  AsProgressDialog progressDialog =
+      AsProgressDialog.getAsProgressDialog(LangStrings.Getting_Ready);
   AsProgressWidget progressWidget =
-      AsProgressWidget.getProgressWidget(AsProgressDialogTitles.Getting_Ready);
+      AsProgressWidget.getProgressWidget(LangStrings.Getting_Ready);
 
   SqliteHelper databaseHelper = SqliteHelper();
   List<BookItem<Book>> selected = [];
@@ -84,15 +82,6 @@ class CcBooksLoadState extends State<CcBooksLoad> {
     }
   }
 
-  _darkModePressed(BuildContext context) {
-    if (darkModePressed) {
-      if (Provider.of<AppSettings>(context).isDarkMode)
-        Provider.of<AppSettings>(context).setDarkMode(true);
-      else
-        Provider.of<AppSettings>(context).setDarkMode(false);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     if (books == null) {
@@ -102,7 +91,8 @@ class CcBooksLoadState extends State<CcBooksLoad> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Set up your vSongBook'),
+        centerTitle: true,
+        title: Text(LangStrings.SetUpvSongBook),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.refresh),
@@ -120,14 +110,11 @@ class CcBooksLoadState extends State<CcBooksLoad> {
             },
           ),
           IconButton(
-            icon: Icon(Provider.of<AppSettings>(context).isDarkMode
-                ? Icons.brightness_4
-                : Icons.brightness_7),
+            icon: Icon(Icons.settings),
             onPressed: () {
-              setState(() {
-                darkModePressed = true;
-              });
-              _darkModePressed(context);
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) => settingsDialog());
             },
           ),
         ],
@@ -139,7 +126,7 @@ class CcBooksLoadState extends State<CcBooksLoad> {
               context: context,
               builder: (BuildContext context) => areYouDoneDialog());
         },
-        tooltip: 'Proceed',
+        tooltip: LangStrings.Proceed,
         child: Icon(Icons.check),
       ),
     );
@@ -155,11 +142,11 @@ class CcBooksLoadState extends State<CcBooksLoad> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  'Create your Collection',
+                  LangStrings.CreateCollection,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 FlatButton(
-                  child: Text('Learn More'),
+                  child: Text(LangStrings.LearnMore),
                   onPressed: () {
                     showDialog(
                         context: context,
@@ -197,6 +184,49 @@ class CcBooksLoadState extends State<CcBooksLoad> {
     );
   }
 
+  Widget settingsDialog() {
+    return new AlertDialog(
+      title: new Text(
+        LangStrings.DisplaySettings,
+        style: new TextStyle(color: Colors.deepOrange, fontSize: 25),
+      ),
+      content: new Container(
+        height: 50,
+        width: double.maxFinite,
+        child: ListView(children: <Widget>[
+          Consumer<AppSettings>(builder: (context, AppSettings settings, _) {
+            return ListTile(
+              onTap: () {},
+              leading: Icon(settings.isDarkMode
+                  ? Icons.brightness_4
+                  : Icons.brightness_7),
+              title: Text(LangStrings.DarkMode),
+              trailing: Switch(
+                onChanged: (bool value) => settings.setDarkMode(value),
+                value: settings.isDarkMode,
+              ),
+            );
+          }),
+          Divider(),
+        ]),
+      ),
+      actions: <Widget>[
+        new Container(
+          margin: EdgeInsets.all(5),
+          child: FlatButton(
+            child:
+                Text(LangStrings.OkayDone, style: new TextStyle(fontSize: 20)),
+            color: Colors.deepOrange,
+            //textColor: Colors.white,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget loadingGettingReady() {
     return new Container(
       height: (MediaQuery.of(context).size.height -
@@ -213,7 +243,7 @@ class CcBooksLoadState extends State<CcBooksLoad> {
                     valueColor: new AlwaysStoppedAnimation(Colors.deepOrange)),
                 new Container(
                   margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                  child: new Text("Getting Ready ...",
+                  child: new Text(LangStrings.Getting_Ready,
                       style: new TextStyle(fontSize: 18)),
                 )
               ],
@@ -227,20 +257,19 @@ class CcBooksLoadState extends State<CcBooksLoad> {
   Widget justAMinuteDialog() {
     return new AlertDialog(
       title: new Text(
-        "Just a minute!",
+        LangStrings.JustAMinute,
         style: new TextStyle(color: Colors.deepOrange, fontSize: 25),
       ),
       content: new Text(
-        "Take time to select a songbook at a time so as to setup your vSongBook Collection.\n\n" +
-            "Once done that, proceed to press the 'TICK' button at the top right or bottom right for next stage\n\n" +
-            "We can always bring you back here to add or remove songbooks",
+        LangStrings.TakeTimeSelectingSongbooks,
         style: new TextStyle(fontSize: 20),
       ),
       actions: <Widget>[
         new Container(
           margin: EdgeInsets.all(5),
           child: FlatButton(
-            child: Text('OKAY, GOT IT', style: new TextStyle(fontSize: 20)),
+            child:
+                Text(LangStrings.OkayGotIt, style: new TextStyle(fontSize: 20)),
             color: Colors.deepOrange,
             //textColor: Colors.white,
             onPressed: () {
@@ -255,19 +284,19 @@ class CcBooksLoadState extends State<CcBooksLoad> {
   Widget noInternetDialog() {
     return new AlertDialog(
       title: new Text(
-        "Wait, are you connected?",
+        LangStrings.AreYouConnected,
         style: new TextStyle(color: Colors.deepOrange, fontSize: 25),
       ),
       content: new Text(
-        "Oops! This is so heart breaking. You don't seem to have a working internet connection.\n\n" +
-            "Kindly connect to a reliable internet either via Wi-Fi or Mobile Data then Retry again.",
+        LangStrings.NoConnection,
         style: new TextStyle(fontSize: 20),
       ),
       actions: <Widget>[
         new Container(
           margin: EdgeInsets.all(5),
           child: FlatButton(
-            child: Text('OKAY, GOT IT', style: new TextStyle(fontSize: 20)),
+            child:
+                Text(LangStrings.OkayGotIt, style: new TextStyle(fontSize: 20)),
             color: Colors.deepOrange,
             textColor: Colors.white,
             onPressed: () {
@@ -278,7 +307,7 @@ class CcBooksLoadState extends State<CcBooksLoad> {
         new Container(
           margin: EdgeInsets.all(5),
           child: FlatButton(
-            child: Text('RETRY', style: new TextStyle(fontSize: 20)),
+            child: Text(LangStrings.Retry, style: new TextStyle(fontSize: 20)),
             color: Colors.deepOrange,
             textColor: Colors.white,
             onPressed: () {
@@ -302,11 +331,11 @@ class CcBooksLoadState extends State<CcBooksLoad> {
             selected[i].data.title +
             " (" +
             selected[i].data.qcount +
-            " songs).\n";
+            LangStrings.SongsPrefix;
       }
       return new AlertDialog(
         title: new Text(
-          "Done with selecting?",
+          LangStrings.DoneSelecting,
           style: new TextStyle(color: Colors.deepOrange, fontSize: 25),
         ),
         content: new Text(
@@ -317,7 +346,8 @@ class CcBooksLoadState extends State<CcBooksLoad> {
           new Container(
             margin: EdgeInsets.all(5),
             child: FlatButton(
-              child: Text('GO BACK', style: new TextStyle(fontSize: 20)),
+              child:
+                  Text(LangStrings.GoBack, style: new TextStyle(fontSize: 20)),
               color: Colors.deepOrange,
               textColor: Colors.white,
               onPressed: () {
@@ -328,7 +358,8 @@ class CcBooksLoadState extends State<CcBooksLoad> {
           new Container(
             margin: EdgeInsets.all(5),
             child: FlatButton(
-              child: Text('PROCEED', style: new TextStyle(fontSize: 20)),
+              child:
+                  Text(LangStrings.Proceed, style: new TextStyle(fontSize: 20)),
               color: Colors.deepOrange,
               textColor: Colors.white,
               onPressed: () {
@@ -342,18 +373,16 @@ class CcBooksLoadState extends State<CcBooksLoad> {
     } else {
       return new AlertDialog(
         title: new Text(
-          "Just a Minute ...",
+          LangStrings.JustAMinute,
           style: new TextStyle(color: Colors.orange, fontSize: 25),
         ),
         content: new Text(
-          "Oops! This is so heart breaking. You haven't selected a book, you expect things to be okay. You got to " +
-              "select at least one book.\n\n By the way we can always bring you back here to select afresh. But for " +
-              "now select at least one.",
+          LangStrings.NoSelection,
           style: new TextStyle(color: Colors.black, fontSize: 20),
         ),
         actions: <Widget>[
           new FlatButton(
-            child: new Text("Okay, Got it",
+            child: new Text(LangStrings.OkayGotIt,
                 style: new TextStyle(color: Colors.orange, fontSize: 20)),
             onPressed: () {
               Navigator.pop(context);
@@ -439,7 +468,7 @@ class CcBooksLoadState extends State<CcBooksLoad> {
                         books[index].qcount +
                             " " +
                             books[index].backpath +
-                            " songs inside;\n" +
+                            LangStrings.SongsInside +
                             books[index].content,
                         style: TextStyle(
                             color: bookList[index].isSelected
