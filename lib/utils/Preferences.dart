@@ -2,11 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:vsongbook/models/callbacks/User.dart';
-import 'package:vsongbook/utils/constants.dart';
+import 'package:vsongbook/utils/Constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Preferences {
-
   static Future<SharedPreferences> getInstance() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs;
@@ -17,7 +16,8 @@ class Preferences {
     prefs.clear();
   }
 
-  static Future<void> setCountryPhone(String country, String icode, String ccode, String mobile) async {
+  static Future<void> setCountryPhone(
+      String country, String icode, String ccode, String mobile) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(SharedPreferenceKeys.User_Country_Name, country);
     prefs.setString(SharedPreferenceKeys.User_Country_Icode, icode);
@@ -42,7 +42,8 @@ class Preferences {
 
   static Future<User> getUserProfile() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return User.fromJson(json.decode(prefs.getString(SharedPreferenceKeys.User)));
+    return User.fromJson(
+        json.decode(prefs.getString(SharedPreferenceKeys.User)));
   }
 
   static Future<void> setUserProfile(User user) async {
@@ -75,5 +76,4 @@ class Preferences {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.setBool(SharedPreferenceKeys.App_Songs_Loaded, areSongsLoaded);
   }
-
 }

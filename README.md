@@ -1,11 +1,11 @@
 # vSongBook Mobile
 
 <a href='https://play.google.com/store/apps/details?id=com.jacksiro_siro.visongbook'>
-  <img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height='50'/>
+  <img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width='200'/>
 </a>
 
 <a href="https://apps.apple.com/app/vsongbook/id1327276691">
-  <img alt='Get it on AppStore' src='https://linkmaker.itunes.apple.com/en-us/badge-lrg.svg?releaseDate=2019-04-02&kind=iossoftware&bubble=ios_apps' height='50'>
+  <img alt='Get it on AppStore' src='https://linkmaker.itunes.apple.com/en-us/badge-lrg.svg?releaseDate=2019-04-02&kind=iossoftware&bubble=ios_apps' width='200'>
 </a>
 
 <a href="https://github.com/Solido/awesome-flutter#components">

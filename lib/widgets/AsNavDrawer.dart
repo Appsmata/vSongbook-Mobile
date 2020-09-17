@@ -5,10 +5,8 @@ import 'package:vsongbook/screens/GgDonate.dart';
 import 'package:vsongbook/screens/GgHelpDesk.dart';
 
 class AsNavDrawer extends StatefulWidget {
-
   @override
   createState() => new AsNavDrawerState();
-
 }
 
 class AsNavDrawerState extends State<AsNavDrawer> {
@@ -17,7 +15,7 @@ class AsNavDrawerState extends State<AsNavDrawer> {
   @override
   Widget build(BuildContext context) {
     didChangeDependencies();
-    
+
     return new ListView(
       children: <Widget>[
         drawerHeader(),
@@ -27,41 +25,36 @@ class AsNavDrawerState extends State<AsNavDrawer> {
           //onTap: () => Navigator.pushReplacement(context, new MaterialPageRoute(builder: (context) => new DdSongBooks()))
         ),
         ListTile(
-          leading: Icon(Icons.card_membership),
-          title: Text('Support us'),
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return GgDonate();
-            }));
-          }
-        ),
+            leading: Icon(Icons.card_membership),
+            title: Text('Support us'),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return GgDonate();
+              }));
+            }),
         Divider(),
-        ListTile( 
+        ListTile(
           leading: Icon(Icons.settings),
-          title: Text('App Settings'), 
+          title: Text('App Settings'),
           //onTap: () => Navigator.pushReplacement( context, new MaterialPageRoute(builder: (context) => new XBasicScreen()))
         ),
-        ListTile( 
-          leading: Icon(Icons.update),
-          title: Text('App Updates') ),
+        ListTile(leading: Icon(Icons.update), title: Text('App Updates')),
         ListTile(
-          leading: Icon(Icons.help_center),
-          title: Text('Help & Feedback'),
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return GgHelpDesk();
-            }));
-          }
-        ),
+            leading: Icon(Icons.help),
+            title: Text('Help & Feedback'),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return GgHelpDesk();
+              }));
+            }),
         ListTile(
-          leading: Icon(Icons.info),
-          title: Text('About vSongBook'),
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return GgAboutApp();
-            }));
-          }
-        ),
+            leading: Icon(Icons.info),
+            title: Text('About vSongBook'),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return GgAboutApp();
+              }));
+            }),
       ],
     );
   }
@@ -80,6 +73,4 @@ class AsNavDrawerState extends State<AsNavDrawer> {
       ),
     );
   }
-
-
 }
