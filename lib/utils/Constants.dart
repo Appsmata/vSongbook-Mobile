@@ -180,6 +180,9 @@ class LangStrings {
       "Oops! This is so heart breaking. You haven't selected a book, you expect things to be okay. You got to " +
           "select at least one book.\n\n By the way we can always bring you back here to select afresh. But for " +
           "now select at least one.";
+  static const String NoNewSelection =
+      "Oops! You haven't selected anymore book to your original collection, maybe you just want to keep your original " +
+          "collection.\n\n By the way we can always bring you back here to select afresh. Well lets hope that is okay with you for now.";
   static const String NoConnection =
       "Oops! This is so heart breaking. You don't seem to have a working internet connection.\n\n" +
           "Kindly connect to a reliable internet either via Wi-Fi or Mobile Data then Retry again.";

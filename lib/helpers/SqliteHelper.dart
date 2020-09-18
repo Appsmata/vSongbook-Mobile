@@ -50,7 +50,7 @@ class SqliteHelper {
     Database db = await this.database;
 
     var result =
-        await db.query(Tables.books, orderBy: Columns.position + " ASC");
+        await db.query(Tables.books, orderBy: Columns.categoryid + " ASC");
     return result;
   }
 
@@ -171,8 +171,9 @@ class SqliteHelper {
   //SONGS LISTS
   Future<List<Map<String, dynamic>>> getSongMapList(int book) async {
     Database db = await this.database;
-    var result =
-        db.query(Tables.songs, where: Columns.bookid + " = " + book.toString());
+    var result = db.query(Tables.songs,
+        where: Columns.bookid + " = " + book.toString(),
+        orderBy: Columns.categoryid + " ASC");
     return result;
   }
 

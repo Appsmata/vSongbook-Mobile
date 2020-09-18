@@ -103,8 +103,20 @@ class AsSearchSongsState extends State<AsSearchSongs> {
           fontSize: 18,
         ),
         decoration: InputDecoration(
-            prefixIcon: Icon(Icons.search),
-            suffixIcon: Icon(Icons.clear),
+            prefixIcon: Padding(
+              padding: const EdgeInsetsDirectional.only(end: 12.0),
+              child: IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () => searchSong(),
+              ),
+            ),
+            suffixIcon: Padding(
+              padding: const EdgeInsetsDirectional.only(end: 12.0),
+              child: IconButton(
+                icon: Icon(Icons.clear),
+                onPressed: () => clearSearch(),
+              ),
+            ),
             hintText: LangStrings.SearchNow,
             hintStyle: TextStyle(fontSize: 18)),
         onChanged: (value) {
@@ -256,6 +268,13 @@ class AsSearchSongsState extends State<AsSearchSongs> {
       updateSongList();
       textResult.setText(LangStrings.SearchResult);
     }
+  }
+
+  void clearSearch() {
+    txtSearch.clear();
+    songs.clear();
+    textResult.setText(LangStrings.SearchResult);
+    updateSongList();
   }
 
   void setCurrentBook(int _book) {

@@ -47,23 +47,18 @@ class AsFavoritesState extends State<AsFavorites> {
             child: new Column(
               children: <Widget>[
                 searchBox(),
-                //searchCriteria(),
               ],
             ),
           ),
           Container(
-            //height: MediaQuery.of(context).size.height - 150,
             height: MediaQuery.of(context).size.height - 100,
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: progressWidget,
           ),
           Container(
-            //height: MediaQuery.of(context).size.height - 150,
             height: MediaQuery.of(context).size.height - 100,
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            //margin: EdgeInsets.only(top: 130),
             margin: EdgeInsets.only(top: 60),
-
             child: ListView.builder(
               itemCount: songs.length,
               itemBuilder: songListView,
@@ -81,7 +76,20 @@ class AsFavoritesState extends State<AsFavorites> {
         controller: txtSearch,
         style: TextStyle(fontSize: 18),
         decoration: InputDecoration(
-            prefixIcon: Icon(Icons.search),
+            prefixIcon: Padding(
+              padding: const EdgeInsetsDirectional.only(end: 12.0),
+              child: IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () => searchSong(),
+              ),
+            ),
+            suffixIcon: Padding(
+              padding: const EdgeInsetsDirectional.only(end: 12.0),
+              child: IconButton(
+                icon: Icon(Icons.clear),
+                onPressed: () => clearSearch(),
+              ),
+            ),
             hintText: LangStrings.SearchNow,
             hintStyle: TextStyle(fontSize: 18)),
         onChanged: (value) {
@@ -171,6 +179,12 @@ class AsFavoritesState extends State<AsFavorites> {
       });
     } else
       updateSongList();
+  }
+
+  void clearSearch() {
+    txtSearch.clear();
+    songs.clear();
+    updateSongList();
   }
 
   void navigateToSong(SongModel song, String title, String songbook) async {

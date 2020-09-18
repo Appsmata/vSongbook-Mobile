@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vsongbook/helpers/AppSettings.dart';
 import 'package:vsongbook/models/BookModel.dart';
+import 'package:vsongbook/screens/AppStart.dart';
 import 'package:vsongbook/widgets/AsProgressDialog.dart';
 import 'package:vsongbook/widgets/AsProgressWidget.dart';
 import 'package:vsongbook/helpers/AppFutures.dart';
@@ -12,7 +13,6 @@ import 'package:vsongbook/models/callbacks/Book.dart';
 import 'package:vsongbook/utils/Preferences.dart';
 import 'package:vsongbook/utils/Constants.dart';
 import 'package:vsongbook/helpers/SqliteHelper.dart';
-import 'package:vsongbook/screens/CcSongsLoad.dart';
 
 class DdSongBooks extends StatefulWidget {
   @override
@@ -31,8 +31,7 @@ class DdSongBooksState extends State<DdSongBooks> {
 
   SqliteHelper db = SqliteHelper();
   Future<Database> dbFuture;
-  List<BookItem<Book>> selected = [];
-  List<BookItem<Book>> bookList;
+  List<BookItem<Book>> selected = [], bookList;
   List<BookModel> mybooks;
   List<Book> books;
   String backpathStr = "";
@@ -41,6 +40,13 @@ class DdSongBooksState extends State<DdSongBooks> {
     bookList = [];
     for (int i = 0; i < books.length; i++) {
       bookList.add(BookItem<Book>(books[i]));
+    }
+
+    for (int i = 0; i < books.length; i++) {
+      if (backpathStr.length > 1) {
+        bookList[i].isSelected =
+            backpathStr.contains(bookList[i].data.backpath) ? true : false;
+      }
     }
   }
 
@@ -56,7 +62,6 @@ class DdSongBooksState extends State<DdSongBooks> {
         for (int i = 0; i < mybooks.length; i++) {
           backpathStr = backpathStr + mybooks[i].backpath + ",";
         }
-        print(backpathStr);
       });
     });
     requestData();
@@ -297,75 +302,54 @@ class DdSongBooksState extends State<DdSongBooks> {
   }
 
   Widget areYouDoneDialog() {
-    if (selected.length > 0) {
-      String selectedbooks = "";
-      for (int i = 0; i < selected.length; i++) {
+    String selectedbooks = "";
+    for (int i = 0; i < bookList.length; i++) {
+      if (bookList[i].isSelected) {
         selectedbooks = selectedbooks +
             (i + 1).toString() +
             ". " +
-            selected[i].data.title +
+            bookList[i].data.title +
             " (" +
-            selected[i].data.qcount +
+            bookList[i].data.qcount +
             LangStrings.SongsPrefix;
       }
-      return new AlertDialog(
-        title: new Text(
-          LangStrings.DoneSelecting,
-          style: new TextStyle(color: Colors.deepOrange, fontSize: 25),
-        ),
-        content: new Text(
-          selectedbooks,
-          style: new TextStyle(fontSize: 20),
-        ),
-        actions: <Widget>[
-          new Container(
-            margin: EdgeInsets.all(5),
-            child: FlatButton(
-              child:
-                  Text(LangStrings.GoBack, style: new TextStyle(fontSize: 20)),
-              color: Colors.deepOrange,
-              textColor: Colors.white,
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ),
-          new Container(
-            margin: EdgeInsets.all(5),
-            child: FlatButton(
-              child:
-                  Text(LangStrings.Proceed, style: new TextStyle(fontSize: 20)),
-              color: Colors.deepOrange,
-              textColor: Colors.white,
-              onPressed: () {
-                Navigator.pop(context);
-                _goToNextScreen();
-              },
-            ),
-          ),
-        ],
-      );
-    } else {
-      return new AlertDialog(
-        title: new Text(
-          LangStrings.JustAMinute,
-          style: new TextStyle(color: Colors.orange, fontSize: 25),
-        ),
-        content: new Text(
-          LangStrings.NoSelection,
-          style: new TextStyle(color: Colors.black, fontSize: 20),
-        ),
-        actions: <Widget>[
-          new FlatButton(
-            child: new Text(LangStrings.OkayGotIt,
-                style: new TextStyle(color: Colors.orange, fontSize: 20)),
+    }
+    return new AlertDialog(
+      title: new Text(
+        LangStrings.DoneSelecting,
+        style: new TextStyle(color: Colors.deepOrange, fontSize: 25),
+      ),
+      content: new Text(
+        selectedbooks,
+        style: new TextStyle(fontSize: 20),
+      ),
+      actions: <Widget>[
+        new Container(
+          margin: EdgeInsets.all(5),
+          child: FlatButton(
+            child: Text(LangStrings.GoBack, style: new TextStyle(fontSize: 20)),
+            color: Colors.deepOrange,
+            textColor: Colors.white,
             onPressed: () {
               Navigator.pop(context);
             },
           ),
-        ],
-      );
-    }
+        ),
+        new Container(
+          margin: EdgeInsets.all(5),
+          child: FlatButton(
+            child:
+                Text(LangStrings.Proceed, style: new TextStyle(fontSize: 20)),
+            color: Colors.deepOrange,
+            textColor: Colors.white,
+            onPressed: () {
+              Navigator.pop(context);
+              _goToNextScreen();
+            },
+          ),
+        ),
+      ],
+    );
   }
 
   void onItemSelected(BookItem tapped) {
@@ -384,11 +368,6 @@ class DdSongBooksState extends State<DdSongBooks> {
   }
 
   Widget bookListView(BuildContext context, int index) {
-    if (backpathStr.length > 1) {
-      bookList[index].isSelected =
-          backpathStr.contains(bookList[index].data.backpath) ? true : false;
-    }
-
     return GestureDetector(
       onTap: () {
         onItemSelected(bookList[index]);
@@ -468,7 +447,7 @@ class DdSongBooksState extends State<DdSongBooks> {
 
   Future<void> saveData() async {
     SqliteHelper db = SqliteHelper();
-    String selectedbooks = selected[0].data.categoryid;
+    String selectedbooks = "";
 
     for (int i = 0; i < selected.length; i++) {
       Book item = selected[i].data;
@@ -478,13 +457,22 @@ class DdSongBooksState extends State<DdSongBooks> {
           i + 1, item.content, item.backpath);
 
       if (backpathStr.length > 1) {
-        if (!backpathStr.contains(selected[i].data.backpath))
+        if (backpathStr.contains(selected[i].data.backpath))
           await db.deleteBook(book.bookid);
+        else {
+          await db.insertBook(book);
+          selectedbooks = selectedbooks + selected[i].data.categoryid + ",";
+        }
       } else {
         await db.insertBook(book);
-        selectedbooks = selectedbooks + "," + selected[i].data.categoryid;
+        selectedbooks = selectedbooks + selected[i].data.categoryid + ",";
       }
 
+      try {
+        selectedbooks = selectedbooks.substring(0, selectedbooks.length - 1);
+      } catch (Exception) {}
+
+      print(selectedbooks);
       Preferences.setBooksLoaded(true);
       Preferences.setSelectedBooks(selectedbooks);
       Preferences.setSongsLoaded(false);
@@ -495,11 +483,9 @@ class DdSongBooksState extends State<DdSongBooks> {
     progressDialog.showProgress();
     saveData();
 
-    for (int i = 1; i < selected.length; i++) {}
-
     progressDialog.hideProgress();
-    Navigator.pushReplacement(context,
-        new MaterialPageRoute(builder: (context) => new CcSongsLoad()));
+    Navigator.pushReplacement(
+        context, new MaterialPageRoute(builder: (context) => new AppStart()));
   }
 
   void moveToLastScreen() {

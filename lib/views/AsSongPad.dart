@@ -45,12 +45,10 @@ class AsSongPadState extends State<AsSongPad> {
             child: new Column(
               children: <Widget>[
                 searchBox(),
-                //searchCriteria(),
               ],
             ),
           ),
           Container(
-            //height: MediaQuery.of(context).size.height - 150,
             height: MediaQuery.of(context).size.height - 100,
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: progressWidget,
@@ -104,7 +102,20 @@ class AsSongPadState extends State<AsSongPad> {
         controller: txtSearch,
         style: TextStyle(fontSize: 18),
         decoration: InputDecoration(
-            prefixIcon: Icon(Icons.search),
+            prefixIcon: Padding(
+              padding: const EdgeInsetsDirectional.only(end: 12.0),
+              child: IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () => searchSong(),
+              ),
+            ),
+            suffixIcon: Padding(
+              padding: const EdgeInsetsDirectional.only(end: 12.0),
+              child: IconButton(
+                icon: Icon(Icons.clear),
+                onPressed: () => clearSearch(),
+              ),
+            ),
             hintText: "Search a draft",
             hintStyle: TextStyle(fontSize: 18)),
         onChanged: (value) {
@@ -161,6 +172,12 @@ class AsSongPadState extends State<AsSongPad> {
       });
     } else
       updateListView();
+  }
+
+  void clearSearch() {
+    txtSearch.clear();
+    songs.clear();
+    updateListView();
   }
 
   void navigateToSong(SongModel song, String title) async {

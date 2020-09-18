@@ -505,10 +505,13 @@ class CcBooksLoadState extends State<CcBooksLoad> {
     progressDialog.showProgress();
     saveData();
 
-    String selectedbooks = selected[0].data.categoryid;
-    for (int i = 1; i < selected.length; i++) {
-      selectedbooks = selectedbooks + "," + selected[i].data.categoryid;
-    }
+    String selectedbooks = "";
+    for (int i = 0; i < selected.length; i++)
+      selectedbooks = selectedbooks + selected[i].data.categoryid + ",";
+
+    try {
+      selectedbooks = selectedbooks.substring(0, selectedbooks.length - 1);
+    } catch (Exception) {}
 
     progressDialog.hideProgress();
     Preferences.setBooksLoaded(true);
