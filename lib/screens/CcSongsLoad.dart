@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:vsongbook/helpers/AppSettings.dart';
 import 'package:vsongbook/models/SongModel.dart';
 import 'package:vsongbook/helpers/AppFutures.dart';
 import 'package:vsongbook/models/base/EventObject.dart';
@@ -131,11 +133,13 @@ class CcSongsLoadState extends State<CcSongsLoad> {
         height: 100,
         width: 350,
         padding: const EdgeInsets.symmetric(horizontal: 10),
-        decoration: new BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: Colors.orange),
-            boxShadow: [BoxShadow(blurRadius: 5)],
-            borderRadius: new BorderRadius.all(new Radius.circular(10))),
+        decoration: Provider.of<AppSettings>(context).isDarkMode
+            ? BoxDecoration()
+            : BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.orange),
+                boxShadow: [BoxShadow(blurRadius: 5)],
+                borderRadius: new BorderRadius.all(new Radius.circular(10))),
         child: new Stack(
           children: <Widget>[
             new Center(child: new Container(width: 300, height: 120)),

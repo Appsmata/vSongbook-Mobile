@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vsongbook/helpers/AppSettings.dart';
+import 'package:vsongbook/screens/DdSongBooks.dart';
 import 'package:vsongbook/screens/GgAboutApp.dart';
 import 'package:vsongbook/screens/GgDonate.dart';
 import 'package:vsongbook/screens/GgHelpDesk.dart';
@@ -33,11 +34,14 @@ class AsNavDrawerState extends State<AsNavDrawer> {
           );
         }),
         Divider(),
-        /*ListTile(
-          leading: Icon(Icons.build),
-          title: Text('Manage Songbooks'),
-          //onTap: () => Navigator.pushReplacement(context, new MaterialPageRoute(builder: (context) => new DdSongBooks()))
-        ),*/
+        ListTile(
+            leading: Icon(Icons.build),
+            title: Text('Manage Songbooks'),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return DdSongBooks();
+              }));
+            }),
         ListTile(
             leading: Icon(Icons.card_membership),
             title: Text('Support us'),

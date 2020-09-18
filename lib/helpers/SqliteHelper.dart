@@ -54,6 +54,14 @@ class SqliteHelper {
     return result;
   }
 
+  void manageSongbooks() async {
+    Database db = await this.database;
+    await db.execute("DROP TABLE " + Tables.books + ";");
+    await db.execute("DROP TABLE " + Tables.songs + ";");
+    await db.execute(Queries.createBooksTable);
+    await db.execute(Queries.createSongsTable);
+  }
+
   Future<int> insertBook(BookModel book) async {
     Database db = await this.database;
     book.created = book.updated = "";
@@ -79,6 +87,8 @@ class SqliteHelper {
     var db = await this.database;
     int result = await db.rawDelete(
         "DELETE FROM " + Tables.books + " WHERE " + Columns.bookid + " = $id");
+    result = await db.rawDelete(
+        "DELETE FROM " + Tables.songs + " WHERE " + Columns.bookid + " = $id");
     return result;
   }
 
