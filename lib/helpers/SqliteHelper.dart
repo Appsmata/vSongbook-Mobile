@@ -180,26 +180,14 @@ class SqliteHelper {
       String searchThis) async {
     Database db = await this.database;
     String bookQuery =
-        "AND " + Columns.bookid + "!=" + Columns.ownsongs.toString() + " ";
+        "AND " + Columns.bookid + "!=" + Columns.ownsongs.toString();
 
-    String sqlQuery =
-        Columns.title + " LIKE ''" + searchThis + "%' " + bookQuery;
-
-    sqlQuery = sqlQuery +
-        "OR " +
+    String sqlQuery = Columns.title +
+        " LIKE '$searchThis%' $bookQuery OR " +
         Columns.alias +
-        " LIKE '" +
-        searchThis +
-        "%' " +
-        bookQuery;
-
-    sqlQuery = sqlQuery +
-        "OR " +
+        " LIKE '$searchThis%' $bookQuery OR " +
         Columns.content +
-        " LIKE ''" +
-        searchThis +
-        "%' " +
-        bookQuery;
+        " LIKE '$searchThis%' $bookQuery";
 
     var result;
     if (isNumeric(searchThis)) {
@@ -251,24 +239,13 @@ class SqliteHelper {
   Future<List<Map<String, dynamic>>> getFavSearchMapList(
       String searchThis) async {
     Database db = await this.database;
-    String bookQuery = "AND " + Columns.isfav + "=1 ";
+    String bookQuery = "AND " + Columns.isfav + "=1";
     String sqlQuery = Columns.title +
-        " LIKE '%" +
-        searchThis +
-        "%' " +
-        bookQuery +
-        "OR " +
+        " LIKE '$searchThis%' $bookQuery OR " +
         Columns.alias +
-        " LIKE '%" +
-        searchThis +
-        "%' " +
-        bookQuery +
-        "OR " +
+        " LIKE '$searchThis%' $bookQuery OR " +
         Columns.content +
-        " LIKE '%" +
-        searchThis +
-        "%' " +
-        bookQuery;
+        " LIKE '$searchThis%' $bookQuery";
 
     var result;
     if (isNumeric(searchThis)) {
@@ -303,24 +280,13 @@ class SqliteHelper {
       String searchThis) async {
     Database db = await this.database;
     String bookQuery =
-        "AND " + Columns.bookid + "=" + Columns.ownsongs.toString() + " ";
+        "AND " + Columns.bookid + "=" + Columns.ownsongs.toString();
     String sqlQuery = Columns.title +
-        " LIKE '%" +
-        searchThis +
-        "%' " +
-        bookQuery +
-        "OR " +
+        " LIKE '$searchThis%' $bookQuery OR " +
         Columns.alias +
-        " LIKE '%" +
-        searchThis +
-        "%' " +
-        bookQuery +
-        "OR " +
+        " LIKE '$searchThis%' $bookQuery OR " +
         Columns.content +
-        " LIKE '%" +
-        searchThis +
-        "%' " +
-        bookQuery;
+        " LIKE '$searchThis%' $bookQuery";
 
     var result = db.query(Tables.songs, where: sqlQuery);
     return result;

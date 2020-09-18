@@ -8,7 +8,7 @@ import 'package:vsongbook/utils/Preferences.dart';
 import 'package:vsongbook/utils/Constants.dart';
 import 'package:vsongbook/helpers/SqliteHelper.dart';
 import 'package:vsongbook/screens/AppStart.dart';
-import 'package:vsongbook/widgets/AsTextView.dart';
+import 'package:vsongbook/views/AsTextView.dart';
 import 'package:vsongbook/widgets/AsLineProgress.dart';
 
 class CcSongsLoad extends StatefulWidget {

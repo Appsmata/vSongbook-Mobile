@@ -10,7 +10,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:vsongbook/utils/Constants.dart';
 import 'package:vsongbook/widgets/AsProgressWidget.dart';
-import 'package:vsongbook/widgets/AsTextView.dart';
+import 'package:vsongbook/views/AsTextView.dart';
 
 class AsSearchSongs extends StatefulWidget {
   final int book;

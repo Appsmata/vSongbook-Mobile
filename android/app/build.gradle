@@ -45,8 +45,8 @@ android {
         applicationId "com.jackson_siro.visongbook"
         minSdkVersion 18
         targetSdkVersion 29
-        versionCode 84
-        versionName "1.7.0"
+        versionCode 85
+        versionName "1.7.1"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
