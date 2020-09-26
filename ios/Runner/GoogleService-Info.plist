@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>519997951805-47hh6296vh5gdoa1jt7pd8tdbf0ml03d.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.519997951805-47hh6296vh5gdoa1jt7pd8tdbf0ml03d</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>519997951805-je07u4rsv50jaocgmcgrblh28u4bb9qd.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDEirvPuA-shLSmaEs1BH8ntgxcJ7JqYTU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>519997951805</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.jacksiro.visongbook</string>
+	<key>PROJECT_ID</key>
+	<string>virtualsongbook</string>
+	<key>STORAGE_BUCKET</key>
+	<string>virtualsongbook.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:519997951805:ios:5cbf37cddfd381ff6abf54</string>
+	<key>DATABASE_URL</key>
+	<string>https://virtualsongbook.firebaseio.com</string>
+</dict>
+</plist>
