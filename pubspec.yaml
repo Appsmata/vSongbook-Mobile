@@ -66,17 +66,4 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/appicon.png
-    - assets/images/appsmata.png
-    - assets/images/book.jpg
-    - assets/images/bg.jpg
-    - assets/images/donation1.png
-    - assets/images/donation2.png
-    - assets/images/donation3.png
-    - assets/images/donation4.png
-    - assets/images/donation5.png
-    - assets/images/help1.png
-    - assets/images/help2.png
-    - assets/images/help3.png
-    - assets/images/header.png
-    - assets/images/splash.jpg
+    - assets/images/
