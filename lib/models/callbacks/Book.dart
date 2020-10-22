@@ -1,10 +1,5 @@
 class Book {
-  String categoryid;
-  String title;
-  String tags;
-  String qcount;
-  String content;
-  String backpath;
+  String categoryid, title, tags, qcount, content, backpath;
 
   Book(
       {
