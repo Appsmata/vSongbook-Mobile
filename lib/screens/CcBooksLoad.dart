@@ -12,6 +12,7 @@ import 'package:vsongbook/utils/Preferences.dart';
 import 'package:vsongbook/utils/Constants.dart';
 import 'package:vsongbook/helpers/SqliteHelper.dart';
 import 'package:vsongbook/screens/CcSongsLoad.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 class CcBooksLoad extends StatefulWidget {
   @override
@@ -22,11 +23,12 @@ class CcBooksLoad extends StatefulWidget {
 
 class CcBooksLoadState extends State<CcBooksLoad> {
   var appBar = AppBar();
-  final globalKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   AsProgressDialog progressDialog =
       AsProgressDialog.getAsProgressDialog(LangStrings.Getting_Ready);
   AsProgressWidget progressWidget =
       AsProgressWidget.getProgressWidget(LangStrings.Getting_Ready);
+  final GlobalKey<LiquidPullToRefreshState> _refreshIndicatorKey = GlobalKey<LiquidPullToRefreshState>();
 
   SqliteHelper databaseHelper = SqliteHelper();
   List<BookItem<Book>> selected = [];
@@ -34,6 +36,23 @@ class CcBooksLoadState extends State<CcBooksLoad> {
   List<Book> books;
 
   bool darkModePressed = false;
+
+  Future<void> _handleRefresh() {
+    final Completer<void> completer = Completer<void>();
+    Timer(const Duration(seconds: 3), () {
+      completer.complete();
+    });
+    
+    return completer.future.then<void>((_) {
+      _scaffoldKey.currentState?.showSnackBar(SnackBar(
+          content: const Text('Refresh complete'),
+          action: SnackBarAction(
+              label: 'RETRY',
+              onPressed: () {
+                _refreshIndicatorKey.currentState.show();
+              })));
+    });
+  }
 
   void populateData() {
     bookList = [];
@@ -167,10 +186,16 @@ class CcBooksLoadState extends State<CcBooksLoad> {
                 (appBar.preferredSize.height * 2)),
             padding: const EdgeInsets.symmetric(horizontal: 10),
             margin: EdgeInsets.only(top: 50),
-            child: ListView.builder(
-              physics: BouncingScrollPhysics(),
-              itemCount: books.length,
-              itemBuilder: bookListView,
+            child: LiquidPullToRefresh(
+              key: _refreshIndicatorKey,	// key if you want to add
+              onRefresh: _handleRefresh,	// refresh callback
+              child: ListView.builder(
+                physics: BouncingScrollPhysics(),
+                    itemCount: books.length,
+                    itemBuilder: bookListView,
+                  ),
+                ),
+              ),
             ),
           ),
           Container(

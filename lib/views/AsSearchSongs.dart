@@ -11,6 +11,7 @@ import 'package:flutter_html/style.dart';
 import 'package:vsongbook/utils/Constants.dart';
 import 'package:vsongbook/widgets/AsProgressWidget.dart';
 import 'package:vsongbook/views/AsTextView.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 class AsSearchSongs extends StatefulWidget {
   final int book;
@@ -27,17 +28,36 @@ class AsSearchSongs extends StatefulWidget {
 }
 
 class AsSearchSongsState extends State<AsSearchSongs> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   AsProgressWidget progressWidget =
       AsProgressWidget.getProgressWidget(LangStrings.Sis_Patience);
   TextEditingController txtSearch = new TextEditingController(text: "");
   AsTextView textResult = AsTextView.setUp(LangStrings.SearchResult, 18, false);
   SqliteHelper db = SqliteHelper();
+  final GlobalKey<LiquidPullToRefreshState> _refreshIndicatorKey = GlobalKey<LiquidPullToRefreshState>();
 
   AsSearchSongsState({this.book});
   Future<Database> dbFuture;
   List<BookModel> books;
   List<SongModel> songs;
   int book;
+
+  Future<void> _handleRefresh() {
+    final Completer<void> completer = Completer<void>();
+    Timer(const Duration(seconds: 3), () {
+      completer.complete();
+    });
+    
+    return completer.future.then<void>((_) {
+      _scaffoldKey.currentState?.showSnackBar(SnackBar(
+          content: const Text('Refresh complete'),
+          action: SnackBarAction(
+              label: 'RETRY',
+              onPressed: () {
+                _refreshIndicatorKey.currentState.show();
+              })));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,10 +104,16 @@ class AsSearchSongsState extends State<AsSearchSongs> {
             height: MediaQuery.of(context).size.height - 200,
             padding: const EdgeInsets.symmetric(horizontal: 5),
             margin: EdgeInsets.only(top: 150),
-            child: ListView.builder(
+            child: LiquidPullToRefresh(
+                    key: _refreshIndicatorKey,	// key if you want to add
+                    onRefresh: _handleRefresh,	// refresh callback
+                    child: ListView.builder(
+                      physics: BouncingScrollPhysics(),
               itemCount: songs.length,
               itemBuilder: listView,
-            ),
+                    ),
+                  ),
+                ),
           ),
         ],
       ),
