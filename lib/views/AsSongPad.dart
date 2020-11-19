@@ -8,7 +8,7 @@ import 'package:vsongbook/screens/EeSongEdit.dart';
 import 'package:vsongbook/screens/EeSongView.dart';
 //import 'package:vsongbook/utils/Preferences.dart';
 import 'package:vsongbook/utils/Constants.dart';
-import 'package:vsongbook/widgets/AsProgressWidget.dart';
+import 'package:vsongbook/widgets/AsProgress.dart';
 
 class AsSongPad extends StatefulWidget {
   @override
@@ -16,8 +16,7 @@ class AsSongPad extends StatefulWidget {
 }
 
 class AsSongPadState extends State<AsSongPad> {
-  AsProgressWidget progressWidget =
-      AsProgressWidget.getProgressWidget(LangStrings.Sis_Patience);
+  AsProgress progress = AsProgress.getAsProgress(LangStrings.Sis_Patience);
   TextEditingController txtSearch = new TextEditingController(text: "");
   SqliteHelper db = SqliteHelper();
 
@@ -51,7 +50,7 @@ class AsSongPadState extends State<AsSongPad> {
           Container(
             height: MediaQuery.of(context).size.height - 100,
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: progressWidget,
+            child: progress,
           ),
           Container(
             height: MediaQuery.of(context).size.height - 100,
@@ -137,7 +136,7 @@ class AsSongPadState extends State<AsSongPad> {
         title: Text(songTitle, style: TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text(songContent),
         onTap: () {
-          navigateToSong(songs[index], songTitle);
+          navigateToSong(songs[index]);
         },
       ),
     );
@@ -150,7 +149,7 @@ class AsSongPadState extends State<AsSongPad> {
       songListFuture.then((songList) {
         setState(() {
           songs = songList;
-          progressWidget.hideProgress();
+          progress.hideProgress();
         });
       });
     });
@@ -180,11 +179,11 @@ class AsSongPadState extends State<AsSongPad> {
     updateListView();
   }
 
-  void navigateToSong(SongModel song, String title) async {
+  void navigateToSong(SongModel song) async {
     bool haschorus = false;
     if (song.content.contains("CHORUS")) haschorus = true;
     await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return EeSongView(song, haschorus, title, "My Own Songs");
+      return EeSongView(song, haschorus, "My Own Songs");
     }));
   }
 }

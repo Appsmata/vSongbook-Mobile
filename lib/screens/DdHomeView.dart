@@ -48,7 +48,6 @@ class DdHomeViewState extends State<DdHomeView> {
       length: appTabs.length,
       child: Scaffold(
         appBar: AppBar(
-          centerTitle: true,
           title: Text('vSongBook'),
           bottom: TabBar(tabs: appTabs),
         ),

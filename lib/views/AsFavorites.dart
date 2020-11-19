@@ -7,7 +7,7 @@ import 'package:vsongbook/models/SongModel.dart';
 import 'package:vsongbook/helpers/SqliteHelper.dart';
 import 'package:vsongbook/screens/EeSongView.dart';
 import 'package:vsongbook/utils/Constants.dart';
-import 'package:vsongbook/widgets/AsProgressWidget.dart';
+import 'package:vsongbook/widgets/AsProgress.dart';
 
 class AsFavorites extends StatefulWidget {
   @override
@@ -15,8 +15,8 @@ class AsFavorites extends StatefulWidget {
 }
 
 class AsFavoritesState extends State<AsFavorites> {
-  AsProgressWidget progressWidget =
-      AsProgressWidget.getProgressWidget(LangStrings.Sis_Patience);
+  AsProgress progress =
+      AsProgress.getAsProgress(LangStrings.Sis_Patience);
   TextEditingController txtSearch = new TextEditingController(text: "");
   SqliteHelper db = SqliteHelper();
 
@@ -53,7 +53,7 @@ class AsFavoritesState extends State<AsFavorites> {
           Container(
             height: MediaQuery.of(context).size.height - 100,
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: progressWidget,
+            child: progress,
           ),
           Container(
             height: MediaQuery.of(context).size.height - 100,
@@ -131,7 +131,7 @@ class AsFavoritesState extends State<AsFavorites> {
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         subtitle: Text(songContent, style: TextStyle(fontSize: 18)),
         onTap: () {
-          navigateToSong(songs[index], songTitle,
+          navigateToSong(songs[index],
               "Song #" + songs[index].number.toString() + " - " + songbook);
         },
       ),
@@ -157,7 +157,7 @@ class AsFavoritesState extends State<AsFavorites> {
       songListFuture.then((songList) {
         setState(() {
           songs = songList;
-          progressWidget.hideProgress();
+          progress.hideProgress();
         });
       });
     });
@@ -187,11 +187,11 @@ class AsFavoritesState extends State<AsFavorites> {
     updateSongList();
   }
 
-  void navigateToSong(SongModel song, String title, String songbook) async {
+  void navigateToSong(SongModel song, String songbook) async {
     bool haschorus = false;
     if (song.content.contains("CHORUS")) haschorus = true;
     await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return EeSongView(song, haschorus, title, songbook);
+      return EeSongView(song, haschorus, songbook);
     }));
   }
 }

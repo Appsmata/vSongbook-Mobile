@@ -88,6 +88,9 @@ class LangStrings {
   static const String CopySong = "Copy Song to Clipboard";
   static const String ShareSong = "Share this Song";
   static const String EditSong = "Edit this Song";
+  static const String CopyVerse = "Copy Verse to Clipboard";
+  static const String ShareVerse = "Share this Verse";
+  static const String ImageVerse = "Share an Image of this Verse";
   static const String TakeTimeSelectingSongbooks =
       "Take time to select a songbook at a time so as to setup your vSongBook Collection.\n\n" +
           "Once done that, proceed to press the 'TICK' button at the top right or bottom right for next stage\n\n" +
@@ -130,8 +133,7 @@ class LangStrings {
   static const String Song_Disliked = " disliked!";
 
   static const String SearchNow = "Search a song";
-  static const String SearchResult =
-      "Search by title, number or words of a song";
+  static const String SearchResult = "Search by title, number or words";
   static const String Signup_Now = "Not registered? Register now !";
   static const String Signin_Now = "Already registered? Login now !";
   static const String Login = "Login";
@@ -235,7 +237,7 @@ class LangStrings {
 
   static const String helpTab1Title = "Contact us";
   static const String helpTab1Content =
-      "<p>SIMU: +2547 - </p><hr><p>BARUA PEPE: <a href=\"mailto:appsmatake@gmail.com\">appsmatake@gmail.com</a> </p><hr> <p>TOVUTI: <a href=\"https://appsmata.com/vSongBook\">appsmata.com/vSongBook</a></p>";
+      "<p>SIMU: +2547 - </p><hr><p>EMAIL: <a href=\"mailto:appsmatake@gmail.com\">appsmatake@gmail.com</a> </p><hr> <p>TOVUTI: <a href=\"https://appsmata.com/vSongBook\">appsmata.com/vSongBook</a></p>";
 
   static const String helpTab2Title = "App Reviews";
   static const String helpTab2Content =
@@ -243,7 +245,7 @@ class LangStrings {
 
   static const String helpTab3Title = "Open Source";
   static const String helpTab3Content =
-      "If you are a software developer, the source code for this app is freely available on the GitHub:</br></br> <a href=\"https://github.com/Appsmata/vSongBook-Mobile\">github.com/kazibora/kamusi</a>";
+      "If you are a software developer, the source code for this app is freely available on the GitHub:</br></br> <a href=\"https://github.com/Appsmata/vSongBook-Mobile\">https://github.com/Appsmata/vSongBook-Mobile</a>";
 }
 
 class Tables {

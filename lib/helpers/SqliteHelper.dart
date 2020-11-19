@@ -136,27 +136,16 @@ class SqliteHelper {
       song.isfav = 1;
     else
       song.isfav = 0;
-    var result = await db.rawUpdate("UPDATE " +
-        Tables.songs +
-        " SET " +
-        Columns.isfav +
-        "=" +
-        song.isfav.toString() +
-        " WHERE " +
-        Columns.songid +
-        "=" +
-        song.songid.toString());
+    var result = await db.rawUpdate("UPDATE " + Tables.songs +
+        " SET " + Columns.isfav + "=" + song.isfav.toString() +
+        " WHERE " + Columns.songid + "=" + song.songid.toString());
     return result;
   }
 
   Future<int> deleteSong(int songID) async {
     var db = await this.database;
-    int result = await db.rawDelete("DELETE FROM " +
-        Tables.songs +
-        " WHERE " +
-        Columns.songid +
-        "=" +
-        songID.toString());
+    int result = await db.rawDelete("DELETE FROM " + Tables.songs +
+        " WHERE " + Columns.songid + "=" + songID.toString());
     return result;
   }
 
@@ -190,23 +179,18 @@ class SqliteHelper {
   Future<List<Map<String, dynamic>>> getSongSearchMapList(
       String searchThis) async {
     Database db = await this.database;
-    String bookQuery =
-        "AND " + Columns.bookid + "!=" + Columns.ownsongs.toString();
+    String bookQuery = "AND " + Columns.bookid + "!=" + Columns.ownsongs.toString();
 
-    String sqlQuery = Columns.title +
-        " LIKE '$searchThis%' $bookQuery OR " +
-        Columns.alias +
-        " LIKE '$searchThis%' $bookQuery OR " +
-        Columns.content +
-        " LIKE '$searchThis%' $bookQuery";
+    String sqlQuery = Columns.title + " LIKE '%$searchThis%' $bookQuery OR " +
+        Columns.alias + " LIKE '%$searchThis%' $bookQuery OR " +
+        Columns.content + " LIKE '%$searchThis%' $bookQuery";
 
     var result;
     if (isNumeric(searchThis)) {
       try {
         int searchno = int.parse(searchThis);
         if (searchno > 0)
-          result = db.query(Tables.songs,
-              where: Columns.number + "=" + searchno.toString());
+          result = db.query(Tables.songs, where: Columns.number + "=" + searchno.toString());
         else
           result = db.query(Tables.songs, where: sqlQuery);
       } catch (Exception) {
@@ -251,12 +235,9 @@ class SqliteHelper {
       String searchThis) async {
     Database db = await this.database;
     String bookQuery = "AND " + Columns.isfav + "=1";
-    String sqlQuery = Columns.title +
-        " LIKE '$searchThis%' $bookQuery OR " +
-        Columns.alias +
-        " LIKE '$searchThis%' $bookQuery OR " +
-        Columns.content +
-        " LIKE '$searchThis%' $bookQuery";
+    String sqlQuery = Columns.title + " LIKE '$searchThis%' $bookQuery OR " +
+        Columns.alias + " LIKE '$searchThis%' $bookQuery OR " +
+        Columns.content + " LIKE '$searchThis%' $bookQuery";
 
     var result;
     if (isNumeric(searchThis)) {
@@ -290,14 +271,10 @@ class SqliteHelper {
   Future<List<Map<String, dynamic>>> getDraftSearchMapList(
       String searchThis) async {
     Database db = await this.database;
-    String bookQuery =
-        "AND " + Columns.bookid + "=" + Columns.ownsongs.toString();
-    String sqlQuery = Columns.title +
-        " LIKE '$searchThis%' $bookQuery OR " +
-        Columns.alias +
-        " LIKE '$searchThis%' $bookQuery OR " +
-        Columns.content +
-        " LIKE '$searchThis%' $bookQuery";
+    String bookQuery = "AND " + Columns.bookid + "=" + Columns.ownsongs.toString();
+    String sqlQuery = Columns.title + " LIKE '$searchThis%' $bookQuery OR " +
+        Columns.alias + " LIKE '$searchThis%' $bookQuery OR " +
+        Columns.content + " LIKE '$searchThis%' $bookQuery";
 
     var result = db.query(Tables.songs, where: sqlQuery);
     return result;

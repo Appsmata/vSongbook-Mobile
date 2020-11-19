@@ -5,8 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:vsongbook/helpers/AppSettings.dart';
 import 'package:vsongbook/models/BookModel.dart';
 import 'package:vsongbook/screens/AppStart.dart';
-import 'package:vsongbook/widgets/AsProgressDialog.dart';
-import 'package:vsongbook/widgets/AsProgressWidget.dart';
+import 'package:vsongbook/widgets/AsProgress.dart';
 import 'package:vsongbook/helpers/AppFutures.dart';
 import 'package:vsongbook/models/base/EventObject.dart';
 import 'package:vsongbook/models/callbacks/Book.dart';
@@ -24,10 +23,7 @@ class DdSongBooks extends StatefulWidget {
 class DdSongBooksState extends State<DdSongBooks> {
   var appBar = AppBar();
   final globalKey = new GlobalKey<ScaffoldState>();
-  AsProgressDialog progressDialog =
-      AsProgressDialog.getAsProgressDialog(LangStrings.Getting_Ready);
-  AsProgressWidget progressWidget =
-      AsProgressWidget.getProgressWidget(LangStrings.Getting_Ready);
+  AsProgress progress = AsProgress.getAsProgress(LangStrings.Getting_Ready);
 
   SqliteHelper db = SqliteHelper();
   Future<Database> dbFuture;
@@ -77,7 +73,7 @@ class DdSongBooksState extends State<DdSongBooks> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => justAMinuteDialog());
-            progressWidget.hideProgress();
+            progress.hideProgress();
             books = eventObject.object;
             populateData();
           });
@@ -90,7 +86,7 @@ class DdSongBooksState extends State<DdSongBooks> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => noInternetDialog());
-            progressWidget.hideProgress();
+            progress.hideProgress();
           });
         }
         break;
@@ -101,7 +97,7 @@ class DdSongBooksState extends State<DdSongBooks> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => noInternetDialog());
-            progressWidget.hideProgress();
+            progress.hideProgress();
           });
         }
         break;
@@ -184,12 +180,6 @@ class DdSongBooksState extends State<DdSongBooks> {
             height: (MediaQuery.of(context).size.height -
                 (appBar.preferredSize.height * 2)),
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: progressWidget,
-          ),
-          Container(
-            height: (MediaQuery.of(context).size.height -
-                (appBar.preferredSize.height * 2)),
-            padding: const EdgeInsets.symmetric(horizontal: 10),
             margin: EdgeInsets.only(top: 50),
             child: ListView.builder(
               physics: BouncingScrollPhysics(),
@@ -201,7 +191,7 @@ class DdSongBooksState extends State<DdSongBooks> {
             height: (MediaQuery.of(context).size.height -
                 (appBar.preferredSize.height * 2)),
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: progressDialog,
+            child: progress,
           ),
         ],
       ),
@@ -480,10 +470,10 @@ class DdSongBooksState extends State<DdSongBooks> {
   }
 
   void _goToNextScreen() {
-    progressDialog.showProgress();
+    progress.showProgress();
     saveData();
 
-    progressDialog.hideProgress();
+    progress.hideProgress();
     Navigator.pushReplacement(
         context, new MaterialPageRoute(builder: (context) => new AppStart()));
   }

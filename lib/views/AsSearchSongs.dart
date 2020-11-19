@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +11,7 @@ import 'package:vsongbook/screens/EeSongView.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:vsongbook/utils/Constants.dart';
-import 'package:vsongbook/widgets/AsProgressWidget.dart';
+import 'package:vsongbook/widgets/AsProgress.dart';
 import 'package:vsongbook/views/AsTextView.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
@@ -29,10 +31,10 @@ class AsSearchSongs extends StatefulWidget {
 
 class AsSearchSongsState extends State<AsSearchSongs> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  AsProgressWidget progressWidget =
-      AsProgressWidget.getProgressWidget(LangStrings.Sis_Patience);
+  AsProgress progressWidget =
+      AsProgress.getAsProgress(LangStrings.Sis_Patience);
   TextEditingController txtSearch = new TextEditingController(text: "");
-  AsTextView textResult = AsTextView.setUp(LangStrings.SearchResult, 18, false);
+  AsTextView textResult = AsTextView.setUp(LangStrings.SearchResult, 15, false);
   SqliteHelper db = SqliteHelper();
   final GlobalKey<LiquidPullToRefreshState> _refreshIndicatorKey = GlobalKey<LiquidPullToRefreshState>();
 
@@ -42,7 +44,8 @@ class AsSearchSongsState extends State<AsSearchSongs> {
   List<SongModel> songs;
   int book;
 
-  Future<void> _handleRefresh() {
+  // vvv
+  Future<void> handleRefresh() {
     final Completer<void> completer = Completer<void>();
     Timer(const Duration(seconds: 3), () {
       completer.complete();
@@ -50,14 +53,15 @@ class AsSearchSongsState extends State<AsSearchSongs> {
     
     return completer.future.then<void>((_) {
       _scaffoldKey.currentState?.showSnackBar(SnackBar(
-          content: const Text('Refresh complete'),
-          action: SnackBarAction(
-              label: 'RETRY',
-              onPressed: () {
-                _refreshIndicatorKey.currentState.show();
-              })));
+        content: const Text('Refresh complete'),
+        action: SnackBarAction(
+            label: 'RETRY',
+            onPressed: () {
+              _refreshIndicatorKey.currentState.show();
+            })));
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -98,22 +102,21 @@ class AsSearchSongsState extends State<AsSearchSongs> {
           Container(
             height: MediaQuery.of(context).size.height - 200,
             padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: progressWidget,
-          ),
-          Container(
-            height: MediaQuery.of(context).size.height - 200,
-            padding: const EdgeInsets.symmetric(horizontal: 5),
             margin: EdgeInsets.only(top: 150),
             child: LiquidPullToRefresh(
                     key: _refreshIndicatorKey,	// key if you want to add
-                    onRefresh: _handleRefresh,	// refresh callback
+                    onRefresh: handleRefresh,	// refresh callback
                     child: ListView.builder(
                       physics: BouncingScrollPhysics(),
               itemCount: songs.length,
               itemBuilder: listView,
-                    ),
-                  ),
-                ),
+              ),
+            ),
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height - 200,
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: progressWidget,
           ),
         ],
       ),
@@ -243,8 +246,7 @@ class AsSearchSongsState extends State<AsSearchSongs> {
           },
         ),
         onTap: () {
-          navigateToSong(songs[index], songTitle,
-              "Song #" + songs[index].number.toString() + " - " + songBook);
+          navigateToSong(songs[index], songBook);
         },
       ),
     );
@@ -309,11 +311,11 @@ class AsSearchSongsState extends State<AsSearchSongs> {
     updateSongList();
   }
 
-  void navigateToSong(SongModel song, String title, String songbook) async {
+  void navigateToSong(SongModel song, String songbook) async {
     bool haschorus = false;
     if (song.content.contains("CHORUS")) haschorus = true;
     await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return EeSongView(song, haschorus, title, songbook);
+      return EeSongView(song, haschorus, songbook);
     }));
   }
 }

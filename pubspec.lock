@@ -363,6 +363,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  flutter_search_bar:
+    dependency: "direct main"
+    description:
+      name: flutter_search_bar
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.0"
   flutter_slidable:
     dependency: "direct dev"
     description:
@@ -520,6 +527,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.12.10-nullsafety.1"
+  material_floating_search_bar:
+    dependency: "direct main"
+    description:
+      name: material_floating_search_bar
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.3"
   matrix_gesture_detector:
     dependency: "direct dev"
     description:
@@ -819,6 +833,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.0-nullsafety.2"
+  speech_recognition:
+    dependency: "direct main"
+    description:
+      name: speech_recognition
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.0+1"
   sqflite:
     dependency: "direct dev"
     description:
