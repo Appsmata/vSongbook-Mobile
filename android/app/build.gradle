@@ -43,7 +43,7 @@ android {
 
     defaultConfig {
         applicationId "com.jackson_siro.visongbook"
-        minSdkVersion 18
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 85
         versionName "1.7.1"

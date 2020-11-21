@@ -4,10 +4,10 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vsongbook/helpers/AppSettings.dart';
-import 'package:vsongbook/screens/AppSplash.dart';
-import 'package:vsongbook/screens/AppStart.dart';
-import 'package:vsongbook/utils/Themes.dart';
+import 'package:vsongbook/helpers/app_settings.dart';
+import 'package:vsongbook/screens/app_splash.dart';
+import 'package:vsongbook/screens/app_start.dart';
+import 'package:vsongbook/utils/themes.dart';
 
 void main() {
   Crashlytics.instance.enableInDevMode = true;

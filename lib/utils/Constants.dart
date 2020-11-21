@@ -76,6 +76,7 @@ class SharedPreferenceKeys {
 }
 
 class LangStrings {
+  static const String appName = "vSongBook";
   static const String DarkMode = "Dark Mode";
   static const String JustAMinute = "Just a minute!";
   static const String In_Progress = "In progress ...";
@@ -133,6 +134,7 @@ class LangStrings {
   static const String Song_Disliked = " disliked!";
 
   static const String SearchNow = "Search a song";
+  static const String SearchHint = "Search by title, number or words";
   static const String SearchResult = "Search by title, number or words";
   static const String Signup_Now = "Not registered? Register now !";
   static const String Signin_Now = "Already registered? Login now !";

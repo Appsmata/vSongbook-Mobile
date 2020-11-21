@@ -1,17 +1,17 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:vsongbook/helpers/AppSettings.dart';
-import 'package:vsongbook/models/SongModel.dart';
-import 'package:vsongbook/helpers/AppFutures.dart';
-import 'package:vsongbook/models/base/EventObject.dart';
+import 'package:vsongbook/helpers/app_settings.dart';
+import 'package:vsongbook/models/song_model.dart';
+import 'package:vsongbook/helpers/app_futures.dart';
+import 'package:vsongbook/models/base/event_object.dart';
 import 'package:vsongbook/models/callbacks/Song.dart';
-import 'package:vsongbook/utils/Preferences.dart';
-import 'package:vsongbook/utils/Constants.dart';
-import 'package:vsongbook/helpers/SqliteHelper.dart';
-import 'package:vsongbook/screens/AppStart.dart';
-import 'package:vsongbook/views/AsTextView.dart';
-import 'package:vsongbook/widgets/AsLineProgress.dart';
+import 'package:vsongbook/utils/preferences.dart';
+import 'package:vsongbook/utils/constants.dart';
+import 'package:vsongbook/helpers/sqlite_helper.dart';
+import 'package:vsongbook/screens/app_start.dart';
+import 'package:vsongbook/widgets/as_text_view.dart';
+import 'package:vsongbook/widgets/as_line_progress.dart';
 
 class CcSongsLoad extends StatefulWidget {
   @override

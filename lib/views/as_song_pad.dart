@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:provider/provider.dart';
-import 'package:vsongbook/helpers/AppSettings.dart';
-import 'package:vsongbook/models/SongModel.dart';
-import 'package:vsongbook/helpers/SqliteHelper.dart';
-import 'package:vsongbook/screens/EeSongEdit.dart';
-import 'package:vsongbook/screens/EeSongView.dart';
-//import 'package:vsongbook/utils/Preferences.dart';
-import 'package:vsongbook/utils/Constants.dart';
-import 'package:vsongbook/widgets/AsProgress.dart';
+import 'package:vsongbook/helpers/app_settings.dart';
+import 'package:vsongbook/models/song_model.dart';
+import 'package:vsongbook/helpers/sqlite_helper.dart';
+import 'package:vsongbook/screens/ee_song_edit.dart';
+import 'package:vsongbook/screens/ee_song_view.dart';
+import 'package:vsongbook/utils/constants.dart';
+import 'package:vsongbook/widgets/as_progress.dart';
 
 class AsSongPad extends StatefulWidget {
   @override
@@ -38,22 +37,11 @@ class AsSongPadState extends State<AsSongPad> {
                   fit: BoxFit.cover)),
       child: new Stack(
         children: <Widget>[
-          new Container(
-            margin: EdgeInsets.only(top: 5),
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: new Column(
-              children: <Widget>[
-                searchBox(),
-              ],
-            ),
-          ),
           Container(
-            height: MediaQuery.of(context).size.height - 100,
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: progress,
           ),
           Container(
-            height: MediaQuery.of(context).size.height - 100,
             padding: const EdgeInsets.symmetric(horizontal: 10),
             margin: EdgeInsets.only(top: 60),
             child: ListView.builder(
@@ -92,36 +80,6 @@ class AsSongPadState extends State<AsSongPad> {
     if (result == true) {
       updateListView();
     }
-  }
-
-  Widget searchBox() {
-    return new Card(
-      elevation: 2,
-      child: new TextField(
-        controller: txtSearch,
-        style: TextStyle(fontSize: 18),
-        decoration: InputDecoration(
-            prefixIcon: Padding(
-              padding: const EdgeInsetsDirectional.only(end: 12.0),
-              child: IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () => searchSong(),
-              ),
-            ),
-            suffixIcon: Padding(
-              padding: const EdgeInsetsDirectional.only(end: 12.0),
-              child: IconButton(
-                icon: Icon(Icons.clear),
-                onPressed: () => clearSearch(),
-              ),
-            ),
-            hintText: "Search a draft",
-            hintStyle: TextStyle(fontSize: 18)),
-        onChanged: (value) {
-          searchSong();
-        },
-      ),
-    );
   }
 
   Widget songListView(BuildContext context, int index) {

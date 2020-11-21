@@ -3,16 +3,16 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:provider/provider.dart';
-import 'package:vsongbook/helpers/AppSettings.dart';
-import 'package:vsongbook/models/BookModel.dart';
-import 'package:vsongbook/models/SongModel.dart';
-import 'package:vsongbook/helpers/SqliteHelper.dart';
-import 'package:vsongbook/screens/EeSongView.dart';
+import 'package:vsongbook/helpers/app_settings.dart';
+import 'package:vsongbook/models/book_model.dart';
+import 'package:vsongbook/models/song_model.dart';
+import 'package:vsongbook/helpers/sqlite_helper.dart';
+import 'package:vsongbook/screens/ee_song_view.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
-import 'package:vsongbook/utils/Constants.dart';
-import 'package:vsongbook/widgets/AsProgress.dart';
-import 'package:vsongbook/views/AsTextView.dart';
+import 'package:vsongbook/utils/constants.dart';
+import 'package:vsongbook/widgets/as_progress.dart';
+import 'package:vsongbook/widgets/as_text_view.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 class AsSearchSongs extends StatefulWidget {
@@ -31,8 +31,7 @@ class AsSearchSongs extends StatefulWidget {
 
 class AsSearchSongsState extends State<AsSearchSongs> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  AsProgress progressWidget =
-      AsProgress.getAsProgress(LangStrings.Sis_Patience);
+  AsProgress progressWidget = AsProgress.getAsProgress(LangStrings.Sis_Patience);
   TextEditingController txtSearch = new TextEditingController(text: "");
   AsTextView textResult = AsTextView.setUp(LangStrings.SearchResult, 15, false);
   SqliteHelper db = SqliteHelper();
@@ -44,7 +43,6 @@ class AsSearchSongsState extends State<AsSearchSongs> {
   List<SongModel> songs;
   int book;
 
-  // vvv
   Future<void> handleRefresh() {
     final Completer<void> completer = Completer<void>();
     Timer(const Duration(seconds: 3), () {
@@ -85,7 +83,6 @@ class AsSearchSongsState extends State<AsSearchSongs> {
             padding: const EdgeInsets.symmetric(horizontal: 5),
             child: new Column(
               children: <Widget>[
-                searchBox(),
                 Container(
                   height: 55,
                   child: ListView.builder(
@@ -95,14 +92,13 @@ class AsSearchSongsState extends State<AsSearchSongs> {
                     itemBuilder: bookListView,
                   ),
                 ),
-                searchCount(),
               ],
             ),
           ),
           Container(
-            height: MediaQuery.of(context).size.height - 200,
+            height: MediaQuery.of(context).size.height - 100,
             padding: const EdgeInsets.symmetric(horizontal: 5),
-            margin: EdgeInsets.only(top: 150),
+            margin: EdgeInsets.only(top: 55),
             child: LiquidPullToRefresh(
                     key: _refreshIndicatorKey,	// key if you want to add
                     onRefresh: handleRefresh,	// refresh callback
@@ -283,8 +279,7 @@ class AsSearchSongsState extends State<AsSearchSongs> {
       songs.clear();
       dbFuture = db.initializeDatabase();
       dbFuture.then((database) {
-        Future<List<SongModel>> songListFuture =
-            db.getSongSearch(txtSearch.text);
+        Future<List<SongModel>> songListFuture = db.getSongSearch(txtSearch.text);
         songListFuture.then((songList) {
           setState(() {
             songs = songList;

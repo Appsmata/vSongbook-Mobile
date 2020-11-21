@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:vsongbook/helpers/AppSettings.dart';
-import 'package:vsongbook/utils/Constants.dart';
+import 'package:vsongbook/helpers/app_settings.dart';
+import 'package:vsongbook/utils/constants.dart';
 
 class GgDonate extends StatefulWidget {
   @override

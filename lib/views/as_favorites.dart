@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:provider/provider.dart';
-import 'package:vsongbook/helpers/AppSettings.dart';
-import 'package:vsongbook/models/BookModel.dart';
-import 'package:vsongbook/models/SongModel.dart';
-import 'package:vsongbook/helpers/SqliteHelper.dart';
-import 'package:vsongbook/screens/EeSongView.dart';
-import 'package:vsongbook/utils/Constants.dart';
-import 'package:vsongbook/widgets/AsProgress.dart';
+import 'package:vsongbook/helpers/app_settings.dart';
+import 'package:vsongbook/models/book_model.dart';
+import 'package:vsongbook/models/song_model.dart';
+import 'package:vsongbook/helpers/sqlite_helper.dart';
+import 'package:vsongbook/screens/ee_song_view.dart';
+import 'package:vsongbook/utils/constants.dart';
+import 'package:vsongbook/widgets/as_progress.dart';
 
 class AsFavorites extends StatefulWidget {
   @override
@@ -41,22 +41,11 @@ class AsFavoritesState extends State<AsFavorites> {
                   fit: BoxFit.cover)),
       child: new Stack(
         children: <Widget>[
-          new Container(
-            margin: EdgeInsets.only(top: 5),
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: new Column(
-              children: <Widget>[
-                searchBox(),
-              ],
-            ),
-          ),
           Container(
-            height: MediaQuery.of(context).size.height - 100,
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: progress,
           ),
           Container(
-            height: MediaQuery.of(context).size.height - 100,
             padding: const EdgeInsets.symmetric(horizontal: 10),
             margin: EdgeInsets.only(top: 60),
             child: ListView.builder(
@@ -65,36 +54,6 @@ class AsFavoritesState extends State<AsFavorites> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget searchBox() {
-    return new Card(
-      elevation: 2,
-      child: new TextField(
-        controller: txtSearch,
-        style: TextStyle(fontSize: 18),
-        decoration: InputDecoration(
-            prefixIcon: Padding(
-              padding: const EdgeInsetsDirectional.only(end: 12.0),
-              child: IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () => searchSong(),
-              ),
-            ),
-            suffixIcon: Padding(
-              padding: const EdgeInsetsDirectional.only(end: 12.0),
-              child: IconButton(
-                icon: Icon(Icons.clear),
-                onPressed: () => clearSearch(),
-              ),
-            ),
-            hintText: LangStrings.SearchNow,
-            hintStyle: TextStyle(fontSize: 18)),
-        onChanged: (value) {
-          searchSong();
-        },
       ),
     );
   }

@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:vsongbook/helpers/AppSettings.dart';
-import 'package:vsongbook/models/BookModel.dart';
-import 'package:vsongbook/widgets/AsProgress.dart';
-import 'package:vsongbook/helpers/AppFutures.dart';
-import 'package:vsongbook/models/base/EventObject.dart';
+import 'package:vsongbook/helpers/app_settings.dart';
+import 'package:vsongbook/models/book_model.dart';
+import 'package:vsongbook/widgets/as_progress.dart';
+import 'package:vsongbook/helpers/app_futures.dart';
+import 'package:vsongbook/models/base/event_object.dart';
 import 'package:vsongbook/models/callbacks/Book.dart';
-import 'package:vsongbook/utils/Preferences.dart';
-import 'package:vsongbook/utils/Constants.dart';
-import 'package:vsongbook/helpers/SqliteHelper.dart';
-import 'package:vsongbook/screens/CcSongsLoad.dart';
+import 'package:vsongbook/utils/preferences.dart';
+import 'package:vsongbook/utils/constants.dart';
+import 'package:vsongbook/helpers/sqlite_helper.dart';
+import 'package:vsongbook/screens/cc_songs_load.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:animated_floatactionbuttons/animated_floatactionbuttons.dart';
 

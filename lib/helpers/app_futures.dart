@@ -8,8 +8,8 @@ import 'package:vsongbook/models/callbacks/Song.dart';
 import 'package:vsongbook/models/callbacks/UserRequest.dart';
 import 'package:vsongbook/models/callbacks/UserResponse.dart';
 import 'package:vsongbook/models/callbacks/User.dart';
-import 'package:vsongbook/models/base/EventObject.dart';
-import 'package:vsongbook/utils/Constants.dart';
+import 'package:vsongbook/models/base/event_object.dart';
+import 'package:vsongbook/utils/constants.dart';
 import 'package:http/http.dart' as http;
 
 Future<EventObject> signinUser(User user) async {

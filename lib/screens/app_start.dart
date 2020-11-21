@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:vsongbook/screens/CcBooksLoad.dart';
-import 'package:vsongbook/screens/CcSongsLoad.dart';
-import 'package:vsongbook/screens/DdHomeView.dart';
-import 'package:vsongbook/utils/Constants.dart';
-import 'package:vsongbook/utils/Preferences.dart';
+import 'package:vsongbook/screens/cc_books_load.dart';
+import 'package:vsongbook/screens/cc_songs_load.dart';
+import 'package:vsongbook/screens/dd_home_view.dart';
+import 'package:vsongbook/utils/constants.dart';
+import 'package:vsongbook/utils/preferences.dart';
 
 class AppStart extends StatefulWidget {
   @override
@@ -47,6 +47,7 @@ class SplashPageState extends State<AppStart> {
             if (songsLoaded != null && songsLoaded)
             {
               Navigator.pushReplacement( context, new MaterialPageRoute(builder: (context) => new DdHomeView(books)));
+              //Navigator.pushReplacement( context, new MaterialPageRoute(builder: (context) => new DdHomeView())); 
             }
             else {
               Navigator.pushReplacement( context, new MaterialPageRoute(builder: (context) => new CcSongsLoad())); 
