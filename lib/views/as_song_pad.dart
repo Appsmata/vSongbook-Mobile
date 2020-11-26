@@ -66,16 +66,15 @@ class AsSongPadState extends State<AsSongPad> {
   }
 
   void newSong() {
-    SongModel song =
-        new SongModel(0, Columns.ownsongs, "S", 0, "", "", "", "", "", 0, "");
+    SongModel song = new SongModel(0, Columns.ownsongs, "", "S", 0, "", "", "", "", "", 0, "");
     navigateToDraft(song, 'Draft a Song');
   }
 
   void navigateToDraft(SongModel song, String title) async {
-    bool result =
-        await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return EeSongEdit(song, title);
-    }));
+      bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return EeSongEdit(song, title);
+      }
+    ));
 
     if (result == true) {
       updateListView();

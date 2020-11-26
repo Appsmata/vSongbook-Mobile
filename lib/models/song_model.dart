@@ -28,6 +28,7 @@ class SongModel {
   SongModel(
       this._postid,
       this._bookid,
+      this._songbook,
       this._basetype,
       this._number,
       this._title,

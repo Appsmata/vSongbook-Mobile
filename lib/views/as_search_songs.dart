@@ -211,13 +211,8 @@ class AsSearchSongsState extends State<AsSearchSongs> {
     strContent =
         strContent + songConts[0] + ' ' + songConts[1] + " ... <br><small><i>";
 
-    try {
-      BookModel curbook = books.firstWhere((i) => i.categoryid == category);
-      strContent = strContent + "\n" + curbook.title + "; ";
-      songBook = curbook.title;
-    } catch (Exception) {
-      strContent = strContent + "\n";
-    }
+    songBook = songs[index].songbook;
+    strContent = strContent + "\n" + songBook + "; ";
 
     if (songs[index].content.contains("CHORUS")) {
       strContent = strContent + LangStrings.HasChorus;

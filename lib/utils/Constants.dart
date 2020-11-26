@@ -239,15 +239,19 @@ class LangStrings {
 
   static const String helpTab1Title = "Contact us";
   static const String helpTab1Content =
-      "<p>SIMU: +2547 - </p><hr><p>EMAIL: <a href=\"mailto:appsmatake@gmail.com\">appsmatake@gmail.com</a> </p><hr> <p>TOVUTI: <a href=\"https://appsmata.com/vSongBook\">appsmata.com/vSongBook</a></p>";
+      "<p>SIMU: +2547 - </p><hr><p>EMAIL: <a href=\"mailto:appsmatake@gmail.com\">appsmatake@gmail.com</a> </p><hr> <p>TOVUTI: " +
+      "<a href=\"https://appsmata.com/vSongBook\">appsmata.com/vSongBook</a></p>";
 
   static const String helpTab2Title = "App Reviews";
   static const String helpTab2Content =
-      "Whether you are happy with our app or not please let us know by leaving a rating as well as review on the <a href=\"https://play.google.com/store/apps/details?id=com.jackson_siro.visongbook\">Google Play Store</a> or <a href=\"https://apps.apple.com/app/vsongbook/id1327276691\">Apple Store</a>.";
+      "Whether you are happy with our app or not please let us know by leaving a rating as well as review on the " +
+      "<a href=\"https://play.google.com/store/apps/details?id=com.jackson_siro.visongbook\">Google Play Store</a> or " +
+      "<a href=\"https://apps.apple.com/app/vsongbook/id1327276691\">Apple Store</a>.";
 
   static const String helpTab3Title = "Open Source";
   static const String helpTab3Content =
-      "If you are a software developer, the source code for this app is freely available on the GitHub:</br></br> <a href=\"https://github.com/Appsmata/vSongBook-Mobile\">https://github.com/Appsmata/vSongBook-Mobile</a>";
+      "If you are a software developer, the source code for this app is freely available on the GitHub:</br></br> " +
+      "<a href=\"https://github.com/Appsmata/vSongBook-Mobile\">https://github.com/Appsmata/vSongBook-Mobile</a>";
 }
 
 class Tables {
@@ -372,30 +376,20 @@ class Queries {
       Columns.created + ' INTEGER NOT NULL DEFAULT 0' +
       ");";
 
-  static const String selectSongsColumns = 'SELECT ' +
-      Columns.songid + ', ' +
-      Columns.postid + ', ' +
-      Columns.bookid + ', ' +
-      Columns.categoryid + ', ' +
-      Columns.basetype + ', ' +
-      Columns.number + ', ' +
-      Columns.alias + ', ' +
-      Columns.title + ', ' +
-      Columns.tags + ', ' +
-      Columns.content + ', ' +
-      Columns.key + ', ' +
-      Columns.author + ', ' +
-      Columns.notes + ', ' +
-      Columns.created + ', ' +
-      Columns.updated + ', ' +
-      Columns.metawhat + ', ' +
-      Columns.metawhen + ', ' +
-      Columns.metawhere + ', ' +
-      Columns.metawho + ', ' +
-      Columns.netthumbs + ', ' +
-      Columns.views + ', ' +
-      Columns.isfav + ', ' +
-      Columns.acount + ', ' +
-      Columns.userid +
-      " FROM " + Tables.songs;
+  static const String selectSongsColumns = 'SELECT ' + Columns.songid + ', ' +  Columns.postid + ', ' + Tables.songs + "." + Columns.bookid + ', ' + 
+      Tables.songs + "." + Columns.categoryid + ', ' + Columns.basetype + ', ' + Columns.number + ', ' + Columns.alias + ', ' + Tables.songs + "." + 
+      Columns.title + ', ' + Tables.songs + "." + Columns.tags + ', ' + Tables.songs + "." + Columns.content + ', ' + Columns.key + ', ' + 
+      Columns.author + ', ' +  Columns.notes + ', ' + Tables.songs + "." + Columns.created + ', ' + Tables.songs + "." + Columns.updated + ', ' + 
+      Columns.metawhat + ', ' + Columns.metawhen + ', ' + Columns.metawhere + ', ' + Columns.metawho + ', ' + Columns.netthumbs + ', ' + 
+      Columns.views + ', ' + Columns.isfav + ', ' + Columns.acount + ', ' + Columns.userid +  ', ' + Tables.books + "." + Columns.title + " AS songbook" +
+      " FROM " + Tables.songs + " LEFT JOIN " + Tables.books + " ON " + Tables.books + "." + Columns.categoryid + "=" + Tables.songs + "." + Columns.bookid;
+
+  static const String selectSongsColumnsX = 'SELECT ' + Columns.songid + ', ' +  Columns.postid + ', ' + Tables.songs + "." + Columns.bookid + ', ' + 
+      Tables.songs + "." + Columns.categoryid + ', ' + Columns.basetype + ', ' + Columns.number + ', ' + Columns.alias + ', ' + Tables.songs + "." + 
+      Columns.title + ', ' + Tables.songs + "." + Columns.tags + ', ' + Tables.songs + "." + Columns.content + ', ' + Columns.key + ', ' + 
+      Columns.author + ', ' +  Columns.notes + ', ' + Tables.songs + "." + Columns.created + ', ' + Tables.songs + "." + Columns.updated + ', ' + 
+      Columns.metawhat + ', ' + Columns.metawhen + ', ' + Columns.metawhere + ', ' + Columns.metawho + ', ' + Columns.netthumbs + ', ' + 
+      Columns.views + ', ' + Columns.isfav + ', ' + Columns.acount + ', ' + Columns.userid +  ', ' + Tables.books + "." + Columns.title + " AS songbook"
+      " FROM " + Tables.songs + " LEFT JOIN " + Tables.books + " ON " + Tables.books + "." + Columns.categoryid + "=" + Tables.songs + "." + Columns.bookid;
+
 }

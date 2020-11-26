@@ -160,11 +160,13 @@ class SqliteHelper {
   //SONGS LISTS
   Future<List<Map<String, dynamic>>> getSongMapList(int book) async {
     Database db = await this.database;
+    print(Queries.selectSongsColumns);
 
     if (book != 0) 
       return db.query(Tables.songs, where: Columns.bookid + " = " + book.toString(), orderBy: Columns.categoryid + " ASC");
     else 
-      return db.query(Tables.songs, orderBy: Columns.categoryid + " ASC");
+      //return db.query(Tables.songs, orderBy: Columns.categoryid + " ASC");
+      return db.rawQuery(Queries.selectSongsColumns);
   }
 
   Future<List<SongModel>> getSongList(int book) async {

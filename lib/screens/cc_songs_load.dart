@@ -239,7 +239,7 @@ class CcSongsLoadState extends State<CcSongsLoad> {
       String content =
           item.content.replaceAll("\n", "\\n").replaceAll("'", "''");
 
-      SongModel song = new SongModel(itemid, bookid, "S", number, title, alias,
+      SongModel song = new SongModel(itemid, bookid, "", "S", number, title, alias,
           content, "", "", userid, item.created);
       await db.insertSong(song);
     }
