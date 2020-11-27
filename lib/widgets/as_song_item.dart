@@ -1,25 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
-import 'package:vsongbook/utils/colors.dart';
 import 'package:vsongbook/utils/constants.dart';
 import 'package:vsongbook/models/song_model.dart';
-import 'package:vsongbook/helpers/sqlite_helper.dart';
-import 'package:vsongbook/screens/ee_song_view.dart';
+//import 'package:vsongbook/screens/ee_song_view.dart';
 
 class AsSongItem extends StatelessWidget {
 
   final SongModel song;
-  SqliteHelper db = SqliteHelper();
-  List<SongModel> songList;
 
   AsSongItem(this.song);
 
   @override
   Widget build(BuildContext context) {
     
-    int category = song.bookid;
-    String songBook = "Songs of Worship";
+    String songBook = "";
     String songTitle = song.number.toString() + ". " + song.title;
     String strContent = '<h2>' + songTitle + '</h2>';
 
@@ -27,14 +22,18 @@ class AsSongItem extends StatelessWidget {
     var songConts = song.content.split("\\n");
     strContent = strContent + songConts[0] + ' ' + songConts[1] + " ... <br><small><i>";
 
-    /*try {
-      BookModel curbook = books.firstWhere((i) => i.categoryid == category);
-      strContent = strContent + "\n" + curbook.title + "; ";
-      songBook = curbook.title;
-    } catch (Exception) {
-      strContent = strContent + "\n";
-    }*/
-
+    try {
+      if (song.songbook.isNotEmpty)
+      {
+        songBook = song.songbook;
+        strContent = strContent + "\n" + songBook + "; ";
+      }
+    }
+    catch (Exception) {
+      
+    }     
+    
+     
     if (song.content.contains("CHORUS")) {
       strContent = strContent + LangStrings.HasChorus;
       strContent = strContent + verses.length.toString() + LangStrings.Verses;
@@ -58,9 +57,17 @@ class AsSongItem extends StatelessWidget {
           },
         ),
         onTap: () {
-          //navigateToSong(songs[index], songBook);
+          navigateToSong(song, songBook);
         },
       ),
     );
+  }
+  
+  void navigateToSong(SongModel song, String songbook) async {
+    bool haschorus = false;
+    if (song.content.contains("CHORUS")) haschorus = true;
+    /*await Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return EeSongView(song, haschorus, songbook);
+    }));*/
   }
 }

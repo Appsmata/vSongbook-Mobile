@@ -8,12 +8,11 @@ import 'package:vsongbook/models/book_model.dart';
 import 'package:vsongbook/models/song_model.dart';
 import 'package:vsongbook/helpers/sqlite_helper.dart';
 import 'package:vsongbook/screens/ee_song_view.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
 import 'package:vsongbook/utils/constants.dart';
 import 'package:vsongbook/widgets/as_progress.dart';
 import 'package:vsongbook/widgets/as_text_view.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:vsongbook/widgets/as_song_item.dart';
 
 class AsSearchSongs extends StatefulWidget {
   final int book;
@@ -100,12 +99,13 @@ class AsSearchSongsState extends State<AsSearchSongs> {
             padding: const EdgeInsets.symmetric(horizontal: 5),
             margin: EdgeInsets.only(top: 55),
             child: LiquidPullToRefresh(
-                    key: _refreshIndicatorKey,	// key if you want to add
-                    onRefresh: handleRefresh,	// refresh callback
-                    child: ListView.builder(
-                      physics: BouncingScrollPhysics(),
-              itemCount: songs.length,
-              itemBuilder: listView,
+              key: _refreshIndicatorKey,	// key if you want to add
+              onRefresh: handleRefresh,	// refresh callback
+              child: ListView.builder(
+                itemCount: songs.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return AsSongItem(songs[index]);
+                }
               ),
             ),
           ),
@@ -115,38 +115,6 @@ class AsSearchSongsState extends State<AsSearchSongs> {
             child: progressWidget,
           ),
         ],
-      ),
-    );
-  }
-
-  Widget searchBox() {
-    return new Card(
-      elevation: 2,
-      child: new TextField(
-        controller: txtSearch,
-        style: TextStyle(
-          fontSize: 18,
-        ),
-        decoration: InputDecoration(
-            prefixIcon: Padding(
-              padding: const EdgeInsetsDirectional.only(end: 12.0),
-              child: IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () => searchSong(),
-              ),
-            ),
-            suffixIcon: Padding(
-              padding: const EdgeInsetsDirectional.only(end: 12.0),
-              child: IconButton(
-                icon: Icon(Icons.clear),
-                onPressed: () => clearSearch(),
-              ),
-            ),
-            hintText: LangStrings.SearchNow,
-            hintStyle: TextStyle(fontSize: 18)),
-        onChanged: (value) {
-          searchSong();
-        },
       ),
     );
   }
@@ -184,65 +152,6 @@ class AsSearchSongsState extends State<AsSearchSongs> {
     );
   }
 
-  Widget searchCount() {
-    return new Card(
-      elevation: 5,
-      child: Hero(
-        tag: 0,
-        child: Container(
-          padding: const EdgeInsets.all(7),
-          child: Center(
-            child: textResult,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget listView(BuildContext context, int index) {
-    int category = songs[index].bookid;
-    String songBook = "Songs of Worship";
-    String songTitle =
-        songs[index].number.toString() + ". " + songs[index].title;
-    String strContent = '<h2>' + songTitle + '</h2>';
-
-    var verses = songs[index].content.split("\\n\\n");
-    var songConts = songs[index].content.split("\\n");
-    strContent =
-        strContent + songConts[0] + ' ' + songConts[1] + " ... <br><small><i>";
-
-    songBook = songs[index].songbook;
-    strContent = strContent + "\n" + songBook + "; ";
-
-    if (songs[index].content.contains("CHORUS")) {
-      strContent = strContent + LangStrings.HasChorus;
-      strContent = strContent + verses.length.toString() + LangStrings.Verses;
-    } else {
-      strContent = strContent + LangStrings.NoChorus;
-      strContent = strContent + verses.length.toString() + LangStrings.Verses;
-    }
-
-    return Card(
-      elevation: 2,
-      child: GestureDetector(
-        child: Html(
-          data: strContent + '</i></small>',
-          style: {
-            "html": Style(
-              fontSize: FontSize(20.0),
-            ),
-            "ul": Style(
-              fontSize: FontSize(18.0),
-            ),
-          },
-        ),
-        onTap: () {
-          navigateToSong(songs[index], songBook);
-        },
-      ),
-    );
-  }
-
   void updateBookList() {
     dbFuture = db.initializeDatabase();
     dbFuture.then((database) {
@@ -266,33 +175,6 @@ class AsSearchSongsState extends State<AsSearchSongs> {
         });
       });
     });
-  }
-
-  void searchSong() {
-    String searchThis = txtSearch.text;
-    if (searchThis.length > 0) {
-      songs.clear();
-      dbFuture = db.initializeDatabase();
-      dbFuture.then((database) {
-        Future<List<SongModel>> songListFuture = db.getSongSearch(txtSearch.text);
-        songListFuture.then((songList) {
-          setState(() {
-            songs = songList;
-            textResult.setText(songs.length.toString() + " songs found");
-          });
-        });
-      });
-    } else {
-      updateSongList();
-      textResult.setText(LangStrings.SearchResult);
-    }
-  }
-
-  void clearSearch() {
-    txtSearch.clear();
-    songs.clear();
-    textResult.setText(LangStrings.SearchResult);
-    updateSongList();
   }
 
   void setCurrentBook(int _book) {

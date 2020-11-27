@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
 import 'package:vsongbook/utils/colors.dart';
 import 'package:vsongbook/utils/constants.dart';
 import 'package:vsongbook/views/as_favorites.dart';
@@ -189,18 +187,6 @@ class SongSearchDelegate extends SearchDelegate<String> {
 		});
 		return ListView.builder(
       itemCount: songList.length,
-      /*itemBuilder: (BuildContext context, int index) {
-        return new ListTile(
-          //leading: FaIcon(FontAwesomeIcons.utensilSpoon, size: 16, color: Theme.of(context).primaryColor,),
-          title: Text(songList[index].title),
-          onTap: () async {
-            close(context, songList[index].title);
-            bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
-              //return RecipeDetail(songList[index], songList[index].title);
-            }));
-          },
-        );
-      }*/
       itemBuilder: (BuildContext context, int index) {
         return AsSongItem(songList[index]);
       }

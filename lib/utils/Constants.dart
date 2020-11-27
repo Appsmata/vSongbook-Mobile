@@ -376,20 +376,37 @@ class Queries {
       Columns.created + ' INTEGER NOT NULL DEFAULT 0' +
       ");";
 
-  static const String selectSongsColumns = 'SELECT ' + Columns.songid + ', ' +  Columns.postid + ', ' + Tables.songs + "." + Columns.bookid + ', ' + 
-      Tables.songs + "." + Columns.categoryid + ', ' + Columns.basetype + ', ' + Columns.number + ', ' + Columns.alias + ', ' + Tables.songs + "." + 
-      Columns.title + ', ' + Tables.songs + "." + Columns.tags + ', ' + Tables.songs + "." + Columns.content + ', ' + Columns.key + ', ' + 
-      Columns.author + ', ' +  Columns.notes + ', ' + Tables.songs + "." + Columns.created + ', ' + Tables.songs + "." + Columns.updated + ', ' + 
-      Columns.metawhat + ', ' + Columns.metawhen + ', ' + Columns.metawhere + ', ' + Columns.metawho + ', ' + Columns.netthumbs + ', ' + 
-      Columns.views + ', ' + Columns.isfav + ', ' + Columns.acount + ', ' + Columns.userid +  ', ' + Tables.books + "." + Columns.title + " AS songbook" +
-      " FROM " + Tables.songs + " LEFT JOIN " + Tables.books + " ON " + Tables.books + "." + Columns.categoryid + "=" + Tables.songs + "." + Columns.bookid;
+  static String searchQuery(String searchStr) {
+    return Columns.title + " LIKE '%$searchStr%' $bookQuery OR " + Columns.alias + " LIKE '%$searchStr%' $bookQuery OR " + Columns.content + " LIKE '%$searchStr%' $bookQuery";
+  }
+  
+  static const String selectSongsColumns = 'SELECT ' + Columns.songid + ', ' +  Columns.postid + ', ' + Tables.songs + '.' + Columns.bookid + ', ' + 
+      Tables.songs + '.' + Columns.categoryid +  ', ' + Tables.books + "." + Columns.title + ' AS songbook' + ', ' + Columns.basetype + ', ' + 
+      Columns.number + ', ' + Columns.alias + ', ' + Tables.songs + '.' + Columns.title + ', ' + Tables.songs + '.' + Columns.tags + ', ' + 
+      Tables.songs + '.' + Columns.content + ', ' + Columns.key + ', ' + Columns.author + ', ' +  Columns.notes + ', ' + Tables.songs + '.' + 
+      Columns.created + ', ' + Tables.songs + '.' + Columns.updated + ', ' + Columns.metawhat + ', ' + Columns.metawhen + ', ' + Columns.metawhere + ', ' + 
+      Columns.metawho + ', ' + Columns.netthumbs + ', ' + Columns.views + ', ' + Columns.isfav + ', ' + Columns.acount + ', ' + Columns.userid +
+      ' FROM ' + Tables.songs + ' LEFT JOIN ' + Tables.books + ' ON ' + Tables.books + '.' + Columns.categoryid + '=' + Tables.songs + '.' + Columns.bookid;
 
-  static const String selectSongsColumnsX = 'SELECT ' + Columns.songid + ', ' +  Columns.postid + ', ' + Tables.songs + "." + Columns.bookid + ', ' + 
-      Tables.songs + "." + Columns.categoryid + ', ' + Columns.basetype + ', ' + Columns.number + ', ' + Columns.alias + ', ' + Tables.songs + "." + 
-      Columns.title + ', ' + Tables.songs + "." + Columns.tags + ', ' + Tables.songs + "." + Columns.content + ', ' + Columns.key + ', ' + 
-      Columns.author + ', ' +  Columns.notes + ', ' + Tables.songs + "." + Columns.created + ', ' + Tables.songs + "." + Columns.updated + ', ' + 
-      Columns.metawhat + ', ' + Columns.metawhen + ', ' + Columns.metawhere + ', ' + Columns.metawho + ', ' + Columns.netthumbs + ', ' + 
-      Columns.views + ', ' + Columns.isfav + ', ' + Columns.acount + ', ' + Columns.userid +  ', ' + Tables.books + "." + Columns.title + " AS songbook"
-      " FROM " + Tables.songs + " LEFT JOIN " + Tables.books + " ON " + Tables.books + "." + Columns.categoryid + "=" + Tables.songs + "." + Columns.bookid;
+  static const String songsOrderby = ' ORDER BY ' +  Columns.songid + ' ASC';
+
+  static String whereSongsBookid(String book)
+  {
+    return ' WHERE ' + Tables.songs + '.' + Columns.bookid + '=' + book + songsOrderby;
+  }
+
+  static String whereSongsNumber(int songno)
+  {
+    return ' WHERE ' + Tables.songs + '.' + Columns.bookid + '=' + songno.toString() + songsOrderby;
+  }
+
+  static String bookQuery = 'AND ' + Tables.songs + '.' + Columns.bookid + '!=' + Columns.ownsongs.toString();
+  
+  static String whereSongMatch(String searchStr)
+  {
+    return ' WHERE ' + Tables.songs + '.' + Columns.title + " LIKE '%$searchStr%' $bookQuery OR " + 
+     Tables.songs + '.' +  Columns.alias + " LIKE '%$searchStr%' $bookQuery OR " + 
+      Tables.songs + '.' + Columns.content + " LIKE '%$searchStr%' $bookQuery" + songsOrderby;
+  }
 
 }

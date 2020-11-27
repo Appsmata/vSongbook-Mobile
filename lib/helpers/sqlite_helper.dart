@@ -160,13 +160,9 @@ class SqliteHelper {
   //SONGS LISTS
   Future<List<Map<String, dynamic>>> getSongMapList(int book) async {
     Database db = await this.database;
-    print(Queries.selectSongsColumns);
 
-    if (book != 0) 
-      return db.query(Tables.songs, where: Columns.bookid + " = " + book.toString(), orderBy: Columns.categoryid + " ASC");
-    else 
-      //return db.query(Tables.songs, orderBy: Columns.categoryid + " ASC");
-      return db.rawQuery(Queries.selectSongsColumns);
+    if (book != 0) return db.rawQuery(Queries.selectSongsColumns + Queries.whereSongsBookid(book.toString()));
+    else return db.rawQuery(Queries.selectSongsColumns + Queries.songsOrderby);
   }
 
   Future<List<SongModel>> getSongList(int book) async {
@@ -179,28 +175,21 @@ class SqliteHelper {
   }
 
   //SONG SEARCH
-  Future<List<Map<String, dynamic>>> getSongSearchMapList(
-      String searchThis) async {
+  Future<List<Map<String, dynamic>>> getSongSearchMapList(String searchThis) async {
     Database db = await this.database;
-    String bookQuery = "AND " + Columns.bookid + "!=" + Columns.ownsongs.toString();
-
-    String sqlQuery = Columns.title + " LIKE '%$searchThis%' $bookQuery OR " +
-        Columns.alias + " LIKE '%$searchThis%' $bookQuery OR " +
-        Columns.content + " LIKE '%$searchThis%' $bookQuery";
 
     var result;
     if (isNumeric(searchThis)) {
       try {
         int searchno = int.parse(searchThis);
-        if (searchno > 0)
-          result = db.query(Tables.songs, where: Columns.number + "=" + searchno.toString());
-        else
-          result = db.query(Tables.songs, where: sqlQuery);
+
+        if (searchno > 0) result = db.rawQuery(Queries.selectSongsColumns + Queries.whereSongsNumber(searchno));
+        else result = db.rawQuery(Queries.selectSongsColumns + Queries.whereSongMatch(searchThis));
       } catch (Exception) {
-        result = db.query(Tables.songs, where: sqlQuery);
+        result = db.rawQuery(Queries.selectSongsColumns + Queries.whereSongMatch(searchThis));
       }
     } else
-      result = db.query(Tables.songs, where: sqlQuery);
+      result = db.query(Tables.songs, where: Queries.searchQuery(searchThis));
     return result;
   }
 
