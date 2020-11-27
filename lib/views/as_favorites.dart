@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:vsongbook/helpers/app_settings.dart';
 import 'package:vsongbook/models/book_model.dart';
 import 'package:vsongbook/models/song_model.dart';
-import 'package:vsongbook/helpers/sqlite_helper.dart';
+import 'package:vsongbook/helpers/app_database.dart';
 import 'package:vsongbook/screens/ee_song_view.dart';
 import 'package:vsongbook/utils/constants.dart';
 import 'package:vsongbook/widgets/as_progress.dart';
@@ -15,10 +15,10 @@ class AsFavorites extends StatefulWidget {
 }
 
 class AsFavoritesState extends State<AsFavorites> {
-  AsProgress progress =
-      AsProgress.getAsProgress(LangStrings.Sis_Patience);
+  AsProgress progress = AsProgress.getAsProgress(LangStrings.Sis_Patience);
   TextEditingController txtSearch = new TextEditingController(text: "");
-  SqliteHelper db = SqliteHelper();
+  final ScrollController _scrollController = ScrollController();
+  AppDatabase db = AppDatabase();
 
   Future<Database> dbFuture;
   List<BookModel> books;
@@ -47,10 +47,14 @@ class AsFavoritesState extends State<AsFavorites> {
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            margin: EdgeInsets.only(top: 60),
-            child: ListView.builder(
-              itemCount: songs.length,
-              itemBuilder: songListView,
+            margin: EdgeInsets.only(top: 60),            
+            child: Scrollbar(
+              isAlwaysShown: true,
+              controller: _scrollController,
+              child: ListView.builder(
+                itemCount: songs.length,
+                itemBuilder: songListView,
+              ),
             ),
           ),
         ],

@@ -11,7 +11,7 @@ import 'package:vsongbook/models/base/event_object.dart';
 import 'package:vsongbook/models/callbacks/Book.dart';
 import 'package:vsongbook/utils/preferences.dart';
 import 'package:vsongbook/utils/constants.dart';
-import 'package:vsongbook/helpers/sqlite_helper.dart';
+import 'package:vsongbook/helpers/app_database.dart';
 
 class DdSongBooks extends StatefulWidget {
   @override
@@ -25,7 +25,7 @@ class DdSongBooksState extends State<DdSongBooks> {
   final globalKey = new GlobalKey<ScaffoldState>();
   AsProgress progress = AsProgress.getAsProgress(LangStrings.Getting_Ready);
 
-  SqliteHelper db = SqliteHelper();
+  AppDatabase db = AppDatabase();
   Future<Database> dbFuture;
   List<BookItem<Book>> selected = [], bookList;
   List<BookModel> mybooks;
@@ -436,7 +436,7 @@ class DdSongBooksState extends State<DdSongBooks> {
   }
 
   Future<void> saveData() async {
-    SqliteHelper db = SqliteHelper();
+    AppDatabase db = AppDatabase();
     String selectedbooks = "";
 
     for (int i = 0; i < selected.length; i++) {

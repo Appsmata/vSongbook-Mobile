@@ -1,73 +1,95 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
+import 'package:provider/provider.dart';
+import 'package:vsongbook/helpers/app_base.dart';
+import 'package:vsongbook/helpers/app_settings.dart';
 import 'package:vsongbook/utils/constants.dart';
 import 'package:vsongbook/models/song_model.dart';
-//import 'package:vsongbook/screens/ee_song_view.dart';
+import 'package:vsongbook/screens/ee_song_view.dart';
 
 class AsSongItem extends StatelessWidget {
 
   final SongModel song;
+  final BuildContext context;
 
-  AsSongItem(this.song);
+  AsSongItem(this.song, this.context);
 
   @override
   Widget build(BuildContext context) {
-    
-    String songBook = "";
-    String songTitle = song.number.toString() + ". " + song.title;
-    String strContent = '<h2>' + songTitle + '</h2>';
+    String songTitle = song.number.toString() + ". " + refineTitle(song.title);
+    String hasChorus, verseCount = '';
 
     var verses = song.content.split("\\n\\n");
-    var songConts = song.content.split("\\n");
-    strContent = strContent + songConts[0] + ' ' + songConts[1] + " ... <br><small><i>";
 
-    try {
-      if (song.songbook.isNotEmpty)
-      {
-        songBook = song.songbook;
-        strContent = strContent + "\n" + songBook + "; ";
-      }
-    }
-    catch (Exception) {
-      
-    }     
-    
-     
     if (song.content.contains("CHORUS")) {
-      strContent = strContent + LangStrings.HasChorus;
-      strContent = strContent + verses.length.toString() + LangStrings.Verses;
+      hasChorus = LangStrings.HasChorus;
+      verseCount = verses.length.toString() + (verses.length == 1 ? ' V' : ' Vs');
     } else {
-      strContent = strContent + LangStrings.NoChorus;
-      strContent = strContent + verses.length.toString() + LangStrings.Verses;
+      hasChorus = LangStrings.NoChorus;
+      verseCount = verses.length.toString() + (verses.length == 1 ? ' V' : ' Vs');
     }
 
-    return Card(
-      elevation: 2,
-      child: GestureDetector(
-        child: Html(
-          data: strContent + '</i></small>',
-          style: {
-            "html": Style(
-              fontSize: FontSize(20.0),
-            ),
-            "ul": Style(
-              fontSize: FontSize(18.0),
-            ),
-          },
-        ),
-        onTap: () {
-          navigateToSong(song, songBook);
-        },
+    return GestureDetector(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(songTitle, maxLines: 1, style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
+                Text(refineContent(verses[0]), maxLines: 2, style: new TextStyle(fontSize: 18)),
+                Container(
+                  height: 35,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: <Widget>[
+                      tagView(song.songbook),
+                      tagView(hasChorus),
+                      tagView(verseCount),
+                    ]
+                  ),
+                )
+              ]
+            )
+          ),
+          Divider(),
+        ]
       ),
-    );
+      onTap: () {
+        navigateToSong(song);
+      },
+    );    
   }
   
-  void navigateToSong(SongModel song, String songbook) async {
+  Widget tagView(String tagText)
+  {
+    try {
+      if (tagText.isNotEmpty)
+      {
+        return Container(
+          padding: const EdgeInsets.all(5),
+          margin: EdgeInsets.only(top: 5, left: 5),
+          decoration: new BoxDecoration( 
+            color: Provider.of<AppSettings>(context).isDarkMode ? Colors.black : Colors.deepOrange,
+            border: Border.all(color: Provider.of<AppSettings>(context).isDarkMode ? Colors.white : Colors.orange),
+            borderRadius: BorderRadius.only(topRight: Radius.circular(5), bottomLeft: Radius.circular(5)),
+          ),
+          child: Text( tagText,style: new TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
+          ),
+        );
+    }
+    else return Container();      
+    } catch (Exception) {
+      return Container(); 
+    }    
+  }
+
+  void navigateToSong(SongModel song) async {
     bool haschorus = false;
     if (song.content.contains("CHORUS")) haschorus = true;
-    /*await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return EeSongView(song, haschorus, songbook);
-    }));*/
+    await Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return EeSongView(song, haschorus, song.songbook);
+    }));
   }
 }

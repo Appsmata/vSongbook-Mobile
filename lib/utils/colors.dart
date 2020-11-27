@@ -14,8 +14,8 @@ class ColorUtils {
   static Color activeColor = Colors.green[500];
   static const Color activeColor2 = Color(0xFFfafafa);
 
-  static const Color primaryColor = Colors.green;
-  static const Color secondaryColor = Colors.greenAccent;
+  static const Color primaryColor = Colors.deepOrange;
+  static const Color secondaryColor = Colors.orange;
   
   static const Color white = Colors.white;
   static const Color grey = Colors.grey;

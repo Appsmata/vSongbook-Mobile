@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:vsongbook/helpers/app_settings.dart';
-import 'package:vsongbook/helpers/sqlite_helper.dart';
+import 'package:vsongbook/helpers/app_database.dart';
 import 'package:vsongbook/models/song_model.dart';
 import 'package:vsongbook/utils/constants.dart';
 
@@ -20,7 +20,7 @@ class EeSongEdit extends StatefulWidget {
 }
 
 class EeSongEditState extends State<EeSongEdit> {
-  SqliteHelper db = SqliteHelper();
+  AppDatabase db = AppDatabase();
 
   String appBarTitle;
   SongModel song;

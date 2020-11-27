@@ -5,3 +5,13 @@ bool isNumeric(String s) {
  }
  return double.tryParse(s) != null;
 }
+
+String refineTitle(String songTitle)
+{
+  return songTitle.replaceAll("''", "'");
+}
+
+String refineContent(String songContent)
+{
+  return songContent.replaceAll("''", "'").replaceAll("\\n", " ");
+}

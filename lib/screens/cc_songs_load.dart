@@ -8,7 +8,7 @@ import 'package:vsongbook/models/base/event_object.dart';
 import 'package:vsongbook/models/callbacks/Song.dart';
 import 'package:vsongbook/utils/preferences.dart';
 import 'package:vsongbook/utils/constants.dart';
-import 'package:vsongbook/helpers/sqlite_helper.dart';
+import 'package:vsongbook/helpers/app_database.dart';
 import 'package:vsongbook/screens/app_start.dart';
 import 'package:vsongbook/widgets/as_text_view.dart';
 import 'package:vsongbook/widgets/as_line_progress.dart';
@@ -26,7 +26,7 @@ class CcSongsLoadState extends State<CcSongsLoad> {
   AsLineProgress lineProgress = AsLineProgress.setUp(300, 0);
   final globalKey = new GlobalKey<ScaffoldState>();
 
-  SqliteHelper databaseHelper = SqliteHelper();
+  AppDatabase databaseHelper = AppDatabase();
   List<Song> songs;
 
   void requestData() async {
@@ -192,7 +192,7 @@ class CcSongsLoadState extends State<CcSongsLoad> {
   }
 
   Future<void> saveData() async {
-    SqliteHelper db = SqliteHelper();
+    AppDatabase db = AppDatabase();
 
     for (int i = 0; i < songs.length; i++) {
       int progress = (i / songs.length * 100).toInt();

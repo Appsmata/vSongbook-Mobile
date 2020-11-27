@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:vsongbook/helpers/app_settings.dart';
 import 'package:vsongbook/models/book_model.dart';
 import 'package:vsongbook/models/song_model.dart';
-import 'package:vsongbook/helpers/sqlite_helper.dart';
+import 'package:vsongbook/helpers/app_database.dart';
 import 'package:vsongbook/screens/ee_song_view.dart';
 import 'package:vsongbook/utils/constants.dart';
 import 'package:vsongbook/widgets/as_progress.dart';
@@ -33,8 +33,9 @@ class AsSearchSongsState extends State<AsSearchSongs> {
   AsProgress progressWidget = AsProgress.getAsProgress(LangStrings.Sis_Patience);
   TextEditingController txtSearch = new TextEditingController(text: "");
   AsTextView textResult = AsTextView.setUp(LangStrings.SearchResult, 15, false);
-  SqliteHelper db = SqliteHelper();
+  AppDatabase db = AppDatabase();
   final GlobalKey<LiquidPullToRefreshState> _refreshIndicatorKey = GlobalKey<LiquidPullToRefreshState>();
+  final ScrollController _scrollController = ScrollController();
 
   AsSearchSongsState({this.book});
   Future<Database> dbFuture;
@@ -55,7 +56,10 @@ class AsSearchSongsState extends State<AsSearchSongs> {
             label: 'RETRY',
             onPressed: () {
               _refreshIndicatorKey.currentState.show();
-            })));
+            }
+          )
+        )
+      );
     });
   }
 
@@ -70,12 +74,6 @@ class AsSearchSongsState extends State<AsSearchSongs> {
     }
 
     return new Container(
-      decoration: Provider.of<AppSettings>(context).isDarkMode
-          ? BoxDecoration()
-          : BoxDecoration(
-              image: DecorationImage(
-                  image: new AssetImage("assets/images/bg.jpg"),
-                  fit: BoxFit.cover)),
       child: new Stack(
         children: <Widget>[
           new Container(
@@ -101,11 +99,15 @@ class AsSearchSongsState extends State<AsSearchSongs> {
             child: LiquidPullToRefresh(
               key: _refreshIndicatorKey,	// key if you want to add
               onRefresh: handleRefresh,	// refresh callback
-              child: ListView.builder(
-                itemCount: songs.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return AsSongItem(songs[index]);
-                }
+              child: Scrollbar(
+                isAlwaysShown: true,
+                controller: _scrollController,
+                child: ListView.builder(
+                  itemCount: songs.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return AsSongItem(songs[index], context);
+                  }
+                ),
               ),
             ),
           ),

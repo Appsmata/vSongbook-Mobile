@@ -3,7 +3,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:provider/provider.dart';
 import 'package:vsongbook/helpers/app_settings.dart';
 import 'package:vsongbook/models/song_model.dart';
-import 'package:vsongbook/helpers/sqlite_helper.dart';
+import 'package:vsongbook/helpers/app_database.dart';
 import 'package:vsongbook/screens/ee_song_edit.dart';
 import 'package:vsongbook/screens/ee_song_view.dart';
 import 'package:vsongbook/utils/constants.dart';
@@ -17,7 +17,8 @@ class AsSongPad extends StatefulWidget {
 class AsSongPadState extends State<AsSongPad> {
   AsProgress progress = AsProgress.getAsProgress(LangStrings.Sis_Patience);
   TextEditingController txtSearch = new TextEditingController(text: "");
-  SqliteHelper db = SqliteHelper();
+  final ScrollController _scrollController = ScrollController();
+  AppDatabase db = AppDatabase();
 
   Future<Database> dbFuture;
   List<SongModel> songs;
@@ -44,9 +45,13 @@ class AsSongPadState extends State<AsSongPad> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             margin: EdgeInsets.only(top: 60),
-            child: ListView.builder(
-              itemCount: songs.length,
-              itemBuilder: songListView,
+            child: Scrollbar(
+              isAlwaysShown: true,
+              controller: _scrollController,
+              child: ListView.builder(
+                itemCount: songs.length,
+                itemBuilder: songListView,
+              ),
             ),
           ),
           Container(

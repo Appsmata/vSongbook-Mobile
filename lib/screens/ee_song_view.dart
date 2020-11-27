@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:vsongbook/helpers/app_settings.dart';
-import 'package:vsongbook/helpers/sqlite_helper.dart';
+import 'package:vsongbook/helpers/app_database.dart';
 import 'package:vsongbook/models/song_model.dart';
 import 'package:vsongbook/screens/ee_song_edit.dart';
 import 'package:vertical_tabs/vertical_tabs.dart';
@@ -29,7 +29,7 @@ class EeSongView extends StatefulWidget {
 class EeSongViewState extends State<EeSongView> {
   EeSongViewState(this.song, this.haschorus, this.book);
   final globalKey = new GlobalKey<ScaffoldState>();
-  SqliteHelper db = SqliteHelper();
+  AppDatabase db = AppDatabase();
 
   var appBar = AppBar(), songVerses;
   String book;
@@ -391,12 +391,7 @@ class EeSongViewState extends State<EeSongView> {
   }
 
   void shareSong() {
-    Share.share(
-      songTitle +
-          "\n\n" +
-          songContent +
-          "\n\nvia #vSongBook " +
-          "https://Appsmata.com/vSongBook",
+    Share.share(songTitle + "\n\n" + songContent + "\n\nvia #vSongBook " + "https://Appsmata.com/vSongBook",
       subject: "Share the song: " + songTitle,
     );
   }

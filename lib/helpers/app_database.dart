@@ -8,15 +8,15 @@ import "package:vsongbook/models/book_model.dart";
 import "package:vsongbook/models/song_model.dart";
 import "package:vsongbook/utils/constants.dart";
 
-class SqliteHelper {
-  static SqliteHelper sqliteHelper; // Singleton DatabaseHelper
+class AppDatabase {
+  static AppDatabase sqliteHelper; // Singleton DatabaseHelper
   static Database appDb; // Singleton Database
 
-  SqliteHelper._createInstance(); // Named constructor to create instance of DatabaseHelper
+  AppDatabase._createInstance(); // Named constructor to create instance of DatabaseHelper
 
-  factory SqliteHelper() {
+  factory AppDatabase() {
     if (sqliteHelper == null) {
-      sqliteHelper = SqliteHelper
+      sqliteHelper = AppDatabase
           ._createInstance(); // This is executed only once, singleton object
     }
     return sqliteHelper;
@@ -197,7 +197,6 @@ class SqliteHelper {
     var songMapList = await getSongSearchMapList(searchThis);
 
     List<SongModel> songList = List<SongModel>();
-    // For loop to create a "song List" from a "Map List"
     for (int i = 0; i < songMapList.length; i++) {
       songList.add(SongModel.fromMapObject(songMapList[i]));
     }

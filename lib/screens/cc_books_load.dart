@@ -9,7 +9,7 @@ import 'package:vsongbook/models/base/event_object.dart';
 import 'package:vsongbook/models/callbacks/Book.dart';
 import 'package:vsongbook/utils/preferences.dart';
 import 'package:vsongbook/utils/constants.dart';
-import 'package:vsongbook/helpers/sqlite_helper.dart';
+import 'package:vsongbook/helpers/app_database.dart';
 import 'package:vsongbook/screens/cc_songs_load.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:animated_floatactionbuttons/animated_floatactionbuttons.dart';
@@ -27,7 +27,7 @@ class CcBooksLoadState extends State<CcBooksLoad> {
   AsProgress progress = AsProgress.getAsProgress(LangStrings.Getting_Ready);
   final GlobalKey<LiquidPullToRefreshState> _refreshIndicatorKey = GlobalKey<LiquidPullToRefreshState>();
 
-  SqliteHelper databaseHelper = SqliteHelper();
+  AppDatabase databaseHelper = AppDatabase();
   List<BookItem<Book>> selected = [];
   List<BookItem<Book>> bookList;
   List<Book> books;
@@ -517,7 +517,7 @@ class CcBooksLoadState extends State<CcBooksLoad> {
   }
 
   Future<void> saveData() async {
-    SqliteHelper db = SqliteHelper();
+    AppDatabase db = AppDatabase();
 
     for (int i = 0; i < selected.length; i++) {
       Book item = selected[i].data;
