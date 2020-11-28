@@ -8,6 +8,7 @@ import 'package:vsongbook/utils/colors.dart';
 import 'package:vsongbook/utils/constants.dart';
 import 'package:vsongbook/models/song_model.dart';
 import 'package:vsongbook/widgets/as_song_item.dart';
+import 'package:vsongbook/screens/ee_song_view.dart';
 
 class AppSearchDelegate extends SearchDelegate<List> {
 
@@ -80,13 +81,24 @@ class AppSearchDelegate extends SearchDelegate<List> {
 
   Widget _buildItems(BuildContext context) {
     return Container(
-      //color: Colors.blueGrey[_config.backgroundColor],
       child: ListView.builder(
         itemCount: filtered.length,
-        itemBuilder: (BuildContext context, int index) {
-          return AsSongItem(filtered[index], context);
+        itemBuilder: (context, index) {
+          //return AsSongItem('SongSearch_' + filtered[index].songid.toString(), filtered[index], context);
+          return _buildItemRow(index, context);
         }
       ),
+    );
+  }
+
+  Widget _buildItemRow(int i, BuildContext context) {
+    return ListTile(
+      title: Text(filtered[i].title), 
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return EeSongView(filtered[i], true, "");
+        }));
+      },    
     );
   }
 

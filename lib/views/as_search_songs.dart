@@ -99,15 +99,11 @@ class AsSearchSongsState extends State<AsSearchSongs> {
             child: LiquidPullToRefresh(
               key: _refreshIndicatorKey,	// key if you want to add
               onRefresh: handleRefresh,	// refresh callback
-              child: Scrollbar(
-                isAlwaysShown: true,
-                controller: _scrollController,
-                child: ListView.builder(
-                  itemCount: songs.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return AsSongItem(songs[index], context);
-                  }
-                ),
+              child: ListView.builder(
+                itemCount: songs.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return AsSongItem('SongIndex_' + songs[index].songid.toString(), songs[index], context);
+                }
               ),
             ),
           ),

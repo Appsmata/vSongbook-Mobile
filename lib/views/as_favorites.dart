@@ -90,12 +90,10 @@ class AsFavoritesState extends State<AsFavorites> {
     return Card(
       elevation: 2,
       child: ListTile(
-        title: Text(songTitle,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        title: Text(songTitle, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         subtitle: Text(songContent, style: TextStyle(fontSize: 18)),
         onTap: () {
-          navigateToSong(songs[index],
-              "Song #" + songs[index].number.toString() + " - " + songbook);
+          navigateToSong(songs[index], "Song #" + songs[index].number.toString() + " - " + songbook);
         },
       ),
     );

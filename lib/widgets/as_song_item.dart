@@ -8,10 +8,11 @@ import 'package:vsongbook/screens/ee_song_view.dart';
 
 class AsSongItem extends StatelessWidget {
 
+  final String heroTag;
   final SongModel song;
   final BuildContext context;
 
-  AsSongItem(this.song, this.context);
+  AsSongItem(this.heroTag, this.song, this.context);
 
   @override
   Widget build(BuildContext context) {
@@ -29,35 +30,38 @@ class AsSongItem extends StatelessWidget {
     }
 
     return GestureDetector(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(songTitle, maxLines: 1, style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
-                Text(refineContent(verses[0]), maxLines: 2, style: new TextStyle(fontSize: 18)),
-                Container(
-                  height: 35,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: <Widget>[
-                      tagView(song.songbook),
-                      tagView(hasChorus),
-                      tagView(verseCount),
-                    ]
-                  ),
-                )
-              ]
-            )
-          ),
-          Divider(),
-        ]
+      child: Hero(
+        tag: this.heroTag,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(songTitle, maxLines: 1, style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
+                  Text(refineContent(verses[0]), maxLines: 2, style: new TextStyle(fontSize: 18)),
+                  Container(
+                    height: 35,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: <Widget>[
+                        tagView(song.songbook),
+                        tagView(hasChorus),
+                        tagView(verseCount),
+                      ]
+                    ),
+                  )
+                ]
+              )
+            ),
+            Divider(),
+          ]
+        ),
       ),
       onTap: () {
-        navigateToSong(song);
+        navigateToSong();
       },
     );    
   }
@@ -85,11 +89,13 @@ class AsSongItem extends StatelessWidget {
     }    
   }
 
-  void navigateToSong(SongModel song) async {
+  void navigateToSong() async {
     bool haschorus = false;
     if (song.content.contains("CHORUS")) haschorus = true;
+    
+    print(this.heroTag);
     await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return EeSongView(song, haschorus, song.songbook);
+      return EeSongView(this.song, haschorus, this.song.songbook);
     }));
   }
 }
