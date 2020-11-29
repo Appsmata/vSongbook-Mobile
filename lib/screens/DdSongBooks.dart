@@ -2,16 +2,17 @@ import 'dart:async';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:vsongbook/helpers/app_settings.dart';
-import 'package:vsongbook/models/book_model.dart';
-import 'package:vsongbook/screens/app_start.dart';
-import 'package:vsongbook/widgets/as_progress.dart';
-import 'package:vsongbook/helpers/app_futures.dart';
-import 'package:vsongbook/models/base/event_object.dart';
+import 'package:vsongbook/helpers/AppSettings.dart';
+import 'package:vsongbook/models/BookModel.dart';
+import 'package:vsongbook/screens/AppStart.dart';
+import 'package:vsongbook/widgets/AsProgressDialog.dart';
+import 'package:vsongbook/widgets/AsProgressWidget.dart';
+import 'package:vsongbook/helpers/AppFutures.dart';
+import 'package:vsongbook/models/base/EventObject.dart';
 import 'package:vsongbook/models/callbacks/Book.dart';
-import 'package:vsongbook/utils/preferences.dart';
-import 'package:vsongbook/utils/constants.dart';
-import 'package:vsongbook/helpers/app_database.dart';
+import 'package:vsongbook/utils/Preferences.dart';
+import 'package:vsongbook/utils/Constants.dart';
+import 'package:vsongbook/helpers/SqliteHelper.dart';
 
 class DdSongBooks extends StatefulWidget {
   @override
@@ -23,9 +24,12 @@ class DdSongBooks extends StatefulWidget {
 class DdSongBooksState extends State<DdSongBooks> {
   var appBar = AppBar();
   final globalKey = new GlobalKey<ScaffoldState>();
-  AsProgress progress = AsProgress.getAsProgress(LangStrings.Getting_Ready);
+  AsProgressDialog progressDialog =
+      AsProgressDialog.getAsProgressDialog(LangStrings.Getting_Ready);
+  AsProgressWidget progressWidget =
+      AsProgressWidget.getProgressWidget(LangStrings.Getting_Ready);
 
-  AppDatabase db = AppDatabase();
+  SqliteHelper db = SqliteHelper();
   Future<Database> dbFuture;
   List<BookItem<Book>> selected = [], bookList;
   List<BookModel> mybooks;
@@ -73,7 +77,7 @@ class DdSongBooksState extends State<DdSongBooks> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => justAMinuteDialog());
-            progress.hideProgress();
+            progressWidget.hideProgress();
             books = eventObject.object;
             populateData();
           });
@@ -86,7 +90,7 @@ class DdSongBooksState extends State<DdSongBooks> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => noInternetDialog());
-            progress.hideProgress();
+            progressWidget.hideProgress();
           });
         }
         break;
@@ -97,7 +101,7 @@ class DdSongBooksState extends State<DdSongBooks> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => noInternetDialog());
-            progress.hideProgress();
+            progressWidget.hideProgress();
           });
         }
         break;
@@ -180,6 +184,12 @@ class DdSongBooksState extends State<DdSongBooks> {
             height: (MediaQuery.of(context).size.height -
                 (appBar.preferredSize.height * 2)),
             padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: progressWidget,
+          ),
+          Container(
+            height: (MediaQuery.of(context).size.height -
+                (appBar.preferredSize.height * 2)),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             margin: EdgeInsets.only(top: 50),
             child: ListView.builder(
               physics: BouncingScrollPhysics(),
@@ -191,7 +201,7 @@ class DdSongBooksState extends State<DdSongBooks> {
             height: (MediaQuery.of(context).size.height -
                 (appBar.preferredSize.height * 2)),
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: progress,
+            child: progressDialog,
           ),
         ],
       ),
@@ -436,7 +446,7 @@ class DdSongBooksState extends State<DdSongBooks> {
   }
 
   Future<void> saveData() async {
-    AppDatabase db = AppDatabase();
+    SqliteHelper db = SqliteHelper();
     String selectedbooks = "";
 
     for (int i = 0; i < selected.length; i++) {
@@ -470,10 +480,10 @@ class DdSongBooksState extends State<DdSongBooks> {
   }
 
   void _goToNextScreen() {
-    progress.showProgress();
+    progressDialog.showProgress();
     saveData();
 
-    progress.hideProgress();
+    progressDialog.hideProgress();
     Navigator.pushReplacement(
         context, new MaterialPageRoute(builder: (context) => new AppStart()));
   }

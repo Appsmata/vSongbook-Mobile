@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:backdrop/backdrop.dart';
-import 'package:vsongbook/utils/colored_tab_bar.dart';
-import 'package:vsongbook/utils/constants.dart';
+import 'package:vsongbook/utils/ColoredTabBar.dart';
+import 'package:vsongbook/utils/Constants.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 

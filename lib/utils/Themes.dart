@@ -1,14 +1,11 @@
-//This files manages the themes of the app
-
 import 'package:flutter/material.dart';
-import 'package:vsongbook/utils/colors.dart';
 
 final asLightTheme = _buildLightTheme();
 final asDarkTheme = _buildDarkTheme();
 
 ThemeData _buildLightTheme() {
-  const Color primaryColor = ColorUtils.primaryColor;
-  const Color secondaryColor = ColorUtils.secondaryColor;
+  const Color primaryColor = Colors.deepOrange;
+  const Color secondaryColor = Colors.orange;
   final ColorScheme colorScheme = const ColorScheme.light().copyWith(
     primary: primaryColor,
     secondary: secondaryColor,
@@ -19,15 +16,15 @@ ThemeData _buildLightTheme() {
     colorScheme: colorScheme,
     primaryColor: primaryColor,
     buttonColor: primaryColor,
-    indicatorColor: ColorUtils.white,
-    toggleableActiveColor: ColorUtils.activeColor,
-    splashColor: ColorUtils.splashColor,
+    indicatorColor: Colors.white,
+    toggleableActiveColor: const Color(0xFFff5722),
+    splashColor: Colors.white24,
     splashFactory: InkRipple.splashFactory,
     accentColor: secondaryColor,
-    canvasColor: ColorUtils.white,
-    scaffoldBackgroundColor: ColorUtils.white,
-    backgroundColor: ColorUtils.white,
-    errorColor: ColorUtils.errorColor,
+    canvasColor: Colors.white,
+    scaffoldBackgroundColor: Colors.white,
+    backgroundColor: Colors.white,
+    errorColor: const Color(0xFFB00020),
     buttonTheme: ButtonThemeData(
       colorScheme: colorScheme,
       textTheme: ButtonTextTheme.primary,
@@ -41,8 +38,8 @@ ThemeData _buildLightTheme() {
 }
 
 ThemeData _buildDarkTheme() {
-  const Color primaryColor = ColorUtils.grey;
-  const Color secondaryColor = ColorUtils.black;
+  const Color primaryColor = Colors.grey;
+  const Color secondaryColor = Colors.black;
   final ColorScheme colorScheme = const ColorScheme.dark().copyWith(
     primary: primaryColor,
     secondary: secondaryColor,
@@ -50,14 +47,17 @@ ThemeData _buildDarkTheme() {
   final ThemeData base = ThemeData(
     brightness: Brightness.dark,
     accentColorBrightness: Brightness.dark,
+    //primaryColor: primaryColor,
+    //primaryColorDark: Colors.grey,
+    //primaryColorLight: secondaryColor,
     buttonColor: primaryColor,
-    indicatorColor: ColorUtils.white,
-    toggleableActiveColor: ColorUtils.activeColor2,
+    indicatorColor: Colors.white,
+    toggleableActiveColor: const Color(0xFFfafafa),
     accentColor: secondaryColor,
-    canvasColor: ColorUtils.baseColor2,
-    scaffoldBackgroundColor: ColorUtils.baseColor2,
-    backgroundColor: ColorUtils.baseColor2,
-    errorColor: ColorUtils.errorColor,
+    canvasColor: const Color(0xFF202124),
+    scaffoldBackgroundColor: const Color(0xFF202124),
+    backgroundColor: const Color(0xFF202124),
+    errorColor: const Color(0xFFB00020),
     buttonTheme: ButtonThemeData(
       colorScheme: colorScheme,
       textTheme: ButtonTextTheme.primary,

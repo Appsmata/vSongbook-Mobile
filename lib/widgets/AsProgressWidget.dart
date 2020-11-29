@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
-class AsProgress extends StatefulWidget {
+// ignore: must_be_immutable
+class AsProgressWidget extends StatefulWidget {
   Color backgroundColor;
   Color color;
   Color containerColor;
   double borderRadius;
   String text;
-  AsProgressState progressState;
+  AsProgressWidgetState progressWidgetState;
 
-  AsProgress(
+  AsProgressWidget(
     {
       this.backgroundColor = Colors.black54,
       this.color = Colors.white,
@@ -19,7 +20,7 @@ class AsProgress extends StatefulWidget {
   );
 
   @override
-  createState() => progressState = new AsProgressState(
+  createState() => progressWidgetState = new AsProgressWidgetState(
       backgroundColor: this.backgroundColor,
       color: this.color,
       containerColor: this.containerColor,
@@ -27,19 +28,19 @@ class AsProgress extends StatefulWidget {
       text: this.text);
 
   void hideProgress() {
-    progressState.hideProgress();
+    progressWidgetState.hideProgress();
   }
 
   void showProgress() {
-    progressState.showProgress();
+    progressWidgetState.showProgress();
   }
 
   void showProgressWithText(String title) {
-    progressState.showProgressWithText(title);
+    progressWidgetState.showProgressWithText(title);
   }
 
-  static Widget getAsProgress(String title) {
-    return new AsProgress(
+  static Widget getProgressWidget(String title) {
+    return new AsProgressWidget(
       backgroundColor: Colors.black12,
       color: Colors.black,
       containerColor: Colors.white,
@@ -49,15 +50,15 @@ class AsProgress extends StatefulWidget {
   }
 }
 
-class AsProgressState extends State<AsProgress> {
+class AsProgressWidgetState extends State<AsProgressWidget> {
   Color backgroundColor;
   Color color;
   Color containerColor;
   double borderRadius;
   String text;
-  bool _opacity = false;
+  bool _opacity = true;
 
-  AsProgressState(    
+  AsProgressWidgetState(    
     {
       this.backgroundColor = Colors.black54,
       this.color = Colors.white,
@@ -74,22 +75,17 @@ class AsProgressState extends State<AsProgress> {
         opacity: _opacity ? 1 : 0,
         child: new Stack(
           children: <Widget>[
-            new Center(
-              child: new Container(
-                width: 300,
-                height: 120,
-                decoration: new BoxDecoration(
-                  color: containerColor,
-                  border: Border.all(color: Colors.orange),
-                  boxShadow: [BoxShadow(blurRadius: 5)],
-                  borderRadius: new BorderRadius.all(
-                     new Radius.circular(borderRadius)
-                  )
+              new Center(
+                child: new Container(
+                  width: 300,
+                  height: 120,
+                  decoration: new BoxDecoration(
+                      color: containerColor,
+                  ),
                 ),
               ),
-            ),
-            new Center(
-              child: _getCenterContent(),
+              new Center(
+                child: _getCenterContent(),
             )
           ],
         ),
