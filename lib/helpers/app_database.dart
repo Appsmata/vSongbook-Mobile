@@ -3,10 +3,10 @@ import "dart:async";
 import "dart:io";
 import "package:path/path.dart";
 import "package:path_provider/path_provider.dart";
-import "package:vsongbook/helpers/AppBase.dart";
-import "package:vsongbook/models/BookModel.dart";
-import "package:vsongbook/models/SongModel.dart";
-import "package:vsongbook/utils/Constants.dart";
+import "package:vsongbook/helpers/app_base.dart";
+import "package:vsongbook/models/book_model.dart";
+import "package:vsongbook/models/song_model.dart";
+import "package:vsongbook/utils/constants.dart";
 
 class SqliteHelper {
   static SqliteHelper sqliteHelper; // Singleton DatabaseHelper

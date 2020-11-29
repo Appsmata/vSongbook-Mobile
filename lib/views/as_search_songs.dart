@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:provider/provider.dart';
-import 'package:vsongbook/helpers/AppSettings.dart';
-import 'package:vsongbook/models/BookModel.dart';
-import 'package:vsongbook/models/SongModel.dart';
-import 'package:vsongbook/helpers/SqliteHelper.dart';
-import 'package:vsongbook/screens/EeSongView.dart';
+import 'package:vsongbook/helpers/app_settings.dart';
+import 'package:vsongbook/models/book_model.dart';
+import 'package:vsongbook/models/song_model.dart';
+import 'package:vsongbook/helpers/app_database.dart';
+import 'package:vsongbook/screens/song_view.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
-import 'package:vsongbook/utils/Constants.dart';
-import 'package:vsongbook/widgets/AsProgressWidget.dart';
-import 'package:vsongbook/views/AsTextView.dart';
+import 'package:vsongbook/utils/constants.dart';
+import 'package:vsongbook/widgets/as_progress.dart';
+import 'package:vsongbook/views/as_text_view.dart';
 
 class AsSearchSongs extends StatefulWidget {
   final int book;
@@ -27,8 +27,7 @@ class AsSearchSongs extends StatefulWidget {
 }
 
 class AsSearchSongsState extends State<AsSearchSongs> {
-  AsProgressWidget progressWidget =
-      AsProgressWidget.getProgressWidget(LangStrings.Sis_Patience);
+  AsProgress asProgress = AsProgress.getProgress(LangStrings.Sis_Patience);
   TextEditingController txtSearch = new TextEditingController(text: "");
   AsTextView textResult = AsTextView.setUp(LangStrings.SearchResult, 18, false);
   SqliteHelper db = SqliteHelper();
@@ -78,7 +77,7 @@ class AsSearchSongsState extends State<AsSearchSongs> {
           Container(
             height: MediaQuery.of(context).size.height - 200,
             padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: progressWidget,
+            child: asProgress,
           ),
           Container(
             height: MediaQuery.of(context).size.height - 200,
@@ -243,7 +242,7 @@ class AsSearchSongsState extends State<AsSearchSongs> {
       songListFuture.then((songList) {
         setState(() {
           songs = songList;
-          progressWidget.hideProgress();
+          asProgress.hideProgress();
         });
       });
     });

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:vsongbook/helpers/AppSettings.dart';
-import 'package:vsongbook/screens/DdSongBooks.dart';
-import 'package:vsongbook/screens/GgAboutApp.dart';
-import 'package:vsongbook/screens/GgDonate.dart';
-import 'package:vsongbook/screens/GgHelpDesk.dart';
+import 'package:vsongbook/helpers/app_settings.dart';
+import 'package:vsongbook/screens/song_books.dart';
+import 'package:vsongbook/screens/about_app.dart';
+import 'package:vsongbook/screens/donate.dart';
+import 'package:vsongbook/screens/help_desk.dart';
 
 class AsNavDrawer extends StatefulWidget {
   @override

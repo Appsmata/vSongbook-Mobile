@@ -1,17 +1,16 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:vsongbook/helpers/AppSettings.dart';
-import 'package:vsongbook/models/BookModel.dart';
-import 'package:vsongbook/widgets/AsProgressDialog.dart';
-import 'package:vsongbook/widgets/AsProgressWidget.dart';
-import 'package:vsongbook/helpers/AppFutures.dart';
-import 'package:vsongbook/models/base/EventObject.dart';
+import 'package:vsongbook/helpers/app_settings.dart';
+import 'package:vsongbook/models/book_model.dart';
+import 'package:vsongbook/widgets/as_progress.dart';
+import 'package:vsongbook/helpers/app_futures.dart';
+import 'package:vsongbook/models/base/event_object.dart';
 import 'package:vsongbook/models/callbacks/Book.dart';
-import 'package:vsongbook/utils/Preferences.dart';
-import 'package:vsongbook/utils/Constants.dart';
-import 'package:vsongbook/helpers/SqliteHelper.dart';
-import 'package:vsongbook/screens/CcSongsLoad.dart';
+import 'package:vsongbook/utils/preferences.dart';
+import 'package:vsongbook/utils/constants.dart';
+import 'package:vsongbook/helpers/app_database.dart';
+import 'package:vsongbook/screens/songs_load.dart';
 
 class CcBooksLoad extends StatefulWidget {
   @override
@@ -23,10 +22,7 @@ class CcBooksLoad extends StatefulWidget {
 class CcBooksLoadState extends State<CcBooksLoad> {
   var appBar = AppBar();
   final globalKey = new GlobalKey<ScaffoldState>();
-  AsProgressDialog progressDialog =
-      AsProgressDialog.getAsProgressDialog(LangStrings.Getting_Ready);
-  AsProgressWidget progressWidget =
-      AsProgressWidget.getProgressWidget(LangStrings.Getting_Ready);
+  AsProgress asProgress = AsProgress.getProgress(LangStrings.Getting_Ready);
 
   SqliteHelper databaseHelper = SqliteHelper();
   List<BookItem<Book>> selected = [];
@@ -51,7 +47,7 @@ class CcBooksLoadState extends State<CcBooksLoad> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => justAMinuteDialog());
-            progressWidget.hideProgress();
+            asProgress.hideProgress();
             books = eventObject.object;
             populateData();
           });
@@ -64,7 +60,7 @@ class CcBooksLoadState extends State<CcBooksLoad> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => noInternetDialog());
-            progressWidget.hideProgress();
+            asProgress.hideProgress();
           });
         }
         break;
@@ -75,7 +71,7 @@ class CcBooksLoadState extends State<CcBooksLoad> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => noInternetDialog());
-            progressWidget.hideProgress();
+            asProgress.hideProgress();
           });
         }
         break;
@@ -160,12 +156,6 @@ class CcBooksLoadState extends State<CcBooksLoad> {
             height: (MediaQuery.of(context).size.height -
                 (appBar.preferredSize.height * 2)),
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: progressWidget,
-          ),
-          Container(
-            height: (MediaQuery.of(context).size.height -
-                (appBar.preferredSize.height * 2)),
-            padding: const EdgeInsets.symmetric(horizontal: 10),
             margin: EdgeInsets.only(top: 50),
             child: ListView.builder(
               physics: BouncingScrollPhysics(),
@@ -177,7 +167,7 @@ class CcBooksLoadState extends State<CcBooksLoad> {
             height: (MediaQuery.of(context).size.height -
                 (appBar.preferredSize.height * 2)),
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: progressDialog,
+            child: asProgress,
           ),
         ],
       ),
@@ -502,7 +492,7 @@ class CcBooksLoadState extends State<CcBooksLoad> {
   }
 
   void _goToNextScreen() {
-    progressDialog.showProgress();
+    asProgress.showProgress();
     saveData();
 
     String selectedbooks = "";
@@ -513,7 +503,7 @@ class CcBooksLoadState extends State<CcBooksLoad> {
       selectedbooks = selectedbooks.substring(0, selectedbooks.length - 1);
     } catch (Exception) {}
 
-    progressDialog.hideProgress();
+    asProgress.hideProgress();
     Preferences.setBooksLoaded(true);
     Preferences.setSelectedBooks(selectedbooks);
     Navigator.pushReplacement(context,

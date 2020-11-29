@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:vsongbook/screens/CcBooksLoad.dart';
-import 'package:vsongbook/screens/CcSongsLoad.dart';
-import 'package:vsongbook/screens/DdHomeView.dart';
-import 'package:vsongbook/utils/Constants.dart';
-import 'package:vsongbook/utils/Preferences.dart';
+import 'package:vsongbook/screens/books_load.dart';
+import 'package:vsongbook/screens/songs_load.dart';
+import 'package:vsongbook/screens/home_view.dart';
+import 'package:vsongbook/utils/constants.dart';
+import 'package:vsongbook/utils/preferences.dart';
 
 class AppStart extends StatefulWidget {
   @override

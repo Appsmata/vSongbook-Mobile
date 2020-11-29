@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:vsongbook/views/AsFavorites.dart';
-import 'package:vsongbook/views/AsSearchSongs.dart';
-import 'package:vsongbook/views/AsSongPad.dart';
-import 'package:vsongbook/widgets/AsNavDrawer.dart';
+import 'package:vsongbook/views/as_favorites.dart';
+import 'package:vsongbook/views/as_search_songs.dart';
+import 'package:vsongbook/views/as_song_pad.dart';
+import 'package:vsongbook/widgets/as_nav_drawer.dart';
 
 class DdHomeView extends StatefulWidget {
   final String bookstr;

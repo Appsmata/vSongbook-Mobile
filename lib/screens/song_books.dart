@@ -2,17 +2,16 @@ import 'dart:async';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:vsongbook/helpers/AppSettings.dart';
-import 'package:vsongbook/models/BookModel.dart';
-import 'package:vsongbook/screens/AppStart.dart';
-import 'package:vsongbook/widgets/AsProgressDialog.dart';
-import 'package:vsongbook/widgets/AsProgressWidget.dart';
-import 'package:vsongbook/helpers/AppFutures.dart';
-import 'package:vsongbook/models/base/EventObject.dart';
+import 'package:vsongbook/helpers/app_settings.dart';
+import 'package:vsongbook/models/book_model.dart';
+import 'package:vsongbook/screens/app_start.dart';
+import 'package:vsongbook/widgets/as_progress.dart';
+import 'package:vsongbook/helpers/app_futures.dart';
+import 'package:vsongbook/models/base/event_object.dart';
 import 'package:vsongbook/models/callbacks/Book.dart';
-import 'package:vsongbook/utils/Preferences.dart';
-import 'package:vsongbook/utils/Constants.dart';
-import 'package:vsongbook/helpers/SqliteHelper.dart';
+import 'package:vsongbook/utils/preferences.dart';
+import 'package:vsongbook/utils/constants.dart';
+import 'package:vsongbook/helpers/app_database.dart';
 
 class DdSongBooks extends StatefulWidget {
   @override
@@ -24,10 +23,7 @@ class DdSongBooks extends StatefulWidget {
 class DdSongBooksState extends State<DdSongBooks> {
   var appBar = AppBar();
   final globalKey = new GlobalKey<ScaffoldState>();
-  AsProgressDialog progressDialog =
-      AsProgressDialog.getAsProgressDialog(LangStrings.Getting_Ready);
-  AsProgressWidget progressWidget =
-      AsProgressWidget.getProgressWidget(LangStrings.Getting_Ready);
+  AsProgress asProgress = AsProgress.getProgress(LangStrings.Getting_Ready);
 
   SqliteHelper db = SqliteHelper();
   Future<Database> dbFuture;
@@ -77,7 +73,7 @@ class DdSongBooksState extends State<DdSongBooks> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => justAMinuteDialog());
-            progressWidget.hideProgress();
+            asProgress.hideProgress();
             books = eventObject.object;
             populateData();
           });
@@ -90,7 +86,7 @@ class DdSongBooksState extends State<DdSongBooks> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => noInternetDialog());
-            progressWidget.hideProgress();
+            asProgress.hideProgress();
           });
         }
         break;
@@ -101,7 +97,7 @@ class DdSongBooksState extends State<DdSongBooks> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => noInternetDialog());
-            progressWidget.hideProgress();
+            asProgress.hideProgress();
           });
         }
         break;
@@ -184,7 +180,7 @@ class DdSongBooksState extends State<DdSongBooks> {
             height: (MediaQuery.of(context).size.height -
                 (appBar.preferredSize.height * 2)),
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: progressWidget,
+            child: asProgress,
           ),
           Container(
             height: (MediaQuery.of(context).size.height -
@@ -201,7 +197,7 @@ class DdSongBooksState extends State<DdSongBooks> {
             height: (MediaQuery.of(context).size.height -
                 (appBar.preferredSize.height * 2)),
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: progressDialog,
+            child: asProgress,
           ),
         ],
       ),
@@ -480,10 +476,10 @@ class DdSongBooksState extends State<DdSongBooks> {
   }
 
   void _goToNextScreen() {
-    progressDialog.showProgress();
+    asProgress.showProgress();
     saveData();
 
-    progressDialog.hideProgress();
+    asProgress.hideProgress();
     Navigator.pushReplacement(
         context, new MaterialPageRoute(builder: (context) => new AppStart()));
   }

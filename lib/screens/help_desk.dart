@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
-import 'package:vsongbook/helpers/AppSettings.dart';
+import 'package:vsongbook/helpers/app_settings.dart';
 import 'package:vsongbook/utils/Constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 

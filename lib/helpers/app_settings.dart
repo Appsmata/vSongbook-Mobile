@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vsongbook/utils/Constants.dart';
+import 'package:vsongbook/utils/constants.dart';
 
 class AppSettings extends ChangeNotifier {
   /*static final _kRoutenameToRouteMap = {

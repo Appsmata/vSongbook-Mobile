@@ -1,34 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:provider/provider.dart';
-import 'package:vsongbook/helpers/AppSettings.dart';
-import 'package:vsongbook/models/SongModel.dart';
-import 'package:vsongbook/helpers/SqliteHelper.dart';
-import 'package:vsongbook/screens/EeSongEdit.dart';
-import 'package:vsongbook/screens/EeSongView.dart';
-//import 'package:vsongbook/utils/Preferences.dart';
-import 'package:vsongbook/utils/Constants.dart';
-import 'package:vsongbook/widgets/AsProgressWidget.dart';
+import 'package:vsongbook/helpers/app_settings.dart';
+import 'package:vsongbook/models/book_model.dart';
+import 'package:vsongbook/models/song_model.dart';
+import 'package:vsongbook/helpers/app_database.dart';
+import 'package:vsongbook/screens/song_view.dart';
+import 'package:vsongbook/utils/constants.dart';
+import 'package:vsongbook/widgets/as_progress_widget.dart';
 
-class AsSongPad extends StatefulWidget {
+class AsFavorites extends StatefulWidget {
   @override
-  createState() => AsSongPadState();
+  createState() => AsFavoritesState();
 }
 
-class AsSongPadState extends State<AsSongPad> {
+class AsFavoritesState extends State<AsFavorites> {
   AsProgressWidget progressWidget =
       AsProgressWidget.getProgressWidget(LangStrings.Sis_Patience);
   TextEditingController txtSearch = new TextEditingController(text: "");
   SqliteHelper db = SqliteHelper();
 
   Future<Database> dbFuture;
+  List<BookModel> books;
   List<SongModel> songs;
 
   @override
   Widget build(BuildContext context) {
     if (songs == null) {
+      books = [];
       songs = [];
-      updateListView();
+      updateBookList();
+      updateSongList();
     }
     return new Container(
       decoration: Provider.of<AppSettings>(context).isDarkMode
@@ -62,37 +64,9 @@ class AsSongPadState extends State<AsSongPad> {
               itemBuilder: songListView,
             ),
           ),
-          Container(
-            margin: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height - 210,
-                left: MediaQuery.of(context).size.width - 100),
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: FloatingActionButton(
-              tooltip: 'Add a Song',
-              child: Icon(Icons.add),
-              onPressed: newSong,
-            ),
-          ),
         ],
       ),
     );
-  }
-
-  void newSong() {
-    SongModel song =
-        new SongModel(0, Columns.ownsongs, "S", 0, "", "", "", "", "", 0, "");
-    navigateToDraft(song, 'Draft a Song');
-  }
-
-  void navigateToDraft(SongModel song, String title) async {
-    bool result =
-        await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return EeSongEdit(song, title);
-    }));
-
-    if (result == true) {
-      updateListView();
-    }
   }
 
   Widget searchBox() {
@@ -116,7 +90,7 @@ class AsSongPadState extends State<AsSongPad> {
                 onPressed: () => clearSearch(),
               ),
             ),
-            hintText: "Search a draft",
+            hintText: LangStrings.SearchNow,
             hintStyle: TextStyle(fontSize: 18)),
         onChanged: (value) {
           searchSong();
@@ -126,27 +100,60 @@ class AsSongPadState extends State<AsSongPad> {
   }
 
   Widget songListView(BuildContext context, int index) {
+    int category = songs[index].bookid;
+    String songbook = "";
     String songTitle = songs[index].title;
-    String songContent =
-        songs[index].content.replaceAll("\\n", " ").replaceAll("CHORUS", " ");
-    if (songContent.length > 45)
-      songContent = songContent.substring(0, 45) + " ...";
+
+    var verses = songs[index].content.split("\\n\\n");
+    var songConts = songs[index].content.split("\\n");
+    String songContent = songConts[0] + ' ' + songConts[1] + " ...";
+
+    try {
+      BookModel curbook = books.firstWhere((i) => i.categoryid == category);
+      songContent = songContent + "\n" + curbook.title + "; ";
+      songbook = curbook.title;
+    } catch (Exception) {
+      songContent = songContent + "\n";
+    }
+
+    if (songs[index].content.contains("CHORUS")) {
+      songContent = songContent + LangStrings.HasChorus;
+      songContent = songContent + verses.length.toString() + LangStrings.Verses;
+    } else {
+      songContent = songContent + LangStrings.NoChorus;
+      songContent = songContent + verses.length.toString() + LangStrings.Verses;
+    }
+
     return Card(
       elevation: 2,
       child: ListTile(
-        title: Text(songTitle, style: TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text(songContent),
+        title: Text(songTitle,
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        subtitle: Text(songContent, style: TextStyle(fontSize: 18)),
         onTap: () {
-          navigateToSong(songs[index], songTitle);
+          navigateToSong(songs[index], songTitle,
+              "Song #" + songs[index].number.toString() + " - " + songbook);
         },
       ),
     );
   }
 
-  void updateListView() {
+  void updateBookList() {
     dbFuture = db.initializeDatabase();
     dbFuture.then((database) {
-      Future<List<SongModel>> songListFuture = db.getSongList(Columns.ownsongs);
+      Future<List<BookModel>> bookListFuture = db.getBookList();
+      bookListFuture.then((bookList) {
+        setState(() {
+          books = bookList;
+        });
+      });
+    });
+  }
+
+  void updateSongList() {
+    dbFuture = db.initializeDatabase();
+    dbFuture.then((database) {
+      Future<List<SongModel>> songListFuture = db.getFavorites();
       songListFuture.then((songList) {
         setState(() {
           songs = songList;
@@ -163,7 +170,7 @@ class AsSongPadState extends State<AsSongPad> {
       dbFuture = db.initializeDatabase();
       dbFuture.then((database) {
         Future<List<SongModel>> songListFuture =
-            db.getDraftSearch(txtSearch.text);
+            db.getFavSearch(txtSearch.text);
         songListFuture.then((songList) {
           setState(() {
             songs = songList;
@@ -171,20 +178,20 @@ class AsSongPadState extends State<AsSongPad> {
         });
       });
     } else
-      updateListView();
+      updateSongList();
   }
 
   void clearSearch() {
     txtSearch.clear();
     songs.clear();
-    updateListView();
+    updateSongList();
   }
 
-  void navigateToSong(SongModel song, String title) async {
+  void navigateToSong(SongModel song, String title, String songbook) async {
     bool haschorus = false;
     if (song.content.contains("CHORUS")) haschorus = true;
     await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return EeSongView(song, haschorus, title, "My Own Songs");
+      return EeSongView(song, haschorus, title, songbook);
     }));
   }
 }
