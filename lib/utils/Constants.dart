@@ -76,6 +76,7 @@ class SharedPreferenceKeys {
 }
 
 class LangStrings {
+  static const String appName = "vSongBook";
   static const String DarkMode = "Dark Mode";
   static const String JustAMinute = "Just a minute!";
   static const String In_Progress = "In progress ...";
@@ -88,25 +89,23 @@ class LangStrings {
   static const String CopySong = "Copy Song to Clipboard";
   static const String ShareSong = "Share this Song";
   static const String EditSong = "Edit this Song";
-  static const String TakeTimeSelectingSongbooks =
-      "Take time to select a songbook at a time so as to setup your vSongBook Collection.\n\n" +
+  static const String CopyVerse = "Copy Verse to Clipboard";
+  static const String ShareVerse = "Share this Verse";
+  static const String ImageVerse = "Share an Image of this Verse";
+  static const String TakeTimeSelectingSongbooks = "Take time to select a songbook at a time so as to setup your vSongBook Collection.\n\n" +
           "Once done that, proceed to press the 'TICK' button at the top right or bottom right for next stage\n\n" +
           "We can always bring you back here to add or remove songbooks";
 
   static const String No_Internet_Connection = "No internet connection";
   static const String Signin_Successful = "Sign in was successful";
-  static const String Signin_Unsuccessful =
-      "Oops! Your sign in was unsuccessful";
-  static const String Change_Password_Successful =
-      "Changing your password was successful";
-  static const String Change_Password_Unsuccessful =
-      "Change password was unsuccessful";
+  static const String Signin_Unsuccessful = "Oops! Your sign in was unsuccessful";
+  static const String Change_Password_Successful = "Changing your password was successful";
+  static const String Change_Password_Unsuccessful = "Change password was unsuccessful";
   static const String Signup_Successful = "Registration was successful";
   static const String Signup_Unsuccessful = "Registration was unsuccessful";
   static const String User_Already_Registered = "User already registered";
   static const String User_Not_Found = "User not found, Let's know you more";
-  static const String Signup_Suspended =
-      "Registration temporarily suspended. Try again soon";
+  static const String Signup_Suspended = "Registration temporarily suspended. Try again soon";
   static const String Signup_Unpermited = "You have no permission to proceed";
   static const String Enter_Pass = "Please enter your password";
   static const String Enter_New_Pass = "Please enter your new password";
@@ -122,16 +121,15 @@ class LangStrings {
   static const String Request_Unsuccessful = "Request was unsuccessful";
   static const String Request_Not_Found = "Request was not found";
   static const String Request_Suspended = "Request was suspended";
-  static const String Request_Unpermited =
-      "Request not permitted at the moment";
+  static const String Request_Unpermited = "Request not permitted at the moment";
   static const String Request_Invalid = "Request is invalid";
   static const String Song_Copied = "Song copied to clipboard!";
   static const String Song_Liked = " liked!";
   static const String Song_Disliked = " disliked!";
 
   static const String SearchNow = "Search a song";
-  static const String SearchResult =
-      "Search by title, number or words of a song";
+  static const String SearchHint = "Search by title, number or words";
+  static const String SearchResult = "Search by title, number or words";
   static const String Signup_Now = "Not registered? Register now !";
   static const String Signin_Now = "Already registered? Login now !";
   static const String Login = "Login";
@@ -146,9 +144,9 @@ class LangStrings {
   static const String Mobile = "Mobile";
   static const String Country = "Country";
   static const String Code = "Code";
-  static const String HasChorus = "Has Chorus; ";
-  static const String NoChorus = "No Chorus; ";
-  static const String Verses = " verses; ";
+  static const String HasChorus = "Has Chorus";
+  static const String NoChorus = "No Chorus";
+  static const String Verses = " verse";
   static const String Name = "Name";
   static const String DefaultCCode = "254";
   static const String DefaultCName = "Kenya";
@@ -176,29 +174,23 @@ class LangStrings {
   static const String GoBack = "GO BACK";
   static const String DoneSelecting = "Done with selecting?";
   static const String AreYouConnected = "Wait, are you connected?";
-  static const String NoSelection =
-      "Oops! This is so heart breaking. You haven't selected a book, you expect things to be okay. You got to " +
+  static const String NoSelection = "Oops! This is so heart breaking. You haven't selected a book, you expect things to be okay. You got to " +
           "select at least one book.\n\n By the way we can always bring you back here to select afresh. But for " +
           "now select at least one.";
-  static const String NoNewSelection =
-      "Oops! You haven't selected anymore book to your original collection, maybe you just want to keep your original " +
+  static const String NoNewSelection = "Oops! You haven't selected anymore book to your original collection, maybe you just want to keep your original " +
           "collection.\n\n By the way we can always bring you back here to select afresh. Well lets hope that is okay with you for now.";
-  static const String NoConnection =
-      "Oops! This is so heart breaking. You don't seem to have a working internet connection.\n\n" +
+  static const String NoConnection = "Oops! This is so heart breaking. You don't seem to have a working internet connection.\n\n" +
           "Kindly connect to a reliable internet either via Wi-Fi or Mobile Data then Retry again.";
 
-  static const String AppAbout =
-      "<h3>What is vSongBook?</h3><p>... vSongBook (Virtual Songbook) is an application that gives users access to songs sung in church services among other places where praise and worship is carried out. Major songbooks include Songs of Worship, Nyimbo za Injili, Believers Songs, Redemption Songs and Tenzi za Rohoni. Other songbooks in various local dialects have been added over time and more are under way to be added.</p>" +
+  static const String AppAbout = "<h3>What is vSongBook?</h3><p>... vSongBook (Virtual Songbook) is an application that gives users access to songs sung in church services among other places where praise and worship is carried out. Major songbooks include Songs of Worship, Nyimbo za Injili, Believers Songs, Redemption Songs and Tenzi za Rohoni. Other songbooks in various local dialects have been added over time and more are under way to be added.</p>" +
           "<hr><h3>What it is not ...</h3><p>... this is not a media player or tutor utility if you don't know how to sing a particular song. Be sure you know to sing most or all of the songs in it, otherwise feel free to customize the songs you want it have for you.</p>";
-  static const String AppHistory =
-      "<p>vSongBook was first developed in September 2014 by Jack Siro while a student at KTTC. By then he was just trying his hands on Android and he just wanted make a little app to have the Songs of worship and Nyimbo za injili on his phone just like the Bible was an app on his phone.</p><p>Later while at home in December his father who came to his room to check on him and ask <i>some little computer questions</i> noticed an unfamiliar app on his phone. On learning and interacting with it though by then it had only 100 songs in English and Swahili books, he asked to have it on his phone. The happy father went to share it with his elder songs. It was at the End of Year Meetings at Mbale, Kenya that Brother Siro endosed the app there during one of his sermons.</p>" +
+  static const String AppHistory = "<p>vSongBook was first developed in September 2014 by Jack Siro while a student at KTTC. By then he was just trying his hands on Android and he just wanted make a little app to have the Songs of worship and Nyimbo za injili on his phone just like the Bible was an app on his phone.</p><p>Later while at home in December his father who came to his room to check on him and ask <i>some little computer questions</i> noticed an unfamiliar app on his phone. On learning and interacting with it though by then it had only 100 songs in English and Swahili books, he asked to have it on his phone. The happy father went to share it with his elder songs. It was at the End of Year Meetings at Mbale, Kenya that Brother Siro endosed the app there during one of his sermons.</p>" +
           "<p>With the help of Brother Gitau while a student at JKUAT Taita Taveta and other youth believers the rest of the songs were able to available in soft copy. The app which resided on his personal website got shared and many started asking to have more songs and features on it.</p><p>The need to have it hosted on Play Store was becoming unavoidable but since the app was not being monetized it was hard to do so till Brother Ngalonde of ZimApps in Zimbabwe came through to allow him to host the app on his Play Store account in the midst of 2015. Towards the midst of 2016 he was already monetizing the app he was able to purchase his own Google Play Store account where to date he still hosts the app from.</p>" +
           "<p>With the help the likes Pastor Waheire, Brother Simon Muthama and Brother Kijusa the Nyimbo cia Kuinira Ngai (Kikuyu), Mbathi sya Kumutaiaa Ngai (Kikamba) and Tsinyimboa Tsya Nyasaye (Luhya) were made available in softcopy. Bro Simutami of Malawi was very supportive in having the Bemba Hymnal just like Sister Alunga was with the Third Exodus songs.</p>" +
           "<p>It was in the year 2016 that the need to have the app available on Windows Phone was realized but it was not until the midst of 2017 that this was made possible on the Windows App Store. A year later the app became available in Windows PCs which didn't have a specific place to download it from until in 2019 when it beaceme available on the new website www.appsmata.com launched by Jack Siro to cater for the projects that would fall under the umbrella of Appsmata Solutions the new brand he was now promoting.</p>" +
           "<p>vSongBook for iOS the latest product for the app became a reality in the midst of 2020 after a whole 3 years of trying to save and getting the requirements that were needed. However as the iOS platform is very expensive to develop for this goal took time to come to reality thanks Brother Danvick who was generaous with his MacBook and iPhone that this became possible.</p>" +
           "<p>This is not the end of the story because this project is still in progress and many fatures are underway to make it the best singing app for anyone wishing to sing from the comfort of their phone. Keep supporting it with your prayers, finance and whatever you got to keep it alive! Be blessed!</p>";
-  static const String AppThanks =
-      "<h3>Special Thanks be to the following people/Organizations:</h3>" +
+  static const String AppThanks = "<h3>Special Thanks be to the following people/Organizations:</h3>" +
           "<p>Pastor Siro, Sister Siro and the entire Kisii Church, " +
           "Brother George Gitau and  JKUAT Taita Taveta Youths, " +
           "Pastor Wakhanu, Pastor Mutonyi, Brother Timothy Mutonyi, " +
@@ -221,12 +213,10 @@ class LangStrings {
   static const String donateTab1Content = "PAYBILL: 891300\n\nACCOUNT: 33112";
 
   static const String donateTab2Title = "Equitel";
-  static const String donateTab2Content =
-      "BUSINESS NUMBER:\n\t891300\n\nACCOUNT: 33112";
+  static const String donateTab2Content = "BUSINESS NUMBER:\n\t891300\n\nACCOUNT: 33112";
 
   static const String donateTab3Title = "Airtel";
-  static const String donateTab3Content =
-      "BUSINESS NAME:\n\tMCHANGA\n\nACCOUNT: 33112";
+  static const String donateTab3Content = "BUSINESS NAME:\n\tMCHANGA\n\nACCOUNT: 33112";
 
   static const String donateTab4Title = "PayPal";
   static const String donateTab4Content = "EMAIL:\n\tappsmatake [at] gmail.com";
@@ -234,16 +224,17 @@ class LangStrings {
   static const String helpTabPage = "Help and Feedback";
 
   static const String helpTab1Title = "Contact us";
-  static const String helpTab1Content =
-      "<p>SIMU: +2547 - </p><hr><p>BARUA PEPE: <a href=\"mailto:appsmatake@gmail.com\">appsmatake@gmail.com</a> </p><hr> <p>TOVUTI: <a href=\"https://appsmata.com/vSongBook\">appsmata.com/vSongBook</a></p>";
+  static const String helpTab1Content = "<p>PHONE: +2547 - </p><hr><p>EMAIL: <a href=\"mailto:appsmatake@gmail.com\">appsmatake@gmail.com</a> </p><hr> <p>WEBSITE: " +
+      "<a href=\"https://appsmata.com/vSongBook\">appsmata.com/vSongBook</a></p>";
 
   static const String helpTab2Title = "App Reviews";
-  static const String helpTab2Content =
-      "Whether you are happy with our app or not please let us know by leaving a rating as well as review on the <a href=\"https://play.google.com/store/apps/details?id=com.jackson_siro.visongbook\">Google Play Store</a> or <a href=\"https://apps.apple.com/app/vsongbook/id1327276691\">Apple Store</a>.";
+  static const String helpTab2Content = "Whether you are happy with our app or not please let us know by leaving a rating as well as review on the " +
+      "<a href=\"https://play.google.com/store/apps/details?id=com.jackson_siro.visongbook\">Google Play Store</a> or " +
+      "<a href=\"https://apps.apple.com/app/vsongbook/id1327276691\">Apple Store</a>.";
 
   static const String helpTab3Title = "Open Source";
-  static const String helpTab3Content =
-      "If you are a software developer, the source code for this app is freely available on the GitHub:</br></br> <a href=\"https://github.com/Appsmata/vSongBook-Mobile\">github.com/kazibora/kamusi</a>";
+  static const String helpTab3Content = "If you are a software developer, the source code for this app is freely available on the GitHub:</br></br> " +
+      "<a href=\"https://github.com/Appsmata/vSongBook-Mobile\">https://github.com/Appsmata/vSongBook-Mobile</a>";
 }
 
 class Tables {
@@ -368,30 +359,41 @@ class Queries {
       Columns.created + ' INTEGER NOT NULL DEFAULT 0' +
       ");";
 
-  static const String selectSongsColumns = 'SELECT ' +
-      Columns.songid + ', ' +
-      Columns.postid + ', ' +
-      Columns.bookid + ', ' +
-      Columns.categoryid + ', ' +
-      Columns.basetype + ', ' +
-      Columns.number + ', ' +
-      Columns.alias + ', ' +
-      Columns.title + ', ' +
-      Columns.tags + ', ' +
-      Columns.content + ', ' +
-      Columns.key + ', ' +
-      Columns.author + ', ' +
-      Columns.notes + ', ' +
-      Columns.created + ', ' +
-      Columns.updated + ', ' +
-      Columns.metawhat + ', ' +
-      Columns.metawhen + ', ' +
-      Columns.metawhere + ', ' +
-      Columns.metawho + ', ' +
-      Columns.netthumbs + ', ' +
-      Columns.views + ', ' +
-      Columns.isfav + ', ' +
-      Columns.acount + ', ' +
-      Columns.userid +
-      " FROM " + Tables.songs;
+  static String searchQuery(String searchStr) {
+    return ' WHERE ' + Tables.songs + '.' + Columns.title + " LIKE '%$searchStr%' $bookQuery OR " + 
+      Tables.songs + '.' + Columns.alias + " LIKE '%$searchStr%' $bookQuery OR " + 
+      Tables.songs + '.' + Columns.content + " LIKE '%$searchStr%' $bookQuery" + songsOrderby;
+  }
+  
+  static const String selectSongsColumns = 
+      'SELECT ' + 
+        Columns.songid + ', ' +  Columns.postid + ', ' + Tables.songs + '.' + Columns.bookid + ', ' + 
+        Tables.songs + '.' + Columns.categoryid +  ', ' + Columns.number + ', ' + Columns.alias + ', ' + 
+        Tables.songs + '.' + Columns.title + ', ' + Tables.songs + '.' + Columns.content + ', ' + 
+        Columns.key + ', ' + Tables.songs + '.' + Columns.created + ', ' + 
+        Tables.songs + '.' + Columns.isfav + ', ' +  Tables.books + "." + Columns.title + ' AS songbook' +
+      ' FROM ' + Tables.songs + 
+      ' LEFT JOIN ' + Tables.books + ' ON ' + Tables.books + '.' + Columns.categoryid + '=' + Tables.songs + '.' + Columns.bookid;
+
+  static const String songsOrderby = ' ORDER BY ' +  Columns.songid + ' ASC';
+
+  static String whereSongsBookid(String book)
+  {
+    return ' WHERE ' + Tables.songs + '.' + Columns.bookid + '=' + book + songsOrderby;
+  }
+
+  static String whereSongsNumber(int songno)
+  {
+    return ' WHERE ' + Tables.songs + '.' + Columns.bookid + '=' + songno.toString() + songsOrderby;
+  }
+
+  static String bookQuery = 'AND ' + Tables.songs + '.' + Columns.bookid + '!=' + Columns.ownsongs.toString();
+  
+  static String whereSongMatch(String searchStr)
+  {
+    return ' WHERE ' + Tables.songs + '.' + Columns.title + " LIKE '%$searchStr%' $bookQuery OR " + 
+     Tables.songs + '.' +  Columns.alias + " LIKE '%$searchStr%' $bookQuery OR " + 
+      Tables.songs + '.' + Columns.content + " LIKE '%$searchStr%' $bookQuery" + songsOrderby;
+  }
+
 }

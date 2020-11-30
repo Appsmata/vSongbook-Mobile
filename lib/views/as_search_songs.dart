@@ -10,6 +10,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:vsongbook/utils/constants.dart';
 import 'package:vsongbook/widgets/as_progress.dart';
+import 'package:vsongbook/widgets/as_song_item.dart';
 import 'package:vsongbook/views/as_text_view.dart';
 
 class AsSearchSongs extends StatefulWidget {
@@ -48,30 +49,26 @@ class AsSearchSongsState extends State<AsSearchSongs> {
     }
 
     return new Container(
-      decoration: Provider.of<AppSettings>(context).isDarkMode
-          ? BoxDecoration()
-          : BoxDecoration(
-              image: DecorationImage(
-                  image: new AssetImage("assets/images/bg.jpg"),
-                  fit: BoxFit.cover)),
       child: new Stack(
-        children: <Widget>[
-          new Container(
+        children: <Widget>[          
+          Container(
+            height: 110,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              physics: BouncingScrollPhysics(),
+              itemCount: books.length,
+              itemBuilder: bookListView,
+            ),
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height - 200,
             padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: new Column(
-              children: <Widget>[
-                searchBox(),
-                Container(
-                  height: 55,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    physics: BouncingScrollPhysics(),
-                    itemCount: books.length,
-                    itemBuilder: bookListView,
-                  ),
-                ),
-                searchCount(),
-              ],
+            margin: EdgeInsets.only(top: 105),
+            child: ListView.builder(
+              itemCount: songs.length,
+              itemBuilder: (context, index) {
+                return AsSongItem('SongSearch_' + songs[index].songid.toString(), songs[index], context);
+              }
             ),
           ),
           Container(
@@ -79,105 +76,55 @@ class AsSearchSongsState extends State<AsSearchSongs> {
             padding: const EdgeInsets.symmetric(horizontal: 5),
             child: asProgress,
           ),
-          Container(
-            height: MediaQuery.of(context).size.height - 200,
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            margin: EdgeInsets.only(top: 150),
-            child: ListView.builder(
-              itemCount: songs.length,
-              itemBuilder: listView,
-            ),
-          ),
         ],
       ),
     );
   }
-
-  Widget searchBox() {
-    return new Card(
-      elevation: 2,
-      child: new TextField(
-        controller: txtSearch,
-        style: TextStyle(
-          fontSize: 18,
-        ),
-        decoration: InputDecoration(
-            prefixIcon: Padding(
-              padding: const EdgeInsetsDirectional.only(end: 12.0),
-              child: IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () => searchSong(),
-              ),
-            ),
-            suffixIcon: Padding(
-              padding: const EdgeInsetsDirectional.only(end: 12.0),
-              child: IconButton(
-                icon: Icon(Icons.clear),
-                onPressed: () => clearSearch(),
-              ),
-            ),
-            hintText: LangStrings.SearchNow,
-            hintStyle: TextStyle(fontSize: 18)),
-        onChanged: (value) {
-          searchSong();
-        },
-      ),
-    );
-  }
-
+  
   Widget bookListView(BuildContext context, int index) {
     return Container(
-      width: 160,
+      width: 100,
+      margin: EdgeInsets.only(bottom: 10),
       child: GestureDetector(
         onTap: () {
           setCurrentBook(books[index].categoryid);
         },
         child: Card(
           elevation: 5,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(50),
+          ),
           child: Hero(
-            tag: books[index].bookid,
-            child: Container(
-              padding: const EdgeInsets.all(3),
-              child: Center(
-                child: Text(
-                  books[index].title +
-                      ' (' +
-                      books[index].qcount.toString() +
-                      ')',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
+              tag: books[index].bookid,
+              child: Container(
+                padding: const EdgeInsets.all(3),
+                decoration: new BoxDecoration( 
+                  color: Provider.of<AppSettings>(context).isDarkMode ? Colors.black : Colors.deepOrange,
+                  border: Border.all(color: Provider.of<AppSettings>(context).isDarkMode ? Colors.white : Colors.orange),
+                  borderRadius: BorderRadius.all(Radius.circular(60)),
+                ),
+                child: Center(
+                  child: Text(
+                    books[index].title + ' (' + books[index].qcount.toString() + ')',
+                    style: TextStyle(
+                      fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
                 ),
               ),
             ),
-          ),
         ),
-      ),
+        
+      ),          
     );
-  }
-
-  Widget searchCount() {
-    return new Card(
-      elevation: 5,
-      child: Hero(
-        tag: 0,
-        child: Container(
-          padding: const EdgeInsets.all(7),
-          child: Center(
-            child: textResult,
-          ),
-        ),
-      ),
-    );
+    
   }
 
   Widget listView(BuildContext context, int index) {
     int category = songs[index].bookid;
     String songBook = "Songs of Worship";
-    String songTitle =
-        songs[index].number.toString() + ". " + songs[index].title;
+    String songTitle = songs[index].number.toString() + ". " + songs[index].title;
     String strContent = '<h2>' + songTitle + '</h2>';
 
     var verses = songs[index].content.split("\\n\\n");
@@ -248,34 +195,6 @@ class AsSearchSongsState extends State<AsSearchSongs> {
     });
   }
 
-  void searchSong() {
-    String searchThis = txtSearch.text;
-    if (searchThis.length > 0) {
-      songs.clear();
-      dbFuture = db.initializeDatabase();
-      dbFuture.then((database) {
-        Future<List<SongModel>> songListFuture =
-            db.getSongSearch(txtSearch.text);
-        songListFuture.then((songList) {
-          setState(() {
-            songs = songList;
-            textResult.setText(songs.length.toString() + " songs found");
-          });
-        });
-      });
-    } else {
-      updateSongList();
-      textResult.setText(LangStrings.SearchResult);
-    }
-  }
-
-  void clearSearch() {
-    txtSearch.clear();
-    songs.clear();
-    textResult.setText(LangStrings.SearchResult);
-    updateSongList();
-  }
-
   void setCurrentBook(int _book) {
     book = _book;
     songs.clear();
@@ -286,7 +205,7 @@ class AsSearchSongsState extends State<AsSearchSongs> {
     bool haschorus = false;
     if (song.content.contains("CHORUS")) haschorus = true;
     await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return EeSongView(song, haschorus, title, songbook);
+      return SongView(song, haschorus, title, songbook);
     }));
   }
 }

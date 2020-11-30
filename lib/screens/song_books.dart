@@ -13,14 +13,14 @@ import 'package:vsongbook/utils/preferences.dart';
 import 'package:vsongbook/utils/constants.dart';
 import 'package:vsongbook/helpers/app_database.dart';
 
-class DdSongBooks extends StatefulWidget {
+class SongBooks extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return DdSongBooksState();
+    return SongBooksState();
   }
 }
 
-class DdSongBooksState extends State<DdSongBooks> {
+class SongBooksState extends State<SongBooks> {
   var appBar = AppBar();
   final globalKey = new GlobalKey<ScaffoldState>();
   AsProgress asProgress = AsProgress.getProgress(LangStrings.Getting_Ready);

@@ -191,7 +191,7 @@ class AsFavoritesState extends State<AsFavorites> {
     bool haschorus = false;
     if (song.content.contains("CHORUS")) haschorus = true;
     await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return EeSongView(song, haschorus, title, songbook);
+      return SongView(song, haschorus, title, songbook);
     }));
   }
 }

@@ -7,19 +7,19 @@ import 'package:vsongbook/helpers/app_database.dart';
 import 'package:vsongbook/models/song_model.dart';
 import 'package:vsongbook/utils/constants.dart';
 
-class EeSongEdit extends StatefulWidget {
+class SongEdit extends StatefulWidget {
   final String appBarTitle;
   final SongModel song;
 
-  EeSongEdit(this.song, this.appBarTitle);
+  SongEdit(this.song, this.appBarTitle);
 
   @override
   State<StatefulWidget> createState() {
-    return EeSongEditState(this.song, this.appBarTitle);
+    return SongEditState(this.song, this.appBarTitle);
   }
 }
 
-class EeSongEditState extends State<EeSongEdit> {
+class SongEditState extends State<SongEdit> {
   SqliteHelper db = SqliteHelper();
 
   String appBarTitle;
@@ -30,7 +30,7 @@ class EeSongEditState extends State<EeSongEdit> {
   TextEditingController keyController = TextEditingController();
   TextEditingController aliasController = TextEditingController();
 
-  EeSongEditState(this.song, this.appBarTitle);
+  SongEditState(this.song, this.appBarTitle);
 
   @override
   Widget build(BuildContext context) {

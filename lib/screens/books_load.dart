@@ -12,14 +12,14 @@ import 'package:vsongbook/utils/constants.dart';
 import 'package:vsongbook/helpers/app_database.dart';
 import 'package:vsongbook/screens/songs_load.dart';
 
-class CcBooksLoad extends StatefulWidget {
+class BooksLoad extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return CcBooksLoadState();
+    return BooksLoadState();
   }
 }
 
-class CcBooksLoadState extends State<CcBooksLoad> {
+class BooksLoadState extends State<BooksLoad> {
   var appBar = AppBar();
   final globalKey = new GlobalKey<ScaffoldState>();
   AsProgress asProgress = AsProgress.getProgress(LangStrings.Getting_Ready);
@@ -507,7 +507,7 @@ class CcBooksLoadState extends State<CcBooksLoad> {
     Preferences.setBooksLoaded(true);
     Preferences.setSelectedBooks(selectedbooks);
     Navigator.pushReplacement(context,
-        new MaterialPageRoute(builder: (context) => new CcSongsLoad()));
+        new MaterialPageRoute(builder: (context) => new SongsLoad()));
   }
 }
 

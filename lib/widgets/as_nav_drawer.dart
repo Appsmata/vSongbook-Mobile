@@ -39,7 +39,7 @@ class AsNavDrawerState extends State<AsNavDrawer> {
             title: Text('Manage Songbooks'),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return DdSongBooks();
+                return SongBooks();
               }));
             }),
         ListTile(
@@ -47,7 +47,7 @@ class AsNavDrawerState extends State<AsNavDrawer> {
             title: Text('Support us'),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return GgDonate();
+                return Donate();
               }));
             }),
         Divider(),
@@ -62,7 +62,7 @@ class AsNavDrawerState extends State<AsNavDrawer> {
             title: Text('Help & Feedback'),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return GgHelpDesk();
+                return HelpDesk();
               }));
             }),
         ListTile(
@@ -70,7 +70,7 @@ class AsNavDrawerState extends State<AsNavDrawer> {
             title: Text('About vSongBook'),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return GgAboutApp();
+                return AboutApp();
               }));
             }),
       ],

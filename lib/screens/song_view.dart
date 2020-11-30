@@ -12,23 +12,23 @@ import 'package:vertical_tabs/vertical_tabs.dart';
 import 'package:share/share.dart';
 import 'package:vsongbook/utils/Constants.dart';
 
-class EeSongView extends StatefulWidget {
+class SongView extends StatefulWidget {
   final bool haschorus;
   final SongModel song;
   final String songtitle;
   final String songbook;
 
-  EeSongView(this.song, this.haschorus, this.songtitle, this.songbook);
+  SongView(this.song, this.haschorus, this.songtitle, this.songbook);
 
   @override
   State<StatefulWidget> createState() {
-    return EeSongViewState(
+    return SongViewState(
         this.song, this.haschorus, this.songtitle, this.songbook);
   }
 }
 
-class EeSongViewState extends State<EeSongView> {
-  EeSongViewState(this.song, this.haschorus, this.songtitle, this.songbook);
+class SongViewState extends State<SongView> {
+  SongViewState(this.song, this.haschorus, this.songtitle, this.songbook);
   final globalKey = new GlobalKey<ScaffoldState>();
   SqliteHelper db = SqliteHelper();
 
@@ -365,7 +365,7 @@ class EeSongViewState extends State<EeSongView> {
 
   void editSong() async {
     await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return EeSongEdit(song, "Editting: " + songTitle);
+      return SongEdit(song, "Editting: " + songTitle);
     }));
   }
 

@@ -87,7 +87,7 @@ class AsSongPadState extends State<AsSongPad> {
   void navigateToDraft(SongModel song, String title) async {
     bool result =
         await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return EeSongEdit(song, title);
+      return SongEdit(song, title);
     }));
 
     if (result == true) {
@@ -184,7 +184,7 @@ class AsSongPadState extends State<AsSongPad> {
     bool haschorus = false;
     if (song.content.contains("CHORUS")) haschorus = true;
     await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return EeSongView(song, haschorus, title, "My Own Songs");
+      return SongView(song, haschorus, title, "My Own Songs");
     }));
   }
 }

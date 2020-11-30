@@ -13,14 +13,14 @@ import 'package:vsongbook/screens/app_start.dart';
 import 'package:vsongbook/views/as_text_view.dart';
 import 'package:vsongbook/widgets/as_line_progress.dart';
 
-class CcSongsLoad extends StatefulWidget {
+class SongsLoad extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return CcSongsLoadState();
+    return SongsLoadState();
   }
 }
 
-class CcSongsLoadState extends State<CcSongsLoad> {
+class SongsLoadState extends State<SongsLoad> {
   AsTextView textIndicator = AsTextView.setUp("Getting ready ...", 25, true);
   AsTextView textProgress = AsTextView.setUp("", 25, true);
   AsLineProgress lineProgress = AsLineProgress.setUp(300, 0);

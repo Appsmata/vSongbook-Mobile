@@ -4,19 +4,19 @@ import 'package:vsongbook/views/as_search_songs.dart';
 import 'package:vsongbook/views/as_song_pad.dart';
 import 'package:vsongbook/widgets/as_nav_drawer.dart';
 
-class DdHomeView extends StatefulWidget {
+class HomeView extends StatefulWidget {
   final String bookstr;
 
-  DdHomeView(this.bookstr);
+  HomeView(this.bookstr);
 
   @override
   State<StatefulWidget> createState() {
-    return DdHomeViewState(this.bookstr);
+    return HomeViewState(this.bookstr);
   }
 }
 
-class DdHomeViewState extends State<DdHomeView> {
-  DdHomeViewState(this.bookstr);
+class HomeViewState extends State<HomeView> {
+  HomeViewState(this.bookstr);
 
   final globalKey = new GlobalKey<ScaffoldState>();
   AsSongPad drafts = AsSongPad();
