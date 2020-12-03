@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vsongbook/helpers/app_settings.dart';
-import 'package:vsongbook/screens/dd_song_books.dart';
-import 'package:vsongbook/screens/gg_about_app.dart';
-import 'package:vsongbook/screens/gg_donate.dart';
-import 'package:vsongbook/screens/gg_help_desk.dart';
+import 'package:vsongbook/screens/song_books.dart';
+import 'package:vsongbook/screens/about_app.dart';
+import 'package:vsongbook/screens/donate.dart';
+import 'package:vsongbook/screens/help_desk.dart';
 
 class AsNavDrawer extends StatefulWidget {
   @override
@@ -39,7 +39,7 @@ class AsNavDrawerState extends State<AsNavDrawer> {
             title: Text('Manage Songbooks'),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return DdSongBooks();
+                return SongBooks();
               }));
             }),
         ListTile(
@@ -47,7 +47,7 @@ class AsNavDrawerState extends State<AsNavDrawer> {
             title: Text('Support us'),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return GgDonate();
+                return Donate();
               }));
             }),
         Divider(),
@@ -62,7 +62,7 @@ class AsNavDrawerState extends State<AsNavDrawer> {
             title: Text('Help & Feedback'),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return GgHelpDesk();
+                return HelpDesk();
               }));
             }),
         ListTile(
@@ -70,7 +70,7 @@ class AsNavDrawerState extends State<AsNavDrawer> {
             title: Text('About vSongBook'),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return GgAboutApp();
+                return AboutApp();
               }));
             }),
       ],

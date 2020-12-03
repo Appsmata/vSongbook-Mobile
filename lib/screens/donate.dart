@@ -1,30 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
 import 'package:vsongbook/helpers/app_settings.dart';
 import 'package:vsongbook/utils/constants.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-class GgHelpDesk extends StatefulWidget {
+class Donate extends StatefulWidget {
   @override
-  createState() => new GgHelpDeskState();
+  createState() => new DonateState();
 }
 
-class GgHelpDeskState extends State<GgHelpDesk> {
+class DonateState extends State<Donate> {
   final globalKey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     final tabPages = <Widget>[
-      tabContent("help1", LangStrings.helpTab1Content),
-      tabContent("help2", LangStrings.helpTab2Content),
-      tabContent("help3", LangStrings.helpTab3Content),
+      tabContent("donation1", LangStrings.donateTab1Content),
+      tabContent("donation2", LangStrings.donateTab2Content),
+      tabContent("donation3", LangStrings.donateTab3Content),
+      tabContent("donation4", LangStrings.donateTab4Content),
     ];
     final tabTitles = <Tab>[
-      Tab(text: LangStrings.helpTab1Title),
-      Tab(text: LangStrings.helpTab2Title),
-      Tab(text: LangStrings.helpTab3Title),
+      Tab(text: LangStrings.donateTab1Title),
+      Tab(text: LangStrings.donateTab2Title),
+      Tab(text: LangStrings.donateTab3Title),
+      Tab(text: LangStrings.donateTab4Title),
     ];
 
     return WillPopScope(
@@ -36,7 +35,7 @@ class GgHelpDeskState extends State<GgHelpDesk> {
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text(LangStrings.helpTabPage),
+            title: Text(LangStrings.donateTabPage),
             bottom: TabBar(
               tabs: tabTitles,
             ),
@@ -68,7 +67,6 @@ class GgHelpDeskState extends State<GgHelpDesk> {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: Image(
                 image: new AssetImage("assets/images/" + image + ".png"),
-                height: 200.0,
               ),
             ),
           ),
@@ -78,14 +76,9 @@ class GgHelpDeskState extends State<GgHelpDesk> {
               child: Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Html(
-                  data: strText,
-                  style: {
-                    "html": Style(
-                      fontSize: FontSize(30.0),
-                    ),
-                  },
-                  onLinkTap: (url) => launchURL(url),
+                child: Text(
+                  strText,
+                  style: new TextStyle(fontSize: 30),
                 ),
               ),
             ),
@@ -93,10 +86,6 @@ class GgHelpDeskState extends State<GgHelpDesk> {
         ],
       ),
     );
-  }
-
-  launchURL(String url) async {
-    if (await canLaunch(url)) await launch(url);
   }
 
   void moveToLastScreen() {

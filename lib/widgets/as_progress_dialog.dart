@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class AsProgress extends StatefulWidget {
+class AsProgressDialog extends StatefulWidget {
   Color backgroundColor;
   Color color;
   Color containerColor;
   double borderRadius;
   String text;
-  AsProgressState progressState;
+  AsProgressDialogState progressDialogState;
 
-  AsProgress(
+  AsProgressDialog(
     {
       this.backgroundColor = Colors.black54,
       this.color = Colors.white,
@@ -19,7 +19,7 @@ class AsProgress extends StatefulWidget {
   );
 
   @override
-  createState() => progressState = new AsProgressState(
+  createState() => progressDialogState = new AsProgressDialogState(
       backgroundColor: this.backgroundColor,
       color: this.color,
       containerColor: this.containerColor,
@@ -27,19 +27,19 @@ class AsProgress extends StatefulWidget {
       text: this.text);
 
   void hideProgress() {
-    progressState.hideProgress();
+    progressDialogState.hideProgress();
   }
 
   void showProgress() {
-    progressState.showProgress();
+    progressDialogState.showProgress();
   }
 
   void showProgressWithText(String title) {
-    progressState.showProgressWithText(title);
+    progressDialogState.showProgressWithText(title);
   }
 
-  static Widget getProgress(String title) {
-    return new AsProgress(
+  static Widget getAsProgressDialog(String title) {
+    return new AsProgressDialog(
       backgroundColor: Colors.black12,
       color: Colors.black,
       containerColor: Colors.white,
@@ -49,7 +49,7 @@ class AsProgress extends StatefulWidget {
   }
 }
 
-class AsProgressState extends State<AsProgress> {
+class AsProgressDialogState extends State<AsProgressDialog> {
   Color backgroundColor;
   Color color;
   Color containerColor;
@@ -57,7 +57,7 @@ class AsProgressState extends State<AsProgress> {
   String text;
   bool _opacity = false;
 
-  AsProgressState(    
+  AsProgressDialogState(    
     {
       this.backgroundColor = Colors.black54,
       this.color = Colors.white,

@@ -5,9 +5,9 @@ import 'package:vsongbook/helpers/app_settings.dart';
 import 'package:vsongbook/models/book_model.dart';
 import 'package:vsongbook/models/song_model.dart';
 import 'package:vsongbook/helpers/app_database.dart';
-import 'package:vsongbook/screens/ee_song_view.dart';
+import 'package:vsongbook/screens/song_view.dart';
 import 'package:vsongbook/utils/constants.dart';
-import 'package:vsongbook/widgets/as_progress.dart';
+import 'package:vsongbook/widgets/as_progress_widget.dart';
 
 class AsFavorites extends StatefulWidget {
   @override
@@ -15,10 +15,10 @@ class AsFavorites extends StatefulWidget {
 }
 
 class AsFavoritesState extends State<AsFavorites> {
-  AsProgress progress = AsProgress.getAsProgress(LangStrings.Sis_Patience);
+  AsProgressWidget progressWidget =
+      AsProgressWidget.getProgressWidget(LangStrings.Sis_Patience);
   TextEditingController txtSearch = new TextEditingController(text: "");
-  final ScrollController _scrollController = ScrollController();
-  AppDatabase db = AppDatabase();
+  SqliteHelper db = SqliteHelper();
 
   Future<Database> dbFuture;
   List<BookModel> books;
@@ -41,23 +41,60 @@ class AsFavoritesState extends State<AsFavorites> {
                   fit: BoxFit.cover)),
       child: new Stack(
         children: <Widget>[
-          Container(
+          new Container(
+            margin: EdgeInsets.only(top: 5),
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: progress,
+            child: new Column(
+              children: <Widget>[
+                searchBox(),
+              ],
+            ),
           ),
           Container(
+            height: MediaQuery.of(context).size.height - 100,
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            margin: EdgeInsets.only(top: 60),            
-            child: Scrollbar(
-              isAlwaysShown: true,
-              controller: _scrollController,
-              child: ListView.builder(
-                itemCount: songs.length,
-                itemBuilder: songListView,
-              ),
+            child: progressWidget,
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height - 100,
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            margin: EdgeInsets.only(top: 60),
+            child: ListView.builder(
+              itemCount: songs.length,
+              itemBuilder: songListView,
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget searchBox() {
+    return new Card(
+      elevation: 2,
+      child: new TextField(
+        controller: txtSearch,
+        style: TextStyle(fontSize: 18),
+        decoration: InputDecoration(
+            prefixIcon: Padding(
+              padding: const EdgeInsetsDirectional.only(end: 12.0),
+              child: IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () => searchSong(),
+              ),
+            ),
+            suffixIcon: Padding(
+              padding: const EdgeInsetsDirectional.only(end: 12.0),
+              child: IconButton(
+                icon: Icon(Icons.clear),
+                onPressed: () => clearSearch(),
+              ),
+            ),
+            hintText: LangStrings.SearchNow,
+            hintStyle: TextStyle(fontSize: 18)),
+        onChanged: (value) {
+          searchSong();
+        },
       ),
     );
   }
@@ -90,10 +127,12 @@ class AsFavoritesState extends State<AsFavorites> {
     return Card(
       elevation: 2,
       child: ListTile(
-        title: Text(songTitle, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        title: Text(songTitle,
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         subtitle: Text(songContent, style: TextStyle(fontSize: 18)),
         onTap: () {
-          navigateToSong(songs[index], "Song #" + songs[index].number.toString() + " - " + songbook);
+          navigateToSong(songs[index], songTitle,
+              "Song #" + songs[index].number.toString() + " - " + songbook);
         },
       ),
     );
@@ -118,7 +157,7 @@ class AsFavoritesState extends State<AsFavorites> {
       songListFuture.then((songList) {
         setState(() {
           songs = songList;
-          progress.hideProgress();
+          progressWidget.hideProgress();
         });
       });
     });
@@ -148,11 +187,11 @@ class AsFavoritesState extends State<AsFavorites> {
     updateSongList();
   }
 
-  void navigateToSong(SongModel song, String songbook) async {
+  void navigateToSong(SongModel song, String title, String songbook) async {
     bool haschorus = false;
     if (song.content.contains("CHORUS")) haschorus = true;
     await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return EeSongView(song, haschorus, songbook);
+      return SongView(song, haschorus, title, songbook);
     }));
   }
 }

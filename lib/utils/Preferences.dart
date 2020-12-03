@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:vsongbook/models/callbacks/User.dart';
-import 'package:vsongbook/utils/constants.dart';
+import 'package:vsongbook/utils/Constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Preferences {

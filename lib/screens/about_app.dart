@@ -5,12 +5,12 @@ import 'package:vsongbook/utils/constants.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 
-class GgAboutApp extends StatefulWidget {
+class AboutApp extends StatefulWidget {
   @override
-  createState() => new GgAboutAppState();
+  createState() => new AboutAppState();
 }
 
-class GgAboutAppState extends State<GgAboutApp> {
+class AboutAppState extends State<AboutApp> {
   final globalKey = new GlobalKey<ScaffoldState>();
 
   @override

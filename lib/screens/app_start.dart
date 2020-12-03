@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:vsongbook/screens/cc_books_load.dart';
-import 'package:vsongbook/screens/cc_songs_load.dart';
-import 'package:vsongbook/screens/dd_home_view.dart';
+import 'package:vsongbook/screens/books_load.dart';
+import 'package:vsongbook/screens/songs_load.dart';
+import 'package:vsongbook/screens/home_view.dart';
 import 'package:vsongbook/utils/constants.dart';
 import 'package:vsongbook/utils/preferences.dart';
 
@@ -46,15 +46,14 @@ class SplashPageState extends State<AppStart> {
           {
             if (songsLoaded != null && songsLoaded)
             {
-              Navigator.pushReplacement( context, new MaterialPageRoute(builder: (context) => new DdHomeView(books)));
-              //Navigator.pushReplacement( context, new MaterialPageRoute(builder: (context) => new DdHomeView())); 
+              Navigator.pushReplacement( context, new MaterialPageRoute(builder: (context) => new HomeView(books)));
             }
             else {
-              Navigator.pushReplacement( context, new MaterialPageRoute(builder: (context) => new CcSongsLoad())); 
+              Navigator.pushReplacement( context, new MaterialPageRoute(builder: (context) => new SongsLoad())); 
             }
           }
           else {
-            Navigator.pushReplacement( context, new MaterialPageRoute(builder: (context) => new CcBooksLoad()));
+            Navigator.pushReplacement( context, new MaterialPageRoute(builder: (context) => new BooksLoad()));
           }
       });
     }

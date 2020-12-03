@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'package:sqflite/sqflite.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vsongbook/helpers/app_settings.dart';
 import 'package:vsongbook/models/book_model.dart';
+import 'package:vsongbook/screens/app_start.dart';
 import 'package:vsongbook/widgets/as_progress.dart';
 import 'package:vsongbook/helpers/app_futures.dart';
 import 'package:vsongbook/models/base/event_object.dart';
@@ -10,52 +12,55 @@ import 'package:vsongbook/models/callbacks/Book.dart';
 import 'package:vsongbook/utils/preferences.dart';
 import 'package:vsongbook/utils/constants.dart';
 import 'package:vsongbook/helpers/app_database.dart';
-import 'package:vsongbook/screens/cc_songs_load.dart';
-import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
-import 'package:animated_floatactionbuttons/animated_floatactionbuttons.dart';
 
-class CcBooksLoad extends StatefulWidget {
+class SongBooks extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return CcBooksLoadState();
+    return SongBooksState();
   }
 }
 
-class CcBooksLoadState extends State<CcBooksLoad> {
+class SongBooksState extends State<SongBooks> {
   var appBar = AppBar();
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  AsProgress progress = AsProgress.getAsProgress(LangStrings.Getting_Ready);
-  final GlobalKey<LiquidPullToRefreshState> _refreshIndicatorKey = GlobalKey<LiquidPullToRefreshState>();
+  final globalKey = new GlobalKey<ScaffoldState>();
+  AsProgress asProgress = AsProgress.getProgress(LangStrings.Getting_Ready);
 
-  AppDatabase databaseHelper = AppDatabase();
-  List<BookItem<Book>> selected = [];
-  List<BookItem<Book>> bookList;
+  SqliteHelper db = SqliteHelper();
+  Future<Database> dbFuture;
+  List<BookItem<Book>> selected = [], bookList;
+  List<BookModel> mybooks;
   List<Book> books;
-
-  bool darkModePressed = false;
-
-  Future<void> handleRefresh() {
-    final Completer<void> completer = Completer<void>();
-    Timer(const Duration(seconds: 3), () {
-      completer.complete();
-    });
-    
-    return completer.future.then<void>((_) {
-      _scaffoldKey.currentState?.showSnackBar(SnackBar(
-          content: const Text('Refresh complete'),
-          action: SnackBarAction(
-              label: 'RETRY',
-              onPressed: () {
-                requestData();
-                _refreshIndicatorKey.currentState.show();
-              })));
-    });
-  }
+  String backpathStr = "";
 
   void populateData() {
     bookList = [];
-    for (int i = 0; i < books.length; i++)
+    for (int i = 0; i < books.length; i++) {
       bookList.add(BookItem<Book>(books[i]));
+    }
+
+    for (int i = 0; i < books.length; i++) {
+      if (backpathStr.length > 1) {
+        bookList[i].isSelected =
+            backpathStr.contains(bookList[i].data.backpath) ? true : false;
+      }
+    }
+  }
+
+  void updateBookList() async {
+    dbFuture = db.initializeDatabase();
+    dbFuture.then((database) {
+      Future<List<BookModel>> bookListFuture = db.getBookList();
+      bookListFuture.then((mybookList) {
+        setState(() {
+          mybooks = mybookList;
+        });
+
+        for (int i = 0; i < mybooks.length; i++) {
+          backpathStr = backpathStr + mybooks[i].backpath + ",";
+        }
+      });
+    });
+    requestData();
   }
 
   void requestData() async {
@@ -68,7 +73,7 @@ class CcBooksLoadState extends State<CcBooksLoad> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => justAMinuteDialog());
-            progress.hideProgress();
+            asProgress.hideProgress();
             books = eventObject.object;
             populateData();
           });
@@ -81,7 +86,7 @@ class CcBooksLoadState extends State<CcBooksLoad> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => noInternetDialog());
-            progress.hideProgress();
+            asProgress.hideProgress();
           });
         }
         break;
@@ -92,7 +97,7 @@ class CcBooksLoadState extends State<CcBooksLoad> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => noInternetDialog());
-            progress.hideProgress();
+            asProgress.hideProgress();
           });
         }
         break;
@@ -103,65 +108,48 @@ class CcBooksLoadState extends State<CcBooksLoad> {
   Widget build(BuildContext context) {
     if (books == null) {
       books = List<Book>();
-      requestData();
-      //handleRefresh();
+      mybooks = [];
+      updateBookList();
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(LangStrings.SetUpvSongBook),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.check),
-            onPressed: () {
-              showDialog(
+    return WillPopScope(
+      onWillPop: () {
+        moveToLastScreen();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(LangStrings.SetUpvSongBook),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.refresh),
+              onPressed: () {
+                books = List<Book>();
+                requestData();
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.check),
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) => areYouDoneDialog());
+              },
+            ),
+          ],
+        ),
+        body: mainBody(),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            showDialog(
                 context: context,
-                builder: (BuildContext context) => areYouDoneDialog()
-              );
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.settings),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) => settingsDialog()
-              );
-            },
-          ),
-        ],
-      ),
-      body: mainBody(),
-      floatingActionButton: AnimatedFloatingActionButton(
-        fabButtons: floatingButtons(),
-        animatedIconData: AnimatedIcons.menu_close,
+                builder: (BuildContext context) => areYouDoneDialog());
+          },
+          tooltip: LangStrings.Proceed,
+          child: Icon(Icons.check),
+        ),
       ),
     );
-  }
-
-  List<Widget> floatingButtons() {
-    return <Widget>[
-      FloatingActionButton(
-        heroTag: null,
-        tooltip: LangStrings.Proceed,
-        child: Icon(Icons.refresh),
-        onPressed: () {
-          books = List<Book>();
-          requestData();
-        },
-      ),
-      FloatingActionButton(
-        heroTag: null,
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) => areYouDoneDialog());
-        },
-        tooltip: LangStrings.Proceed,
-        child: Icon(Icons.check),
-      ),
-    ];
   }
 
   Widget mainBody() {
@@ -189,70 +177,30 @@ class CcBooksLoadState extends State<CcBooksLoad> {
             ),
           ),
           Container(
-            height: (MediaQuery.of(context).size.height - (appBar.preferredSize.height * 2)),
-            padding: const EdgeInsets.symmetric(horizontal: 5),
+            height: (MediaQuery.of(context).size.height -
+                (appBar.preferredSize.height * 2)),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: asProgress,
+          ),
+          Container(
+            height: (MediaQuery.of(context).size.height -
+                (appBar.preferredSize.height * 2)),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             margin: EdgeInsets.only(top: 50),
-            child: LiquidPullToRefresh(
-              key: _refreshIndicatorKey,	// key if you want to add
-              onRefresh: handleRefresh,	// refresh callback
-              child: ListView.builder(
-                physics: BouncingScrollPhysics(),
-                    itemCount: books.length,
-                    itemBuilder: bookListView,
-              ),
+            child: ListView.builder(
+              physics: BouncingScrollPhysics(),
+              itemCount: books.length,
+              itemBuilder: bookListView,
             ),
           ),
           Container(
             height: (MediaQuery.of(context).size.height -
                 (appBar.preferredSize.height * 2)),
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: progress,
+            child: asProgress,
           ),
         ],
       ),
-    );
-  }
-
-  Widget settingsDialog() {
-    return new AlertDialog(
-      title: new Text(
-        LangStrings.DisplaySettings,
-        style: new TextStyle(color: Colors.deepOrange, fontSize: 25),
-      ),
-      content: new Container(
-        height: 50,
-        width: double.maxFinite,
-        child: ListView(children: <Widget>[
-          Consumer<AppSettings>(builder: (context, AppSettings settings, _) {
-            return ListTile(
-              onTap: () {},
-              leading: Icon(settings.isDarkMode
-                  ? Icons.brightness_4
-                  : Icons.brightness_7),
-              title: Text(LangStrings.DarkMode),
-              trailing: Switch(
-                onChanged: (bool value) => settings.setDarkMode(value),
-                value: settings.isDarkMode,
-              ),
-            );
-          }),
-          Divider(),
-        ]),
-      ),
-      actions: <Widget>[
-        new Container(
-          margin: EdgeInsets.all(5),
-          child: FlatButton(
-            child:
-                Text(LangStrings.OkayDone, style: new TextStyle(fontSize: 20)),
-            color: Colors.deepOrange,
-            //textColor: Colors.white,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ),
-      ],
     );
   }
 
@@ -300,7 +248,6 @@ class CcBooksLoadState extends State<CcBooksLoad> {
             child:
                 Text(LangStrings.OkayGotIt, style: new TextStyle(fontSize: 20)),
             color: Colors.deepOrange,
-            //textColor: Colors.white,
             onPressed: () {
               Navigator.pop(context);
             },
@@ -351,75 +298,54 @@ class CcBooksLoadState extends State<CcBooksLoad> {
   }
 
   Widget areYouDoneDialog() {
-    if (selected.length > 0) {
-      String selectedbooks = "";
-      for (int i = 0; i < selected.length; i++) {
+    String selectedbooks = "";
+    for (int i = 0; i < bookList.length; i++) {
+      if (bookList[i].isSelected) {
         selectedbooks = selectedbooks +
             (i + 1).toString() +
             ". " +
-            selected[i].data.title +
+            bookList[i].data.title +
             " (" +
-            selected[i].data.qcount +
+            bookList[i].data.qcount +
             LangStrings.SongsPrefix;
       }
-      return new AlertDialog(
-        title: new Text(
-          LangStrings.DoneSelecting,
-          style: new TextStyle(color: Colors.deepOrange, fontSize: 25),
-        ),
-        content: new Text(
-          selectedbooks,
-          style: new TextStyle(fontSize: 20),
-        ),
-        actions: <Widget>[
-          new Container(
-            margin: EdgeInsets.all(5),
-            child: FlatButton(
-              child:
-                  Text(LangStrings.GoBack, style: new TextStyle(fontSize: 20)),
-              color: Colors.deepOrange,
-              textColor: Colors.white,
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ),
-          new Container(
-            margin: EdgeInsets.all(5),
-            child: FlatButton(
-              child:
-                  Text(LangStrings.Proceed, style: new TextStyle(fontSize: 20)),
-              color: Colors.deepOrange,
-              textColor: Colors.white,
-              onPressed: () {
-                Navigator.pop(context);
-                _goToNextScreen();
-              },
-            ),
-          ),
-        ],
-      );
-    } else {
-      return new AlertDialog(
-        title: new Text(
-          LangStrings.JustAMinute,
-          style: new TextStyle(color: Colors.orange, fontSize: 25),
-        ),
-        content: new Text(
-          LangStrings.NoSelection,
-          style: new TextStyle(color: Colors.black, fontSize: 20),
-        ),
-        actions: <Widget>[
-          new FlatButton(
-            child: new Text(LangStrings.OkayGotIt,
-                style: new TextStyle(color: Colors.orange, fontSize: 20)),
+    }
+    return new AlertDialog(
+      title: new Text(
+        LangStrings.DoneSelecting,
+        style: new TextStyle(color: Colors.deepOrange, fontSize: 25),
+      ),
+      content: new Text(
+        selectedbooks,
+        style: new TextStyle(fontSize: 20),
+      ),
+      actions: <Widget>[
+        new Container(
+          margin: EdgeInsets.all(5),
+          child: FlatButton(
+            child: Text(LangStrings.GoBack, style: new TextStyle(fontSize: 20)),
+            color: Colors.deepOrange,
+            textColor: Colors.white,
             onPressed: () {
               Navigator.pop(context);
             },
           ),
-        ],
-      );
-    }
+        ),
+        new Container(
+          margin: EdgeInsets.all(5),
+          child: FlatButton(
+            child:
+                Text(LangStrings.Proceed, style: new TextStyle(fontSize: 20)),
+            color: Colors.deepOrange,
+            textColor: Colors.white,
+            onPressed: () {
+              Navigator.pop(context);
+              _goToNextScreen();
+            },
+          ),
+        ),
+      ],
+    );
   }
 
   void onItemSelected(BookItem tapped) {
@@ -447,9 +373,7 @@ class CcBooksLoadState extends State<CcBooksLoad> {
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 4),
-        //color: Colors.white,
         child: Card(
-          //color: bookList[index].isSelected ? Colors.deepOrange : Colors.white,
           color: bookList[index].isSelected
               ? Colors.deepOrange
               : Provider.of<AppSettings>(context).isDarkMode
@@ -492,6 +416,7 @@ class CcBooksLoadState extends State<CcBooksLoad> {
                     ),
                     SizedBox(height: 10),
                     Container(
+                      width: 240,
                       child: Text(
                         books[index].qcount +
                             " " +
@@ -517,7 +442,8 @@ class CcBooksLoadState extends State<CcBooksLoad> {
   }
 
   Future<void> saveData() async {
-    AppDatabase db = AppDatabase();
+    SqliteHelper db = SqliteHelper();
+    String selectedbooks = "";
 
     for (int i = 0; i < selected.length; i++) {
       Book item = selected[i].data;
@@ -525,27 +451,41 @@ class CcBooksLoadState extends State<CcBooksLoad> {
       int cartid = int.parse(item.categoryid);
       BookModel book = new BookModel(cartid, 1, item.title, item.tags, songs,
           i + 1, item.content, item.backpath);
-      await db.insertBook(book);
+
+      if (backpathStr.length > 1) {
+        if (backpathStr.contains(selected[i].data.backpath))
+          await db.deleteBook(book.bookid);
+        else {
+          await db.insertBook(book);
+          selectedbooks = selectedbooks + selected[i].data.categoryid + ",";
+        }
+      } else {
+        await db.insertBook(book);
+        selectedbooks = selectedbooks + selected[i].data.categoryid + ",";
+      }
+
+      try {
+        selectedbooks = selectedbooks.substring(0, selectedbooks.length - 1);
+      } catch (Exception) {}
+
+      print(selectedbooks);
+      Preferences.setBooksLoaded(true);
+      Preferences.setSelectedBooks(selectedbooks);
+      Preferences.setSongsLoaded(false);
     }
   }
 
   void _goToNextScreen() {
-    progress.showProgress();
+    asProgress.showProgress();
     saveData();
 
-    String selectedbooks = "";
-    for (int i = 0; i < selected.length; i++)
-      selectedbooks = selectedbooks + selected[i].data.categoryid + ",";
+    asProgress.hideProgress();
+    Navigator.pushReplacement(
+        context, new MaterialPageRoute(builder: (context) => new AppStart()));
+  }
 
-    try {
-      selectedbooks = selectedbooks.substring(0, selectedbooks.length - 1);
-    } catch (Exception) {}
-
-    progress.hideProgress();
-    Preferences.setBooksLoaded(true);
-    Preferences.setSelectedBooks(selectedbooks);
-    Navigator.pushReplacement(context,
-        new MaterialPageRoute(builder: (context) => new CcSongsLoad()));
+  void moveToLastScreen() {
+    Navigator.pop(context, true);
   }
 }
 

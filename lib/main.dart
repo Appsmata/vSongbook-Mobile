@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vsongbook/helpers/app_settings.dart';
 import 'package:vsongbook/screens/app_splash.dart';
 import 'package:vsongbook/screens/app_start.dart';
-import 'package:vsongbook/utils/themes.dart';
+import 'package:vsongbook/utils/Themes.dart';
 
 void main() {
   Crashlytics.instance.enableInDevMode = true;

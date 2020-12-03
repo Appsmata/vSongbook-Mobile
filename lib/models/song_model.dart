@@ -18,7 +18,6 @@ class SongModel {
   String _metawhen;
   String _metawhere;
   String _metawho;
-  String _songbook;
   int _netthumbs;
   int _views;
   int _isfav;
@@ -28,7 +27,6 @@ class SongModel {
   SongModel(
       this._postid,
       this._bookid,
-      this._songbook,
       this._basetype,
       this._number,
       this._title,
@@ -58,7 +56,6 @@ class SongModel {
   String get metawhen => _metawhen;
   String get metawhere => _metawhere;
   String get metawho => _metawho;
-  String get songbook => _songbook;
   int get netthumbs => _netthumbs;
   int get views => _views;
   int get isfav => _isfav;
@@ -165,10 +162,6 @@ class SongModel {
     this._metawho = newMetawho;
   }
 
-  set songbook(String newSongbook) {
-    this._songbook = newSongbook;
-  }
-
   // Convert a Note object into a Map object
   Map<String, dynamic> toMap() {
     var map = Map<String, dynamic>();
@@ -193,7 +186,6 @@ class SongModel {
     map['metawhen'] = _metawhen;
     map['metawhere'] = _metawhere;
     map['metawho'] = _metawho;
-    map['songbook'] = _songbook;
     map['netthumbs'] = _netthumbs;
     map['views'] = _views;
     map['isfav'] = _isfav;
@@ -223,7 +215,6 @@ class SongModel {
     this._metawhen = map['metawhen'];
     this._metawhere = map['metawhere'];
     this._metawho = map['metawho'];
-    this._songbook = map['songbook'];
     this._netthumbs = map['netthumbs'];
     this._views = map['views'];
     this._isfav = map['isfav'];

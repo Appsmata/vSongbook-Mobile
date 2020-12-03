@@ -1,29 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html/style.dart';
 import 'package:vsongbook/helpers/app_settings.dart';
-import 'package:vsongbook/utils/constants.dart';
+import 'package:vsongbook/utils/Constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class GgDonate extends StatefulWidget {
+class HelpDesk extends StatefulWidget {
   @override
-  createState() => new GgDonateState();
+  createState() => new HelpDeskState();
 }
 
-class GgDonateState extends State<GgDonate> {
+class HelpDeskState extends State<HelpDesk> {
   final globalKey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     final tabPages = <Widget>[
-      tabContent("donation1", LangStrings.donateTab1Content),
-      tabContent("donation2", LangStrings.donateTab2Content),
-      tabContent("donation3", LangStrings.donateTab3Content),
-      tabContent("donation4", LangStrings.donateTab4Content),
+      tabContent("help1", LangStrings.helpTab1Content),
+      tabContent("help2", LangStrings.helpTab2Content),
+      tabContent("help3", LangStrings.helpTab3Content),
     ];
     final tabTitles = <Tab>[
-      Tab(text: LangStrings.donateTab1Title),
-      Tab(text: LangStrings.donateTab2Title),
-      Tab(text: LangStrings.donateTab3Title),
-      Tab(text: LangStrings.donateTab4Title),
+      Tab(text: LangStrings.helpTab1Title),
+      Tab(text: LangStrings.helpTab2Title),
+      Tab(text: LangStrings.helpTab3Title),
     ];
 
     return WillPopScope(
@@ -35,7 +36,7 @@ class GgDonateState extends State<GgDonate> {
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text(LangStrings.donateTabPage),
+            title: Text(LangStrings.helpTabPage),
             bottom: TabBar(
               tabs: tabTitles,
             ),
@@ -67,6 +68,7 @@ class GgDonateState extends State<GgDonate> {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: Image(
                 image: new AssetImage("assets/images/" + image + ".png"),
+                height: 200.0,
               ),
             ),
           ),
@@ -76,9 +78,14 @@ class GgDonateState extends State<GgDonate> {
               child: Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Text(
-                  strText,
-                  style: new TextStyle(fontSize: 30),
+                child: Html(
+                  data: strText,
+                  style: {
+                    "html": Style(
+                      fontSize: FontSize(30.0),
+                    ),
+                  },
+                  onLinkTap: (url) => launchURL(url),
                 ),
               ),
             ),
@@ -86,6 +93,10 @@ class GgDonateState extends State<GgDonate> {
         ],
       ),
     );
+  }
+
+  launchURL(String url) async {
+    if (await canLaunch(url)) await launch(url);
   }
 
   void moveToLastScreen() {
