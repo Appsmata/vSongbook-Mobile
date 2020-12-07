@@ -20,9 +20,10 @@ And note there are some limitations to the web variant.
 ## Screenshots
 <table>
 <tr>
-<td><img src="screenshots/Screenshot_1.png" width="240px" /></td>
-<td><img src="screenshots/Screenshot_2.png" width="240px" /></td>
-<td><img src="screenshots/Screenshot_3.png" width="240px" /></td>
+<td><img src="screenshots/Screenshot_1.jpg" width="200px" /></td>
+<td><img src="screenshots/Screenshot_2.jpg" width="200px" /></td>
+<td><img src="screenshots/Screenshot_3.jpg" width="200px" /></td>
+<td><img src="screenshots/Screenshot_4.jpg" width="200px" /></td>
 </tr>
 </table>
 
