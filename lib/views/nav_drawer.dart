@@ -40,7 +40,7 @@ class NavDrawerState extends State<NavDrawer> {
             title: Text(LangStrings.manageSongbooks),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return DdSongBooks();
+                return SongBooks();
               }));
             }),
         ListTile(
@@ -48,7 +48,7 @@ class NavDrawerState extends State<NavDrawer> {
             title: Text(LangStrings.supportUs),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return GgDonate();
+                return Donate();
               }));
             }),
         Divider(),        
@@ -57,7 +57,7 @@ class NavDrawerState extends State<NavDrawer> {
             title: Text(LangStrings.helpFeedback),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return GgHelpDesk();
+                return HelpDesk();
               }));
             }),
         ListTile(

@@ -14,14 +14,14 @@ import 'package:vsongbook/screens/songs_load.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:animated_floatactionbuttons/animated_floatactionbuttons.dart';
 
-class CcBooksLoad extends StatefulWidget {
+class BooksLoad extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return CcBooksLoadState();
+    return BooksLoadState();
   }
 }
 
-class CcBooksLoadState extends State<CcBooksLoad> {
+class BooksLoadState extends State<BooksLoad> {
   var appBar = AppBar();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   AsProgress progress = AsProgress.getAsProgress(LangStrings.gettingReady);
@@ -44,7 +44,7 @@ class CcBooksLoadState extends State<CcBooksLoad> {
       _scaffoldKey.currentState?.showSnackBar(SnackBar(
           content: const Text('Refresh complete'),
           action: SnackBarAction(
-              label: 'RETRY',
+              label: LangStrings.retry,
               onPressed: () {
                 requestData();
                 _refreshIndicatorKey.currentState.show();
@@ -75,7 +75,7 @@ class CcBooksLoadState extends State<CcBooksLoad> {
         }
         break;
 
-      case EventConstants.requestUnsuccessful
+      case EventConstants.requestUnsuccessful:
         {
           setState(() {
             showDialog(
@@ -110,7 +110,7 @@ class CcBooksLoadState extends State<CcBooksLoad> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(LangStrings.setUpTheApp),
+        title: Text(LangStrings.setUpTheApp + LangStrings.appName),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.check),
@@ -540,7 +540,7 @@ class CcBooksLoadState extends State<CcBooksLoad> {
     Preferences.setBooksLoaded(true);
     Preferences.setSelectedBooks(selectedbooks);
     Navigator.pushReplacement(context,
-        new MaterialPageRoute(builder: (context) => new CcSongsLoad()));
+        new MaterialPageRoute(builder: (context) => new SongsLoad()));
   }
 }
 

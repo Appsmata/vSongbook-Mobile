@@ -2,12 +2,16 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:vsongbook/utils/colors.dart';
+import 'package:vsongbook/utils/constants.dart';
+import 'package:provider/provider.dart';
+import 'package:vsongbook/helpers/app_base.dart';
+import 'package:vsongbook/helpers/app_settings.dart';
 import 'package:vsongbook/models/book_model.dart';
 import 'package:vsongbook/models/song_model.dart';
 import 'package:vsongbook/helpers/app_database.dart';
 import 'package:vsongbook/screens/song_view.dart';
 import 'package:vsongbook/views/song_item.dart';
-import 'package:vsongbook/utils/constants.dart';
 import 'package:vsongbook/widgets/as_progress.dart';
 import 'package:vsongbook/widgets/as_text_view.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
@@ -41,27 +45,6 @@ class SongListState extends State<SongList> {
   List<SongModel> songs;
   int book;
 
-  Future<void> handleRefresh() {
-    final Completer<void> completer = Completer<void>();
-    Timer(const Duration(seconds: 3), () {
-      completer.complete();
-    });
-    
-    return completer.future.then<void>((_) {
-      _scaffoldKey.currentState?.showSnackBar(SnackBar(
-        content: const Text('Refresh complete'),
-        action: SnackBarAction(
-            label: 'RETRY',
-            onPressed: () {
-              _refreshIndicatorKey.currentState.show();
-            }
-          )
-        )
-      );
-    });
-  }
-
-
   @override
   Widget build(BuildContext context) {
     if (songs == null) {
@@ -74,12 +57,12 @@ class SongListState extends State<SongList> {
     return new Container(
       child: new Stack(
         children: <Widget>[
-          new Container(
+          Container(
             padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: new Column(
+            child: Column(
               children: <Widget>[
                 Container(
-                  height: 55,
+                  height: 105,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     physics: BouncingScrollPhysics(),
@@ -90,19 +73,21 @@ class SongListState extends State<SongList> {
               ],
             ),
           ),
+          
           Container(
-            height: MediaQuery.of(context).size.height - 100,
+            margin: EdgeInsets.only(top: 98),
+            child: Divider(),
+          ),
+          
+          Container(
+            height: MediaQuery.of(context).size.height - 150,
             padding: const EdgeInsets.symmetric(horizontal: 5),
-            margin: EdgeInsets.only(top: 55),
-            child: LiquidPullToRefresh(
-              key: _refreshIndicatorKey,	// key if you want to add
-              onRefresh: handleRefresh,	// refresh callback
-              child: ListView.builder(
-                itemCount: songs.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return SongItem('SongIndex_' + songs[index].songid.toString(), songs[index], context);
-                }
-              ),
+            margin: EdgeInsets.only(top: 105),
+            child: ListView.builder(
+              itemCount: songs.length,
+              itemBuilder: (BuildContext context, int index) {
+                return SongItem('SongIndex_' + songs[index].songid.toString(), songs[index], books, context);
+              }
             ),
           ),
           Container(
@@ -117,25 +102,28 @@ class SongListState extends State<SongList> {
 
   Widget bookListView(BuildContext context, int index) {
     return Container(
-      width: 160,
+      width: 100,
+      padding: const EdgeInsets.only(bottom: 5),
       child: GestureDetector(
         onTap: () {
           setCurrentBook(books[index].categoryid);
         },
         child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(50),
+            side: BorderSide(color: Provider.of<AppSettings>(context).isDarkMode ? ColorUtils.black : ColorUtils.secondaryColor, width: 1.5),
+          ),      
+          color: Provider.of<AppSettings>(context).isDarkMode ? ColorUtils.black : ColorUtils.primaryColor,
           elevation: 5,
           child: Hero(
             tag: books[index].bookid,
             child: Container(
-              padding: const EdgeInsets.all(3),
+              padding: const EdgeInsets.all(10),
               child: Center(
                 child: Text(
-                  books[index].title +
-                      ' (' +
-                      books[index].qcount.toString() +
-                      ')',
+                  books[index].title + ' (' + books[index].qcount.toString() + ')',
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 15, color: ColorUtils.white,
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
@@ -183,7 +171,7 @@ class SongListState extends State<SongList> {
     bool haschorus = false;
     if (song.content.contains("CHORUS")) haschorus = true;
     await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return EeSongView(song, haschorus, songbook);
+      return SongView(song, haschorus, songbook);
     }));
   }
 }

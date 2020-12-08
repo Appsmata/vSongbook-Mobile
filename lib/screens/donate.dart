@@ -3,12 +3,12 @@ import 'package:provider/provider.dart';
 import 'package:vsongbook/helpers/app_settings.dart';
 import 'package:vsongbook/utils/constants.dart';
 
-class GgDonate extends StatefulWidget {
+class Donate extends StatefulWidget {
   @override
-  createState() => new GgDonateState();
+  createState() => new DonateState();
 }
 
-class GgDonateState extends State<GgDonate> {
+class DonateState extends State<Donate> {
   final globalKey = new GlobalKey<ScaffoldState>();
 
   @override

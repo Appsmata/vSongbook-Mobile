@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vsongbook/helpers/app_base.dart';
 import 'package:vsongbook/helpers/app_settings.dart';
+import 'package:vsongbook/utils/colors.dart';
 import 'package:vsongbook/utils/constants.dart';
+import 'package:vsongbook/models/book_model.dart';
 import 'package:vsongbook/models/song_model.dart';
 import 'package:vsongbook/screens/song_view.dart';
 
@@ -10,9 +12,11 @@ class SongItem extends StatelessWidget {
 
   final String heroTag;
   final SongModel song;
+  final List<BookModel> books;
   final BuildContext context;
 
-  SongItem(this.heroTag, this.song, this.context);
+  SongItem(this.heroTag, this.song, this.books, this.context);
+  String songBook;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +31,13 @@ class SongItem extends StatelessWidget {
     } else {
       hasChorus = LangStrings.noChorus;
       verseCount = verses.length.toString() + (verses.length == 1 ? ' V' : ' Vs');
+    }
+
+    try {
+      BookModel curbook = books.firstWhere((i) => i.categoryid == song.bookid);
+      songBook = curbook.title;
+    } catch (Exception) {
+      songBook = "";
     }
 
     return GestureDetector(
@@ -47,7 +58,7 @@ class SongItem extends StatelessWidget {
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: <Widget>[
-                        tagView(song.songbook),
+                        tagView(songBook),
                         tagView(hasChorus),
                         tagView(verseCount),
                       ]
@@ -75,11 +86,11 @@ class SongItem extends StatelessWidget {
           padding: const EdgeInsets.all(5),
           margin: EdgeInsets.only(top: 5, left: 5),
           decoration: new BoxDecoration( 
-            color: Provider.of<AppSettings>(context).isDarkMode ? Colors.black : Colors.deepOrange,
-            border: Border.all(color: Provider.of<AppSettings>(context).isDarkMode ? Colors.white : Colors.orange),
+            color: Provider.of<AppSettings>(context).isDarkMode ? ColorUtils.black : ColorUtils.primaryColor,
+            border: Border.all(color: Provider.of<AppSettings>(context).isDarkMode ? ColorUtils.white : ColorUtils.secondaryColor),
             borderRadius: BorderRadius.only(topRight: Radius.circular(5), bottomLeft: Radius.circular(5)),
           ),
-          child: Text( tagText,style: new TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
+          child: Text( tagText,style: TextStyle(color: ColorUtils.white, fontWeight: FontWeight.bold, fontSize: 15),
           ),
         );
     }
@@ -95,7 +106,7 @@ class SongItem extends StatelessWidget {
     
     print(this.heroTag);
     await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return EeSongView(this.song, haschorus, this.song.songbook);
+      return SongView(this.song, haschorus, songBook);
     }));
   }
 }

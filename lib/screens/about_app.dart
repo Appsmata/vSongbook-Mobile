@@ -27,7 +27,7 @@ class GgAboutAppState extends State<GgAboutApp> {
           child: ListView(
             children: <Widget>[
               Html(
-                data: LangStrings.AppAbout,
+                data: LangStrings.appAbout,
                 style: {
                   "h3": Style(fontSize: FontSize(30.0)),
                   "p": Style(fontSize: FontSize(20.0)),
@@ -40,7 +40,7 @@ class GgAboutAppState extends State<GgAboutApp> {
         child: ListView(
           children: <Widget>[
             Html(
-              data: LangStrings.AppHistory,
+              data: LangStrings.appHistory,
               style: {
                 "h3": Style(fontSize: FontSize(30.0)),
                 "p": Style(fontSize: FontSize(20.0)),
@@ -54,7 +54,7 @@ class GgAboutAppState extends State<GgAboutApp> {
           child: ListView(
             children: <Widget>[
               Html(
-                data: LangStrings.AppThanks,
+                data: LangStrings.appThanks,
                 style: {
                   "h3": Style(fontSize: FontSize(30.0)),
                   "p": Style(fontSize: FontSize(20.0)),

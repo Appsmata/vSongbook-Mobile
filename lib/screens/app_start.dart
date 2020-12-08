@@ -46,14 +46,14 @@ class SplashPageState extends State<AppStart> {
           {
             if (songsLoaded != null && songsLoaded)
             {
-              Navigator.pushReplacement( context, new MaterialPageRoute(builder: (context) => new DdHomeView(books)));
+              Navigator.pushReplacement( context, new MaterialPageRoute(builder: (context) => new HomeView(books)));
             }
             else {
-              Navigator.pushReplacement( context, new MaterialPageRoute(builder: (context) => new CcSongsLoad())); 
+              Navigator.pushReplacement( context, new MaterialPageRoute(builder: (context) => new SongsLoad())); 
             }
           }
           else {
-            Navigator.pushReplacement( context, new MaterialPageRoute(builder: (context) => new CcBooksLoad()));
+            Navigator.pushReplacement( context, new MaterialPageRoute(builder: (context) => new BooksLoad()));
           }
       });
     }

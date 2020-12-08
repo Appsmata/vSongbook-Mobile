@@ -5,5 +5,5 @@ class EventObject {
   Object object;
 
   EventObject(
-      {this.id: EventConstants.No_Internet_Connection, this.object: null});
+      {this.id: EventConstants.noInternetConnection, this.object: null});
 }

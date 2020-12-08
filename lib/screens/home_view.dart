@@ -12,18 +12,18 @@ import 'package:vsongbook/helpers/app_database.dart';
 import 'package:vsongbook/helpers/app_search_delegate.dart';
 import 'package:vsongbook/views/nav_drawer.dart';
 
-class DdHomeView extends StatefulWidget {
+class HomeView extends StatefulWidget {
   final String bookstr;
-  DdHomeView(this.bookstr);
+  HomeView(this.bookstr);
 
   @override
   State<StatefulWidget> createState() {
-    return DdHomeViewState(this.bookstr);
+    return HomeViewState(this.bookstr);
   }
 }
 
-class DdHomeViewState extends State<DdHomeView> {
-  DdHomeViewState(this.bookstr);
+class HomeViewState extends State<HomeView> {
+  HomeViewState(this.bookstr);
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   int _lastIntegerSelected;

@@ -96,7 +96,7 @@ class AppSearchDelegate extends SearchDelegate<List> {
       title: Text(filtered[i].title), 
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return EeSongView(filtered[i], true, "");
+          return SongView(filtered[i], true, "");
         }));
       },    
     );

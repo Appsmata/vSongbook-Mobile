@@ -6,12 +6,12 @@ import 'package:vsongbook/helpers/app_settings.dart';
 import 'package:vsongbook/utils/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class GgHelpDesk extends StatefulWidget {
+class HelpDesk extends StatefulWidget {
   @override
-  createState() => new GgHelpDeskState();
+  createState() => new HelpDeskState();
 }
 
-class GgHelpDeskState extends State<GgHelpDesk> {
+class HelpDeskState extends State<HelpDesk> {
   final globalKey = new GlobalKey<ScaffoldState>();
 
   @override

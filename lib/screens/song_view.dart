@@ -12,22 +12,22 @@ import 'package:share/share.dart';
 import 'package:vsongbook/utils/Constants.dart';
 import 'package:animated_floatactionbuttons/animated_floatactionbuttons.dart';
 
-class EeSongView extends StatefulWidget {
+class SongView extends StatefulWidget {
   final bool haschorus;
   final SongModel song;
   final String book;
 
-  EeSongView(this.song, this.haschorus, this.book);
+  SongView(this.song, this.haschorus, this.book);
 
   @override
   State<StatefulWidget> createState() {
-    return EeSongViewState(
+    return SongViewState(
         this.song, this.haschorus, this.book);
   }
 }
 
-class EeSongViewState extends State<EeSongView> {
-  EeSongViewState(this.song, this.haschorus, this.book);
+class SongViewState extends State<SongView> {
+  SongViewState(this.song, this.haschorus, this.book);
   final globalKey = new GlobalKey<ScaffoldState>();
   AppDatabase db = AppDatabase();
 
@@ -398,7 +398,7 @@ class EeSongViewState extends State<EeSongView> {
 
   void editSong() async {
     await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return EeSongEdit(song, "Editting: " + songTitle);
+      return SongEdit(song, "Editting: " + songTitle);
     }));
   }
 

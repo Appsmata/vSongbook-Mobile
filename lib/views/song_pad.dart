@@ -71,13 +71,13 @@ class SongPadState extends State<SongPad> {
   }
 
   void newSong() {
-    SongModel song = new SongModel(0, Columns.ownsongs, "", "S", 0, "", "", "", "", "", 0, "");
+    SongModel song = new SongModel(0, Columns.ownsongs, "S", 0, "", "", "", "", "", 0, "");
     navigateToDraft(song, LangStrings.draftASong);
   }
 
   void navigateToDraft(SongModel song, String title) async {
       bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return EeSongEdit(song, title);
+        return SongEdit(song, title);
       }
     ));
 
@@ -145,7 +145,7 @@ class SongPadState extends State<SongPad> {
     bool haschorus = false;
     if (song.content.contains("CHORUS")) haschorus = true;
     await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return EeSongView(song, haschorus, "My Own Songs");
+      return SongView(song, haschorus, "My Own Songs");
     }));
   }
 }
