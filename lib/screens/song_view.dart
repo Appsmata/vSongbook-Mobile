@@ -92,7 +92,7 @@ class SongViewState extends State<SongView> {
   }
 
   Widget settingsDialog() {
-    return new AlertDialog(
+    return AlertDialog(
       title: new Text(
         LangStrings.displaySettings,
         style: new TextStyle(color: Colors.deepOrange, fontSize: 25),
@@ -173,7 +173,7 @@ class SongViewState extends State<SongView> {
         tabs: List<Tab>.generate(
           verseInfos.length,
           (int index) {
-            return new Tab(
+            return Tab(
               child: Center(
                 child: Text(verseInfos[index],
                     style: new TextStyle(
@@ -187,7 +187,7 @@ class SongViewState extends State<SongView> {
         contents: List<Widget>.generate(
           verseInfos.length,
           (int index) {
-            return new Container(
+            return Container(
               child: tabsContent(index),
               decoration: Provider.of<AppSettings>(context).isDarkMode ? BoxDecoration() : BoxDecoration(color: Colors.orange[100]),
             );
@@ -208,7 +208,7 @@ class SongViewState extends State<SongView> {
     String lyrics = verseTexts[index].replaceAll("\\n", "\n").replaceAll("''", "'");
     double nfontsize = getFontSize(lyrics.length, MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
 
-    return new Stack(
+    return Stack(
       children: <Widget>[
         verseText(lyrics, nfontsize),
         verseTitle(verseTitles[index]),
@@ -223,7 +223,7 @@ class SongViewState extends State<SongView> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         margin: EdgeInsets.only(top: 10, left: 10),
-        child: new Column(
+        child: Column(
           children: <Widget>[
             new Container(
               width: 200,
@@ -233,8 +233,8 @@ class SongViewState extends State<SongView> {
                 boxShadow: [BoxShadow(blurRadius: 5)],
                 borderRadius: new BorderRadius.all(new Radius.circular(5))
               ),
-              child: new Center(
-                child: new Text(
+              child: Center(
+                child: Text(
                   verseTitle,
                   style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                 ),
@@ -255,10 +255,10 @@ class SongViewState extends State<SongView> {
       decoration: Provider.of<AppSettings>(context).isDarkMode ? BoxDecoration() : BoxDecoration(color: Colors.orange[100]),
       child: Card(
         elevation: 2,
-        child: new Center(
+        child: Center(
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: new Text(
+            child: Text(
               lyrics,
               style: new TextStyle(fontSize: fontsize),
             ),

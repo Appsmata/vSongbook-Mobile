@@ -29,14 +29,14 @@ class SongPadState extends State<SongPad> {
       songs = [];
       updateListView();
     }
-    return new Container(
+    return Container(
       decoration: Provider.of<AppSettings>(context).isDarkMode
           ? BoxDecoration()
           : BoxDecoration(
               image: DecorationImage(
                   image: new AssetImage("assets/images/bg.jpg"),
                   fit: BoxFit.cover)),
-      child: new Stack(
+      child: Stack(
         children: <Widget>[
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10),

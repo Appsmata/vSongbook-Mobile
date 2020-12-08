@@ -82,7 +82,7 @@ class SongEditState extends State<SongEdit> {
   Widget basicForm() {
     return Card(
       elevation: 2,
-      child: new Center(
+      child: Center(
         child: Container(
           padding: EdgeInsets.all(10),
           child: Column(
@@ -129,7 +129,7 @@ class SongEditState extends State<SongEdit> {
   Widget extraForm() {
     return Card(
       elevation: 2,
-      child: new Center(
+      child: Center(
         child: Container(
           padding: EdgeInsets.all(10),
           child: Column(

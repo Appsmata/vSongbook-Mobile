@@ -19,7 +19,7 @@ class NavDrawerState extends State<NavDrawer> {
   Widget build(BuildContext context) {
     didChangeDependencies();
 
-    return new ListView(
+    return ListView(
       children: <Widget>[
         drawerHeader(),
         Consumer<AppSettings>(builder: (context, AppSettings settings, _) {
@@ -77,7 +77,7 @@ class NavDrawerState extends State<NavDrawer> {
       accountName: Text(LangStrings.appName + LangStrings.appVersion),
       accountEmail: Text(LangStrings.appSlogan),
       currentAccountPicture: CircleAvatar(
-        child: new Image(
+        child: Image(
           image: new AssetImage("assets/images/appicon.png"),
           height: 75,
           width: 75,

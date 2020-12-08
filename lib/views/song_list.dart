@@ -24,7 +24,7 @@ class SongList extends StatefulWidget {
   createState() => SongListState(book: this.book);
 
   static Widget getList(int songbook) {
-    return new SongList(
+    return SongList(
       book: songbook,
     );
   }
@@ -54,8 +54,8 @@ class SongListState extends State<SongList> {
       updateSongList();
     }
 
-    return new Container(
-      child: new Stack(
+    return Container(
+      child: Stack(
         children: <Widget>[
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 5),

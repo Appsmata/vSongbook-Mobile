@@ -23,14 +23,14 @@ Future<EventObject> getSongbooks() async {
     if (response != null) {
       if (response.statusCode == APIResponseCode.scOK && response.body != null) {
         List<Book> books = await fetchBooks(response.body);
-        return new EventObject(id: EventConstants.requestSuccessful, object: books);
+        return EventObject(id: EventConstants.requestSuccessful, object: books);
       } 
       else {
-        return new EventObject(id: EventConstants.requestUnsuccessful);
+        return EventObject(id: EventConstants.requestUnsuccessful);
       }
     } 
     else {
-      return new EventObject();
+      return EventObject();
     }
   } 
   catch (Exception) {
@@ -53,14 +53,14 @@ Future<EventObject> getSongs(String books) async {
     if (response != null) {
       if (response.statusCode == APIResponseCode.scOK && response.body != null) {
         List<Song> songs = await fetchSongs(response.body);
-        return new EventObject(id: EventConstants.requestSuccessful, object: songs);
+        return EventObject(id: EventConstants.requestSuccessful, object: songs);
       } 
       else {
-        return new EventObject(id: EventConstants.requestUnsuccessful);
+        return EventObject(id: EventConstants.requestUnsuccessful);
       }
     } 
     else {
-      return new EventObject();
+      return EventObject();
     }
   } 
   catch (Exception) {

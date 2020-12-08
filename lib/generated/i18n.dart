@@ -59,10 +59,10 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<WidgetsLocali
     switch (lang) {
 
       case "en":
-        return new SynchronousFuture<WidgetsLocalizations>(const en());
+        return SynchronousFuture<WidgetsLocalizations>(const en());
 
       default:
-        return new SynchronousFuture<WidgetsLocalizations>(const S());
+        return SynchronousFuture<WidgetsLocalizations>(const S());
     }
   }
 

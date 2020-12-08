@@ -82,7 +82,7 @@ class SongsLoadState extends State<SongsLoad> {
               image: DecorationImage(
                   image: new AssetImage("assets/images/bg.jpg"),
                   fit: BoxFit.cover)),
-          child: new Column(
+          child: Column(
             children: <Widget>[
               Stack(
                 children: <Widget>[
@@ -105,9 +105,9 @@ class SongsLoadState extends State<SongsLoad> {
   }
 
   Widget _appIcon() {
-    return new Center(
-      child: new Container(
-        child: new Image(
+    return Center(
+      child: Container(
+        child: Image(
           image: new AssetImage("assets/images/appicon.png"),
           height: 450,
           width: 300,
@@ -118,9 +118,9 @@ class SongsLoadState extends State<SongsLoad> {
   }
 
   Widget _appLoading() {
-    return new Center(
-      child: new Container(
-        child: new CircularProgressIndicator(
+    return Center(
+      child: Container(
+        child: CircularProgressIndicator(
             valueColor: new AlwaysStoppedAnimation(Colors.white)),
         margin: EdgeInsets.only(top: 200),
       ),
@@ -128,8 +128,8 @@ class SongsLoadState extends State<SongsLoad> {
   }
 
   Widget _appLabel() {
-    return new Center(
-      child: new Container(
+    return Center(
+      child: Container(
         height: 100,
         width: 350,
         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -140,11 +140,11 @@ class SongsLoadState extends State<SongsLoad> {
                 border: Border.all(color: Colors.orange),
                 boxShadow: [BoxShadow(blurRadius: 5)],
                 borderRadius: new BorderRadius.all(new Radius.circular(10))),
-        child: new Stack(
+        child: Stack(
           children: <Widget>[
-            new Center(child: new Container(width: 300, height: 120)),
+            new Center(child: Container(width: 300, height: 120)),
             new Center(
-              child: new Container(
+              child: Container(
                 margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                 child: textIndicator,
               ),
@@ -156,13 +156,13 @@ class SongsLoadState extends State<SongsLoad> {
   }
 
   Widget _appProgress() {
-    return new Center(
-      child: new Container(
+    return Center(
+      child: Container(
         height: 100,
         width: 350,
         margin: EdgeInsets.only(top: 20),
         padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: new Stack(
+        child: Stack(
           children: <Widget>[
             new Center(
               child: lineProgress,
@@ -174,13 +174,13 @@ class SongsLoadState extends State<SongsLoad> {
   }
 
   Widget _appProgressText() {
-    return new Center(
-      child: new Container(
+    return Center(
+      child: Container(
         height: 100,
         width: 350,
         margin: EdgeInsets.only(top: 20),
         padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: new Stack(
+        child: Stack(
           children: <Widget>[
             new Center(
               child: textProgress,

@@ -199,22 +199,22 @@ class SongBooksState extends State<SongBooks> {
   }
 
   Widget loadingGettingReady() {
-    return new Container(
+    return Container(
       height: (MediaQuery.of(context).size.height -
           (appBar.preferredSize.height * 2)),
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: new Stack(
+      child: Stack(
         children: <Widget>[
-          new Center(child: new Container(width: 300, height: 120)),
+          new Center(child: Container(width: 300, height: 120)),
           new Center(
-            child: new Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 new CircularProgressIndicator(
                     valueColor: new AlwaysStoppedAnimation(Colors.deepOrange)),
                 new Container(
                   margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                  child: new Text(LangStrings.gettingReady,
+                  child: Text(LangStrings.gettingReady,
                       style: new TextStyle(fontSize: 18)),
                 )
               ],
@@ -226,7 +226,7 @@ class SongBooksState extends State<SongBooks> {
   }
 
   Widget justAMinuteDialog() {
-    return new AlertDialog(
+    return AlertDialog(
       title: new Text(
         LangStrings.justAMinute,
         style: new TextStyle(color: Colors.deepOrange, fontSize: 25),
@@ -252,7 +252,7 @@ class SongBooksState extends State<SongBooks> {
   }
 
   Widget noInternetDialog() {
-    return new AlertDialog(
+    return AlertDialog(
       title: new Text(
         LangStrings.areYouConnected,
         style: new TextStyle(color: Colors.deepOrange, fontSize: 25),
@@ -304,7 +304,7 @@ class SongBooksState extends State<SongBooks> {
             LangStrings.songsPrefix;
       }
     }
-    return new AlertDialog(
+    return AlertDialog(
       title: new Text(
         LangStrings.doneSelecting,
         style: new TextStyle(color: Colors.deepOrange, fontSize: 25),
