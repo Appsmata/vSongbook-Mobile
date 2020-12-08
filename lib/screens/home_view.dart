@@ -95,6 +95,7 @@ class HomeViewState extends State<HomeView> {
         appBar: AppBar(
           iconTheme: new IconThemeData(color: ColorUtils.white),
           title: const Text(LangStrings.appName),
+          centerTitle: true,
           bottom: TabBar(tabs: appTabs),
           actions: <Widget>[
             IconButton(
@@ -105,19 +106,7 @@ class HomeViewState extends State<HomeView> {
                   context: context,
                   delegate: AppSearchDelegate(context, bookList, songList),
                 );
-                if ((selected != null) && (selected.isNotEmpty)) {
-                  setState(() {
-                    //query = selected;
-                  });
-                }
               },
-            ),
-            
-            IconButton(
-              icon: Icon(
-                Theme.of(context).platform == TargetPlatform.iOS ? Icons.more_horiz : Icons.more_vert,
-              ),
-              onPressed: () { },
             ),
           ],
         ),

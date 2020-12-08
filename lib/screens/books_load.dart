@@ -11,7 +11,6 @@ import 'package:vsongbook/utils/preferences.dart';
 import 'package:vsongbook/utils/constants.dart';
 import 'package:vsongbook/helpers/app_database.dart';
 import 'package:vsongbook/screens/songs_load.dart';
-import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:animated_floatactionbuttons/animated_floatactionbuttons.dart';
 
 class BooksLoad extends StatefulWidget {
@@ -25,7 +24,6 @@ class BooksLoadState extends State<BooksLoad> {
   var appBar = AppBar();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   AsProgress progress = AsProgress.getAsProgress(LangStrings.gettingReady);
-  final GlobalKey<LiquidPullToRefreshState> _refreshIndicatorKey = GlobalKey<LiquidPullToRefreshState>();
 
   AppDatabase databaseHelper = AppDatabase();
   List<BookItem<Book>> selected = [];
@@ -34,24 +32,6 @@ class BooksLoadState extends State<BooksLoad> {
 
   bool darkModePressed = false;
 
-  Future<void> handleRefresh() {
-    final Completer<void> completer = Completer<void>();
-    Timer(const Duration(seconds: 3), () {
-      completer.complete();
-    });
-    
-    return completer.future.then<void>((_) {
-      _scaffoldKey.currentState?.showSnackBar(SnackBar(
-          content: const Text('Refresh complete'),
-          action: SnackBarAction(
-              label: LangStrings.retry,
-              onPressed: () {
-                requestData();
-                _refreshIndicatorKey.currentState.show();
-              })));
-    });
-  }
-
   void populateData() {
     bookList = [];
     for (int i = 0; i < books.length; i++)
@@ -59,6 +39,8 @@ class BooksLoadState extends State<BooksLoad> {
   }
 
   void requestData() async {
+    progress.showProgress();
+
     EventObject eventObject = await getSongbooks();
 
     switch (eventObject.id) {
@@ -109,24 +91,21 @@ class BooksLoadState extends State<BooksLoad> {
 
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
         title: Text(LangStrings.setUpTheApp + LangStrings.appName),
         actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.refresh),
+            onPressed: () {
+              books = List<Book>();
+              requestData();
+            },
+          ),
           IconButton(
             icon: Icon(Icons.check),
             onPressed: () {
               showDialog(
                 context: context,
                 builder: (BuildContext context) => areYouDoneDialog()
-              );
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.settings),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) => settingsDialog()
               );
             },
           ),
@@ -143,16 +122,18 @@ class BooksLoadState extends State<BooksLoad> {
   List<Widget> floatingButtons() {
     return <Widget>[
       FloatingActionButton(
-        heroTag: null,
-        tooltip: LangStrings.proceed,
-        child: Icon(Icons.refresh),
+        heroTag: "settings",
+        tooltip: LangStrings.appTheme,
+        child: Icon(Icons.settings),
         onPressed: () {
-          books = List<Book>();
-          requestData();
+          showDialog(
+            context: context,
+            builder: (BuildContext context) => settingsDialog()
+          );
         },
       ),
       FloatingActionButton(
-        heroTag: null,
+        heroTag: "proceed",
         onPressed: () {
           showDialog(
             context: context,
@@ -192,19 +173,14 @@ class BooksLoadState extends State<BooksLoad> {
             height: (MediaQuery.of(context).size.height - (appBar.preferredSize.height * 2)),
             padding: const EdgeInsets.symmetric(horizontal: 5),
             margin: EdgeInsets.only(top: 50),
-            child: LiquidPullToRefresh(
-              key: _refreshIndicatorKey,	// key if you want to add
-              onRefresh: handleRefresh,	// refresh callback
-              child: ListView.builder(
-                physics: BouncingScrollPhysics(),
-                    itemCount: books.length,
-                    itemBuilder: bookListView,
-              ),
+            child: ListView.builder(
+              physics: BouncingScrollPhysics(),
+                  itemCount: books.length,
+                  itemBuilder: bookListView,
             ),
           ),
           Container(
-            height: (MediaQuery.of(context).size.height -
-                (appBar.preferredSize.height * 2)),
+            height: (MediaQuery.of(context).size.height - (appBar.preferredSize.height * 2)),
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: progress,
           ),

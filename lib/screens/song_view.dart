@@ -1,4 +1,9 @@
+import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
+import 'package:screenshot/screenshot.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:animated_floatactionbuttons/animated_floatactionbuttons.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,7 +16,11 @@ import 'package:vsongbook/screens/song_edit.dart';
 import 'package:vertical_tabs/vertical_tabs.dart';
 import 'package:share/share.dart';
 import 'package:vsongbook/utils/Constants.dart';
-import 'package:animated_floatactionbuttons/animated_floatactionbuttons.dart';
+import 'package:wakelock/wakelock.dart';
+import 'package:vsongbook/screens/about_app.dart';
+import 'package:vsongbook/screens/donate.dart';
+import 'package:vsongbook/screens/help_desk.dart';
+import 'package:vsongbook/screens/preferences.dart';
 
 class SongView extends StatefulWidget {
   final bool haschorus;
@@ -40,6 +49,25 @@ class SongViewState extends State<SongView> {
   List<String> verseTexts, verseTitles, verseInfos;
   String songTitle, songContent;
 
+  int _counter = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  void _incrementCounter() {
+    setState(() {
+      // This call to setState tells the Flutter framework that something has
+      // changed in this State, which causes it to rerun the build method below
+      // so that the display can reflect the updated values. If we changed
+      // _counter without calling setState(), then the build method would not be
+      // called again, and so nothing would appear to happen.
+      _counter++;
+    });
+  }
+
   void getListView() async {
     await setContent();
   }
@@ -50,6 +78,9 @@ class SongViewState extends State<SongView> {
     songTitle = song.title;
     songContent = song.content.replaceAll("\\n", "\n").replaceAll("''", "'");
 
+    if (Provider.of<AppSettings>(context).isScreenAwake) Wakelock.enable();
+    else Wakelock.disable();
+
     if (verseTexts == null) {
       verseInfos = List<String>();
       verseTitles = List<String>();
@@ -57,6 +88,38 @@ class SongViewState extends State<SongView> {
       getListView();
     }
     bool isFavourited(int favorite) => favorite == 1 ?? false;
+
+    Widget menuPopup() => PopupMenuButton<int>(
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          value: 1,
+          child: Text(LangStrings.quickSettings),
+        ),
+        PopupMenuItem(
+          value: 2,
+          child: Text(LangStrings.manageApp),
+        ),
+        PopupMenuItem(
+          value: 3,
+          child: Text(LangStrings.supportUs),
+        ),
+        PopupMenuItem(
+          value: 4,
+          child: Text(LangStrings.helpFeedback),
+        ),
+        PopupMenuItem(
+          value: 5,
+          child: Text(LangStrings.aboutTheApp + LangStrings.appName),
+        ),
+      ],
+      onCanceled: () { },
+      onSelected: (value) {
+        selectedMenu(value, context);
+      },
+      icon: Icon(
+        Theme.of(context).platform == TargetPlatform.iOS ? Icons.more_horiz : Icons.more_vert,
+      ),
+    );
 
     return WillPopScope(
       onWillPop: () {
@@ -68,19 +131,10 @@ class SongViewState extends State<SongView> {
           title: Text(book),
           actions: <Widget>[
             IconButton(
-              icon: Icon(
-                isFavourited(song.isfav) ? Icons.star : Icons.star_border,
-              ),
+              icon: Icon(isFavourited(song.isfav) ? Icons.star : Icons.star_border),
               onPressed: () => favoriteSong(),
             ),
-            IconButton(
-              icon: Icon(Icons.settings),
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) => settingsDialog());
-              },
-            ),
+            menuPopup(),
           ],
         ),
         body: mainBody(),
@@ -89,46 +143,6 @@ class SongViewState extends State<SongView> {
           animatedIconData: AnimatedIcons.menu_close,
         ),
       ),
-    );
-  }
-
-  Widget settingsDialog() {
-    return AlertDialog(
-      title: new Text(
-        LangStrings.displaySettings,
-        style: new TextStyle(color: Colors.deepOrange, fontSize: 25),
-      ),
-      content: new Container(
-        height: 50,
-        width: double.maxFinite,
-        child: ListView(children: <Widget>[
-          Consumer<AppSettings>(builder: (context, AppSettings settings, _) {
-            return ListTile(
-              onTap: () {},
-              leading: Icon(settings.isDarkMode ? Icons.brightness_4 : Icons.brightness_7),
-              title: Text(LangStrings.darkMode),
-              trailing: Switch(
-                onChanged: (bool value) => settings.setDarkMode(value),
-                value: settings.isDarkMode,
-              ),
-            );
-          }),
-          Divider(),
-        ]),
-      ),
-      actions: <Widget>[
-        new Container(
-          margin: EdgeInsets.all(5),
-          child: FlatButton(
-            child:
-                Text(LangStrings.okayDone, style: new TextStyle(fontSize: 20)),
-            color: Colors.deepOrange,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ),
-      ],
     );
   }
 
@@ -206,15 +220,28 @@ class SongViewState extends State<SongView> {
   }
 
   Widget tabsContent(int index) {
-    var lines = verseTexts[index].split("\\n");
     String lyrics = verseTexts[index].replaceAll("\\n", "\n").replaceAll("''", "'");
     double nfontsize = getFontSize(lyrics.length, MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
+    
+    File image;
+    
+    //Create an instance of ScreenshotController
+    ScreenshotController controller = ScreenshotController();
 
     return Stack(
       children: <Widget>[
-        verseText(lyrics, nfontsize),
+        verseText(lyrics, nfontsize, image, controller),
         verseTitle(verseTitles[index]),
-        verseActions(index, lyrics),
+        Container(
+          margin: EdgeInsets.only(top: MediaQuery.of(context).size.height - 210, left: 15),
+          child: Row(
+            children: [
+              copyVerse(index, lyrics),
+              shareVerse(index, lyrics),
+              imageVerse(index, lyrics, image, controller),
+            ]
+          ),
+        ),
       ],
     );
   }
@@ -248,69 +275,100 @@ class SongViewState extends State<SongView> {
     );
   }
 
-  Widget verseText(String lyrics, double fontsize)
+  Widget verseText(String lyrics, double fontsize, File _imageFile, ScreenshotController screenshotController)
   {
-    return Container(
-      height: MediaQuery.of(context).size.height - 235,
-      margin: EdgeInsets.only(top: 25),
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-      decoration: Provider.of<AppSettings>(context).isDarkMode ? BoxDecoration() : BoxDecoration(color: Colors.orange[100]),
-      child: Card(
-        elevation: 2,
-        child: Center(
+    return Stack(
+      children: <Widget>[
+        Screenshot(
+          controller: screenshotController,
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Text(
-              lyrics,
-              style: new TextStyle(fontSize: fontsize),
+            height: MediaQuery.of(context).size.height - 235,
+            margin: EdgeInsets.only(top: 25),
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            decoration: Provider.of<AppSettings>(context).isDarkMode ? BoxDecoration() : BoxDecoration(color: Colors.orange[100]),
+            child: Card(
+              elevation: 2,
+              child: Center(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: Text(
+                    lyrics,
+                    style: new TextStyle(fontSize: fontsize),
+                  ),
+                ),
+              )
             ),
           ),
-        )
+        ),
+        _imageFile != null ? Image.file(_imageFile) : Container(),
+      ]
+    );
+  }
+
+  Widget copyVerse(int index, String lyrics)
+  {
+    return Padding(
+      padding: const EdgeInsets.all(5),
+      child: FloatingActionButton(
+        heroTag: "CopyVerse_" + index.toString(),
+        child: Icon(Icons.content_copy),
+        tooltip: LangStrings.copyVerse,
+        onPressed: () async {
+          Clipboard.setData(ClipboardData(text: lyrics));
+          globalKey.currentState.showSnackBar(new SnackBar(
+            content: new Text(LangStrings.verseCopied),
+          ));
+        }
       ),
     );
   }
 
-  Widget verseActions(int index, String lyrics)
+  
+  Widget shareVerse(int index, String lyrics)
   {
-    return Container(
-      margin: EdgeInsets.only(top: MediaQuery.of(context).size.height - 210, left: 15),
-      child: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(5),
-            child: FloatingActionButton(
-              heroTag: "CopyVerse_" + index.toString(),
-              child: Icon(Icons.content_copy),
-              tooltip: LangStrings.copyVerse,
-              onPressed: () async {
-                copyVerse(lyrics);
-              }
-            ),
-          ),          
-          Padding(
-            padding: const EdgeInsets.all(5),
-            child: FloatingActionButton(
-              heroTag: "ShareVerse_" + index.toString(),
-              child: Icon(Icons.share),
-              tooltip: LangStrings.shareVerse,
-              onPressed: () async {
-                shareVerse(lyrics);
-              }
-            ),
-          ),  
-          Padding(
-            padding: const EdgeInsets.all(5),
-            child: FloatingActionButton(
-              heroTag: "ImageVerse_" + index.toString(),
-              child: Icon(Icons.image),
-              tooltip: LangStrings.imageVerse,
-              //onPressed: editSong,
-            ),
-          ),  
-        ],
-      )
+    return Padding(
+      padding: const EdgeInsets.all(5),
+      child: FloatingActionButton(
+        heroTag: "ShareVerse_" + index.toString(),
+        child: Icon(Icons.share),
+        tooltip: LangStrings.shareVerse,
+        onPressed: () async {
+          Share.share(lyrics, subject: "Share a Verse of the song: " + songTitle);
+        }
+      ),
     );
   }
+
+  Widget imageVerse(int index, String lyrics, File _imageFile, ScreenshotController screenshotController)
+  {
+    return Padding(
+      padding: const EdgeInsets.all(5),
+      child: FloatingActionButton(
+        heroTag: "ImageVerse_" + index.toString(),
+        child: Icon(Icons.image),
+        tooltip: LangStrings.imageVerse,
+        onPressed: () {
+          /*_incrementCounter();
+          _imageFile = null;
+          screenshotController.capture(delay: Duration(milliseconds: 10)).then((File image) async {
+            //print("Capture Done");
+            setState(() {
+              _imageFile = image;
+            });
+            final result = await ImageGallerySaver.save(image.readAsBytesSync());
+            print("File Saved to Gallery");
+          }).catchError((onError) {
+            print(onError);
+          });*/
+        },
+      ),
+    );
+  }
+
+  /*_saved(File image) async {
+    final result = await ImageGallerySaver.save(image.readAsBytesSync());
+    print("File Saved to Gallery");
+  }*/
 
   List<Widget> floatingButtons() {
     return <Widget>[
@@ -319,19 +377,30 @@ class SongViewState extends State<SongView> {
         heroTag: null,
         child: Icon(Icons.content_copy),
         tooltip: LangStrings.copySong,
-        onPressed: copySong,
+        onPressed: () async {
+          Clipboard.setData(ClipboardData(text: songTitle + "\n\n" + songContent));
+          globalKey.currentState.showSnackBar(new SnackBar(
+            content: new Text(LangStrings.songCopied),
+          ));
+        }
       ),
       FloatingActionButton(
         heroTag: null,
         child: Icon(Icons.share),
-        tooltip: LangStrings.shareSong,
-        onPressed: shareSong,
+        onPressed: () async {
+          Share.share(songTitle + "\n\n" + songContent + "\n\nvia #vSongBook " + "https://Appsmata.com/vSongBook",
+            subject: "Share the song: " + songTitle,
+          );
+        }
       ),
       FloatingActionButton(
         heroTag: null,
         child: Icon(Icons.edit),
-        tooltip: LangStrings.editSong,
-        onPressed: editSong,
+        onPressed: () async {
+          await Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return SongEdit(song, "Editting: " + songTitle);
+          }));
+        }
       ),
     ];
   }
@@ -341,11 +410,12 @@ class SongViewState extends State<SongView> {
       return FloatingActionButton(
         heroTag: null,
         child: Icon(Icons.delete),
-        tooltip: LangStrings.editSong,
-        onPressed: deleteSong,
+        onPressed: () async {
+          int result = await db.deleteSong(song.songid);
+          if (result != 0) moveToLastScreen();
+        }
       );
-    else
-      return null;
+    else return null;
   }
 
   Future<void> setContent() async {
@@ -389,41 +459,6 @@ class SongViewState extends State<SongView> {
     }
   }
 
-  void copySong() {
-    Clipboard.setData(ClipboardData(text: songTitle + "\n\n" + songContent));
-    globalKey.currentState.showSnackBar(new SnackBar(
-      content: new Text(LangStrings.songCopied),
-    ));
-  }
-
-  void shareSong() {
-    Share.share(songTitle + "\n\n" + songContent + "\n\nvia #vSongBook " + "https://Appsmata.com/vSongBook",
-      subject: "Share the song: " + songTitle,
-    );
-  }
-  
-  void copyVerse(String lyrics) {
-    Clipboard.setData(ClipboardData(text: lyrics));
-    globalKey.currentState.showSnackBar(new SnackBar(
-      content: new Text(LangStrings.verseCopied),
-    ));
-  }
-
-  void shareVerse(String lyrics) {
-    Share.share(lyrics, subject: "Share a Verse of the song: " + songTitle);
-  }
-
-  void editSong() async {
-    await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return SongEdit(song, "Editting: " + songTitle);
-    }));
-  }
-
-  void deleteSong() async {
-    int result = await db.deleteSong(song.songid);
-    if (result != 0) moveToLastScreen();
-  }
-
   void favoriteSong() {
     if (song.isfav == 1)
       db.favouriteSong(song, false);
@@ -433,6 +468,87 @@ class SongViewState extends State<SongView> {
       content: new Text(songTitle + " " + LangStrings.songLiked),
     ));
     //notifyListeners();
+  }
+
+  Widget settingsDialog() {
+    return AlertDialog(
+      title: new Text(LangStrings.quickSettings),
+      content: new Container(
+        height: 150,
+        width: double.maxFinite,
+        child: ListView(children: <Widget>[
+          Divider(),
+          Consumer<AppSettings>(builder: (context, AppSettings settings, _) {
+            return ListTile(
+              onTap: () {},
+              title: Text(LangStrings.darkMode),
+              trailing: Switch(
+                onChanged: (bool value) => settings.setDarkMode(value),
+                value: settings.isDarkMode,
+              ),
+            );
+          }),
+          Consumer<AppSettings>(builder: (context, AppSettings settings, _) {
+            return ListTile(
+              onTap: () {},
+              title: Text(LangStrings.screenAwake),
+              trailing: Switch(
+                onChanged: (bool value) => settings.setScreenAwake(value),
+                value: settings.isScreenAwake,
+              ),
+            );
+          }),
+          Divider(),
+        ]),
+      ),
+      actions: <Widget>[
+        new Container(
+          child: FlatButton(
+            child: Text(LangStrings.okayDone, style: new TextStyle(fontSize: 20)),
+            color: Colors.deepOrange,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  void selectedMenu(int menu, BuildContext context) {
+    switch (menu) {
+      case 1:
+        showDialog(
+          context: context,
+          builder: (BuildContext context) => settingsDialog()
+        );
+        break;
+
+      case 2:
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return Preferences();
+          })
+        );
+        break;
+      case 3:
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return Donate();
+          })
+        );
+        break;
+      case 4:
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return HelpDesk();
+          })
+        );
+        break;
+      case 5:
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return AboutApp();
+          })
+        );
+        break;
+    }
   }
 
   void moveToLastScreen() {

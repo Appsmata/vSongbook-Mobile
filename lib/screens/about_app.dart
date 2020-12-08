@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:backdrop/backdrop.dart';
+
 import 'package:vsongbook/utils/colored_tabbar.dart';
 import 'package:vsongbook/utils/constants.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 
-class GgAboutApp extends StatefulWidget {
+class AboutApp extends StatefulWidget {
   @override
-  createState() => new GgAboutAppState();
+  createState() => new AboutAppState();
 }
 
-class GgAboutAppState extends State<GgAboutApp> {
+class AboutAppState extends State<AboutApp> {
   final globalKey = new GlobalKey<ScaffoldState>();
 
   @override
@@ -68,18 +68,18 @@ class GgAboutAppState extends State<GgAboutApp> {
       onWillPop: () {
         moveToLastScreen();
       },
-      child: BackdropScaffold(
-        title: Text('About vSongBook App'),
-        iconPosition: BackdropIconPosition.action,
-        headerHeight: 120,
-        frontLayer: DefaultTabController(
-          length: 3,
-          child: Scaffold(
-            appBar: ColoredTabBar(
-              color: Theme.of(context).primaryColor,
-              tabBar: TabBar(tabs: _Titles),
+      child:  DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text(LangStrings.aboutTheApp + LangStrings.appName),
+            bottom: TabBar(
+              tabs: _Titles,
             ),
-            body: TabBarView(children: _Tabs),
+          ),
+          body: TabBarView(
+            children: _Tabs,
           ),
         ),
       ),

@@ -63,23 +63,35 @@ class APIResponseCode {
 }
 
 class SharedPreferenceKeys {
-  static const String isUserLoggedin = "vsbappusersignedin";
-  static const String userCountryName = "vsbappcountryname";
-  static const String userCountryIcode = "vsbappcountryicode";
-  static const String userCountryCcode = "vsbappcountryccode";
-  static const String appBooksLoaded = "vsbappbooksloaded";
-  static const String appSongsLoaded = "vsbappsongsloaded";
-  static const String userMobile = "vsbappusermobile";
-  static const String selectedBooks = "vsbappselectedbooks";
-  static const String user = "vsbappuser";
-  static const String darkMode = "vsbappdarkmode";
+  static const String isUserLoggedin = "vsbapp_user_signedin";
+  static const String userCountryName = "vsbapp_country_name";
+  static const String userCountryIcode = "vsbapp_country_icode";
+  static const String userCountryCcode = "vsbapp_country_ccode";
+  static const String appBooksLoaded = "vsbapp_books_loaded";
+  static const String appSongsLoaded = "vsbapp_songs_loaded";
+  static const String userMobile = "vsbapp_user_mobile";
+  static const String selectedBooks = "vsbapp_selected_books";
+  static const String user = "vsbapp_user";
+  static const String darkMode = "vsbapp_dark_mode";
+  static const String screenAwake = "vsbapp_screen_awake";
 }
 
 class LangStrings {
   static const String appName = "vSongBook";
-  static const String appVersion = "v1.7.6";
+  static const String appVersion = " v1.7.6";
   static const String appSlogan = "Freedom to sing anywhere";
+
+  static const String appTheme = "Display Theme";
   static const String darkMode = "Dark Mode";
+  static const String lightMode = "Light Mode";
+  static const String screenAwake = "Screen Awake";
+  static const String screenAwakeOn = "Screen will be on indefinately when viewing a song";
+  static const String screenAwakeOff = "Screen will go off if inactive when viewing a song";
+  static const String isEnabled = " enabled";
+  static const String isDisabled = " disabled";
+
+  static const String quickSettings = "Quick Settings";
+
   static const String justAMinute = "Just a minute!";
   static const String inProgress = "In progress ...";
   static const String userSignin = "Signing you in ...";
@@ -171,10 +183,12 @@ class LangStrings {
   static const String songNotes = "Song Notes";
   static const String learnMore = "Learn More";
 
-  static const String manageSongbooks = "Manage Songbooks";
+  static const String manageSongbooks = "Manage Books";
   static const String supportUs = "Support us";
   static const String helpFeedback = "Help & Feedback";
   static const String aboutTheApp = "About ";
+  static const String manageApp = "App Settings";
+  static const String appSettings = " Settings";
 
   static const String retry = "RETRY";
   static const String songsInside = " songs inside;\n";
