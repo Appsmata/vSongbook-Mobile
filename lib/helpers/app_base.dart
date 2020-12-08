@@ -8,7 +8,7 @@ bool isNumeric(String s) {
 
 String refineTitle(String songTitle)
 {
-  return songTitle.replaceAll("''", "'");
+  return songTitle.replaceAll("''L", "'l").replaceAll("''", "'");
 }
 
 String refineContent(String songContent)

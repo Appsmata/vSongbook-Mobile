@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:vsongbook/helpers/app_base.dart';
 import 'package:vsongbook/helpers/app_settings.dart';
 import 'package:vsongbook/helpers/app_database.dart';
 import 'package:vsongbook/models/song_model.dart';
@@ -150,7 +151,7 @@ class SongViewState extends State<SongView> {
         padding: const EdgeInsets.all(10),
         height: 50,
         child: Text(
-          song.number.toString() + ". " + song.title,
+          song.number.toString() + ". " + refineTitle(song.title),
           style: new TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 25,
@@ -176,10 +177,11 @@ class SongViewState extends State<SongView> {
             return Tab(
               child: Center(
                 child: Text(verseInfos[index],
-                    style: new TextStyle(
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black)),
+                  style: new TextStyle(
+                    fontSize: 35,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black)
+                ),
               ),
             );
           },
@@ -280,7 +282,9 @@ class SongViewState extends State<SongView> {
               heroTag: "CopyVerse_" + index.toString(),
               child: Icon(Icons.content_copy),
               tooltip: LangStrings.copyVerse,
-              onPressed: copySong,
+              onPressed: () async {
+                copyVerse(lyrics);
+              }
             ),
           ),          
           Padding(
@@ -289,7 +293,9 @@ class SongViewState extends State<SongView> {
               heroTag: "ShareVerse_" + index.toString(),
               child: Icon(Icons.share),
               tooltip: LangStrings.shareVerse,
-              onPressed: shareSong,
+              onPressed: () async {
+                shareVerse(lyrics);
+              }
             ),
           ),  
           Padding(
@@ -298,7 +304,7 @@ class SongViewState extends State<SongView> {
               heroTag: "ImageVerse_" + index.toString(),
               child: Icon(Icons.image),
               tooltip: LangStrings.imageVerse,
-              onPressed: editSong,
+              //onPressed: editSong,
             ),
           ),  
         ],
@@ -394,6 +400,17 @@ class SongViewState extends State<SongView> {
     Share.share(songTitle + "\n\n" + songContent + "\n\nvia #vSongBook " + "https://Appsmata.com/vSongBook",
       subject: "Share the song: " + songTitle,
     );
+  }
+  
+  void copyVerse(String lyrics) {
+    Clipboard.setData(ClipboardData(text: lyrics));
+    globalKey.currentState.showSnackBar(new SnackBar(
+      content: new Text(LangStrings.verseCopied),
+    ));
+  }
+
+  void shareVerse(String lyrics) {
+    Share.share(lyrics, subject: "Share a Verse of the song: " + songTitle);
   }
 
   void editSong() async {

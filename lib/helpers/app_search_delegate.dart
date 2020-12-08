@@ -1,20 +1,19 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vsongbook/helpers/app_settings.dart';
 import "package:vsongbook/helpers/app_base.dart";
 import 'package:vsongbook/utils/colors.dart';
 import 'package:vsongbook/utils/constants.dart';
+import 'package:vsongbook/models/book_model.dart';
 import 'package:vsongbook/models/song_model.dart';
 import 'package:vsongbook/views/song_item.dart';
-import 'package:vsongbook/screens/song_view.dart';
 
 class AppSearchDelegate extends SearchDelegate<List> {
 
+	List<BookModel> bookList;
 	List<SongModel> songList, filtered;
 
-	AppSearchDelegate(BuildContext context, this.songList) {
+	AppSearchDelegate(BuildContext context, this.bookList, this.songList) {
     filtered = songList;
   }
 
@@ -84,21 +83,9 @@ class AppSearchDelegate extends SearchDelegate<List> {
       child: ListView.builder(
         itemCount: filtered.length,
         itemBuilder: (context, index) {
-          //return SongItem('SongSearch_' + filtered[index].songid.toString(), filtered[index], context);
-          return _buildItemRow(index, context);
+          return SongItem('SongSearch_' + filtered[index].songid.toString(), filtered[index], bookList, context);
         }
       ),
-    );
-  }
-
-  Widget _buildItemRow(int i, BuildContext context) {
-    return ListTile(
-      title: Text(filtered[i].title), 
-      onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return SongView(filtered[i], true, "");
-        }));
-      },    
     );
   }
 
@@ -114,9 +101,12 @@ class AppSearchDelegate extends SearchDelegate<List> {
           }
         }
         
-        else if(songList[i].title.toLowerCase().contains(query.toLowerCase()) || 
-          songList[i].alias.toLowerCase().contains(query.toLowerCase()) || 
-          songList[i].content.toLowerCase().contains(query.toLowerCase())) {
+        else if(
+          refineTitle(songList[i].title).toLowerCase().contains(query.toLowerCase()) || 
+          refineTitle(songList[i].alias).toLowerCase().contains(query.toLowerCase()) || 
+          refineTitle(songList[i].content).toLowerCase().contains(query.toLowerCase())
+          ) 
+        {
           tmpList.add(songList[i]);
         }
 

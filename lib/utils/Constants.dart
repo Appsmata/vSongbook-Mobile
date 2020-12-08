@@ -126,6 +126,7 @@ class LangStrings {
   static const String requestUnpermited = "Request not permitted at the moment";
   static const String requestInvalid = "Request is invalid";
   static const String songCopied = "Song copied to clipboard!";
+  static const String verseCopied = "Verse copied to clipboard!";
   static const String songLiked = " liked!";
   static const String songDisliked = " disliked!";
 

@@ -7,6 +7,7 @@ import 'package:vsongbook/utils/constants.dart';
 import 'package:vsongbook/views/favorites.dart';
 import 'package:vsongbook/views/song_list.dart';
 import 'package:vsongbook/views/song_pad.dart';
+import 'package:vsongbook/models/book_model.dart';
 import 'package:vsongbook/models/song_model.dart';
 import 'package:vsongbook/helpers/app_database.dart';
 import 'package:vsongbook/helpers/app_search_delegate.dart';
@@ -31,8 +32,21 @@ class HomeViewState extends State<HomeView> {
   String bookstr;
 
   AppDatabase db = AppDatabase();
+  List<BookModel> bookList;
   List<SongModel> songList;
 	int count = 0;
+
+  void updateBookList() {
+    final Future<Database> dbFuture = db.initializeDatabase();
+    dbFuture.then((database) {
+      Future<List<BookModel>> bookListFuture = db.getBookList();
+      bookListFuture.then((bookList) {
+        setState(() {
+          this.bookList = bookList;
+        });
+      });
+    });
+  }
 
   void updateSongList() {
     final Future<Database> dbFuture = db.initializeDatabase();
@@ -49,7 +63,9 @@ class HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     if (songList == null) {
+      bookList = List<BookModel>();
       songList = List<SongModel>();
+      updateBookList();
       updateSongList();
     }
 
@@ -87,7 +103,7 @@ class HomeViewState extends State<HomeView> {
               onPressed: () async {
                 final List selected = await showSearch(
                   context: context,
-                  delegate: AppSearchDelegate(context, songList),
+                  delegate: AppSearchDelegate(context, bookList, songList),
                 );
                 if ((selected != null) && (selected.isNotEmpty)) {
                   setState(() {

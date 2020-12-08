@@ -111,7 +111,7 @@ class SongListState extends State<SongList> {
         child: Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(50),
-            side: BorderSide(color: Provider.of<AppSettings>(context).isDarkMode ? ColorUtils.black : ColorUtils.secondaryColor, width: 1.5),
+            side: BorderSide(color: Provider.of<AppSettings>(context).isDarkMode ? ColorUtils.white : ColorUtils.secondaryColor, width: 1.5),
           ),      
           color: Provider.of<AppSettings>(context).isDarkMode ? ColorUtils.black : ColorUtils.primaryColor,
           elevation: 5,
