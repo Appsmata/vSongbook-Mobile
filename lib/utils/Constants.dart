@@ -1,196 +1,221 @@
 class APIConstants {
-  static const String OctetStream = "application/octet-stream";
-  static const String BaseUrl = "http://sing.appsmata.com/";
-  //static const String BaseUrl = "http://192.168.43.18/projects/vsongweb/";
+  static const String octetStream = "application/octet-stream";
+  static const String baseUrl = "http://sing.appsmata.com/";
+  //static const String baseUrl = "http://192.168.43.18/projects/vsongweb/";
 }
 
 class APIOperations {
-  static const String Success = "success";
-  static const String Failure = "failure";
-  static const String Suspended = "suspended";
-  static const String Unpermited = "unpermited";
-  static const String Missing = "missing";
-  static const String Invalid = "invalid";
-  static const String Already = "already";
+  static const String success = "success";
+  static const String failure = "failure";
+  static const String suspended = "suspended";
+  static const String unpermited = "unpermited";
+  static const String missing = "missing";
+  static const String invalid = "invalid";
+  static const String already = "already";
 
-  static const String Login = "login";
-  static const String Register = "register";
-  static const String Change_Password = "chgpass";
+  static const String login = "login";
+  static const String register = "register";
+  static const String changePassword = "chgpass";
 
-  static const String PostsLists = "as-client/posts-lists.php";
-  static const String PostsSelect = "as-client/posts-select.php";
-  static const String PostsSingle = "as-client/posts-single.php";
-  static const String PostsAnswers = "as-client/posts-answers.php";
-  static const String PostsSearch = "as-client/posts-search.php";
-  static const String PostsSlider = "as-client/posts-slider.php";
-  static const String PostsByCategory = "as-client/posts-by-category.php";
-  static const String CategoriesAll = "as-client/categories.php";
-  static const String BooksSelect = "as-client/book-select.php";
-  static const String Feedback = "as-client/feedback.php";
-  static const String ShowComment = "as-client/comment-by-id.php";
-  static const String CountComment = "as-client/comment-submit.php";
-  static const String BackgroundDrawer = "as-client/bg-drawer.php";
-  static const String UserSignin = "as-client/user-signin.php";
-  static const String UserSignup = "as-client/user-signup.php";
-  static const String UserLastseen = "as-client/user-lastseen.php";
+  static const String postsLists = "as-client/posts-lists.php";
+  static const String postsSelect = "as-client/posts-select.php";
+  static const String postsSingle = "as-client/posts-single.php";
+  static const String postsAnswers = "as-client/posts-answers.php";
+  static const String postsSearch = "as-client/posts-search.php";
+  static const String postsSlider = "as-client/posts-slider.php";
+  static const String postsByCategory = "as-client/posts-by-category.php";
+  static const String categoriesAll = "as-client/categories.php";
+  static const String booksSelect = "as-client/book-select.php";
+  static const String feedback = "as-client/feedback.php";
+  static const String showComment = "as-client/comment-by-id.php";
+  static const String sountComment = "as-client/comment-submit.php";
+  static const String backgroundDrawer = "as-client/bg-drawer.php";
+  static const String userSignin = "as-client/user-signin.php";
+  static const String userSignup = "as-client/user-signup.php";
+  static const String userLastseen = "as-client/user-lastseen.php";
 }
 
 class EventConstants {
-  static const int No_Internet_Connection = 0;
+  static const int noInternetConnection = 0;
 
-  static const int Request_Successful = 300;
-  static const int Request_Unsuccessful = 301;
-  static const int Request_Not_Found = 302;
-  static const int Request_Suspended = 303;
-  static const int Request_Unpermited = 304;
-  static const int Request_Invalid = 305;
+  static const int requestSuccessful = 300;
+  static const int requestUnsuccessful = 301;
+  static const int requestNotFound = 302;
+  static const int requestSuspended = 303;
+  static const int requestUnpermited = 304;
+  static const int requestInvalid = 305;
 
-  static const int User_Signin_Successful = 500;
-  static const int User_Signin_Unsuccessful = 501;
-  static const int User_Not_Found = 502;
-  static const int User_Signup_Successful = 503;
-  static const int User_Signup_Unsuccessful = 504;
-  static const int User_Already_Registered = 505;
-  static const int Signup_Suspended = 506;
-  static const int Signup_Unpermited = 507;
-  static const int Change_Password_Successful = 508;
-  static const int Change_Password_Unsuccessful = 509;
-  static const int Invalid_Old_Password = 510;
+  static const int userSigninSuccessful = 500;
+  static const int userSigninUnsuccessful = 501;
+  static const int userNotFound = 502;
+  static const int userSignupSuccessful = 503;
+  static const int userSignupUnsuccessful = 504;
+  static const int userAlreadyRegistered = 505;
+  static const int signupSuspended = 506;
+  static const int signupUnpermited = 507;
+  static const int changePasswordSuccessful = 508;
+  static const int changePasswordUnsuccessful = 509;
+  static const int invalidOldPassword = 510;
 }
 
 class APIResponseCode {
-  static const int SC_OK = 200;
+  static const int scOK = 200;
 }
 
 class SharedPreferenceKeys {
-  static const String Is_User_Loggedin = "vsbapp_user_signedin";
-  static const String User_Country_Name = "vsbapp_country_name";
-  static const String User_Country_Icode = "vsbapp_country_icode";
-  static const String User_Country_Ccode = "vsbapp_country_ccode";
-  static const String App_Books_Loaded = "vsbapp_books_loaded";
-  static const String App_Songs_Loaded = "vsbapp_songs_loaded";
-  static const String User_Mobile = "vsbapp_user_mobile";
-  static const String Selected_Books = "vsbapp_selected_books";
-  static const String User = "vsbapp_user";
-  static const String DarkMode = "vsbapp_dark_mode";
+  static const String isUserLoggedin = "vsbapp_user_signedin";
+  static const String userCountryName = "vsbapp_country_name";
+  static const String userCountryIcode = "vsbapp_country_icode";
+  static const String userCountryCcode = "vsbapp_country_ccode";
+  static const String appBooksLoaded = "vsbapp_books_loaded";
+  static const String appSongsLoaded = "vsbapp_songs_loaded";
+  static const String userMobile = "vsbapp_user_mobile";
+  static const String selectedBooks = "vsbapp_selected_books";
+  static const String user = "vsbapp_user";
+  static const String darkMode = "vsbapp_dark_mode";
+  static const String screenAwake = "vsbapp_screen_awake";
 }
 
 class LangStrings {
   static const String appName = "vSongBook";
-  static const String DarkMode = "Dark Mode";
-  static const String JustAMinute = "Just a minute!";
-  static const String In_Progress = "In progress ...";
-  static const String User_Signin = "Signing you in ...";
-  static const String User_Change_Password = "Changing ...";
-  static const String User_Signup = "Signing you up ...";
-  static const String Getting_Ready = "Getting ready ...";
-  static const String Sis_Patience = "Eish! ... Some patience ...";
+  static const String appVersion = " v1.7.6";
+  static const String appSlogan = "Freedom to sing anywhere";
 
-  static const String CopySong = "Copy Song to Clipboard";
-  static const String ShareSong = "Share this Song";
-  static const String EditSong = "Edit this Song";
-  static const String CopyVerse = "Copy Verse to Clipboard";
-  static const String ShareVerse = "Share this Verse";
-  static const String ImageVerse = "Share an Image of this Verse";
-  static const String TakeTimeSelectingSongbooks = "Take time to select a songbook at a time so as to setup your vSongBook Collection.\n\n" +
+  static const String appTheme = "Display Theme";
+  static const String darkMode = "Dark Mode";
+  static const String lightMode = "Light Mode";
+  static const String screenAwake = "Screen Awake";
+  static const String screenAwakeOn = "Screen will be on indefinately when viewing a song";
+  static const String screenAwakeOff = "Screen will go off if inactive when viewing a song";
+  static const String isEnabled = " enabled";
+  static const String isDisabled = " disabled";
+
+  static const String quickSettings = "Quick Settings";
+
+  static const String justAMinute = "Just a minute!";
+  static const String inProgress = "In progress ...";
+  static const String userSignin = "Signing you in ...";
+  static const String userChangePassword = "Changing ...";
+  static const String userSignup = "Signing you up ...";
+  static const String gettingReady = "Getting ready ...";
+  static const String somePatience = "Eish! ... Some patience ...";
+
+  static const String copySong = "Copy Song to Clipboard";
+  static const String shareSong = "Share this Song";
+  static const String editSong = "Edit this Song";
+  static const String copyVerse = "Copy Verse to Clipboard";
+  static const String shareVerse = "Share this Verse";
+  static const String imageVerse = "Share an Image of this Verse";
+  static const String takeTimeSelecting = "Take time to select a songbook at a time so as to setup your vSongBook Collection.\n\n" +
           "Once done that, proceed to press the 'TICK' button at the top right or bottom right for next stage\n\n" +
           "We can always bring you back here to add or remove songbooks";
 
-  static const String No_Internet_Connection = "No internet connection";
-  static const String Signin_Successful = "Sign in was successful";
-  static const String Signin_Unsuccessful = "Oops! Your sign in was unsuccessful";
-  static const String Change_Password_Successful = "Changing your password was successful";
-  static const String Change_Password_Unsuccessful = "Change password was unsuccessful";
-  static const String Signup_Successful = "Registration was successful";
-  static const String Signup_Unsuccessful = "Registration was unsuccessful";
-  static const String User_Already_Registered = "User already registered";
-  static const String User_Not_Found = "User not found, Let's know you more";
-  static const String Signup_Suspended = "Registration temporarily suspended. Try again soon";
-  static const String Signup_Unpermited = "You have no permission to proceed";
-  static const String Enter_Pass = "Please enter your password";
-  static const String Enter_New_Pass = "Please enter your new password";
-  static const String Enter_Old_Pass = "Please enter your old password";
-  static const String Enter_Email = "Please enter your email id";
-  static const String Enter_Phone = "Please enter your Mobile Number";
-  static const String Enter_Valid_Mail = "Please enter valid email id";
-  static const String Enter_Name = "Please enter your name";
-  static const String Invalid_Old_Password = "Invalid old password";
-  static const String Invalid_Entry = "Invalid entry!";
+  static const String noInternetConnection = "No internet connection";
+  static const String signinSuccessful = "Sign in was successful";
+  static const String signinUnsuccessful = "Oops! Your sign in was unsuccessful";
+  static const String changePasswordSuccessful = "Changing your password was successful";
+  static const String shangePasswordUnsuccessful = "Change password was unsuccessful";
+  static const String signupSuccessful = "Registration was successful";
+  static const String signupUnsuccessful = "Registration was unsuccessful";
+  static const String userAlreadyRegistered = "User already registered";
+  static const String userNotFound = "User not found, Let's know you more";
+  static const String signupSuspended = "Registration temporarily suspended. Try again soon";
+  static const String signupUnpermited = "You have no permission to proceed";
+  static const String enterPass = "Please enter your password";
+  static const String enterNewPass = "Please enter your new password";
+  static const String enterOldPass = "Please enter your old password";
+  static const String enterEmail = "Please enter your email id";
+  static const String enterPhone = "Please enter your Mobile Number";
+  static const String enterValidMail = "Please enter valid email id";
+  static const String enterName = "Please enter your name";
+  static const String invalidOldPassword = "Invalid old password";
+  static const String invalidEntry = "Invalid entry!";
 
-  static const String Request_Successful = "Request was successful";
-  static const String Request_Unsuccessful = "Request was unsuccessful";
-  static const String Request_Not_Found = "Request was not found";
-  static const String Request_Suspended = "Request was suspended";
-  static const String Request_Unpermited = "Request not permitted at the moment";
-  static const String Request_Invalid = "Request is invalid";
-  static const String Song_Copied = "Song copied to clipboard!";
-  static const String Song_Liked = " liked!";
-  static const String Song_Disliked = " disliked!";
+  static const String requestSuccessful = "Request was successful";
+  static const String requestUnsuccessful = "Request was unsuccessful";
+  static const String requestNotFound = "Request was not found";
+  static const String requestSuspended = "Request was suspended";
+  static const String requestUnpermited = "Request not permitted at the moment";
+  static const String requestInvalid = "Request is invalid";
+  static const String songCopied = "Song copied to clipboard!";
+  static const String verseCopied = "Verse copied to clipboard!";
+  static const String songLiked = " liked!";
+  static const String songDisliked = " disliked!";
 
-  static const String SearchNow = "Search a song";
-  static const String SearchHint = "Search by title, number or words";
-  static const String SearchResult = "Search by title, number or words";
-  static const String Signup_Now = "Not registered? Register now !";
-  static const String Signin_Now = "Already registered? Login now !";
-  static const String Login = "Login";
-  static const String Proceed = "PROCEED";
-  static const String Register = "Register";
-  static const String Password = "Password";
-  static const String Old_Password = "Old Password";
-  static const String New_Password = "New Password";
-  static const String Change_Password = "Change Password";
-  static const String Logout = "Logout";
-  static const String Email = "Email Address";
-  static const String Mobile = "Mobile";
-  static const String Country = "Country";
-  static const String Code = "Code";
-  static const String HasChorus = "Has Chorus";
-  static const String NoChorus = "No Chorus";
-  static const String Verses = " verse";
-  static const String Name = "Name";
-  static const String DefaultCCode = "254";
-  static const String DefaultCName = "Kenya";
-  static const String DefaultCI = "KE";
+  static const String addASong = "Add a Song";
+  static const String draftASong = "Draft a Song";
+  static const String searchNow = "Search a song";
+  static const String searchHint = "Search by title, number or words";
+  static const String searchResult = "Search by title, number or words";
+  static const String signupNow = "Not registered? Register now !";
+  static const String signinNow = "Already registered? Login now !";
+  static const String login = "Login";
+  static const String proceed = "PROCEED";
+  static const String register = "Register";
+  static const String password = "Password";
+  static const String oldPassword = "Old Password";
+  static const String newPassword = "New Password";
+  static const String changePassword = "Change Password";
+  static const String logout = "Logout";
+  static const String email = "Email Address";
+  static const String mobile = "Mobile";
+  static const String country = "Country";
+  static const String code = "Code";
+  static const String hasChorus = "Has Chorus";
+  static const String noChorus = "No Chorus";
+  static const String verses = " verse";
+  static const String name = "Name";
+  static const String defaultCCode = "254";
+  static const String defaultCName = "Kenya";
+  static const String defaultCI = "KE";
 
-  static const String FirstName = "First Name";
-  static const String LastName = "Last Name";
-  static const String YourGender = "You are a";
-  static const String YourCity = "Your City";
-  static const String YourChurch = "Your Church";
+  static const String firstName = "First Name";
+  static const String lastName = "Last Name";
+  static const String yourGender = "You are a";
+  static const String yourCity = "Your City";
+  static const String yourChurch = "Your Church";
 
-  static const String SetUpvSongBook = "Set up your vSongBook";
-  static const String CreateCollection = "Create your Collection";
-  static const String SongTitle = "Song Title";
-  static const String SongContent = "Song Content";
-  static const String SongKey = "Song Key";
-  static const String SongNotes = "Song Notes";
-  static const String LearnMore = "Learn More";
-  static const String Retry = "RETRY";
-  static const String SongsInside = " songs inside;\n";
-  static const String SongsPrefix = " songs).\n";
-  static const String DisplaySettings = "Display Preferences";
-  static const String OkayDone = "OKAY, DONE";
-  static const String OkayGotIt = "OKAY, GOT IT";
-  static const String GoBack = "GO BACK";
-  static const String DoneSelecting = "Done with selecting?";
-  static const String AreYouConnected = "Wait, are you connected?";
-  static const String NoSelection = "Oops! This is so heart breaking. You haven't selected a book, you expect things to be okay. You got to " +
+  static const String setUpTheApp = "Set up your ";
+  static const String createCollection = "Create your Collection";
+  static const String songTitle = "Song Title";
+  static const String songContent = "Song Content";
+  static const String songKey = "Song Key";
+  static const String songNotes = "Song Notes";
+  static const String learnMore = "Learn More";
+
+  static const String manageSongbooks = "Manage Books";
+  static const String supportUs = "Support us";
+  static const String helpFeedback = "Help & Feedback";
+  static const String aboutTheApp = "About ";
+  static const String manageApp = "App Settings";
+  static const String appSettings = " Settings";
+
+  static const String retry = "RETRY";
+  static const String songsInside = " songs inside;\n";
+  static const String songsPrefix = " songs).\n";
+  static const String displaySettings = "Display Preferences";
+  static const String okayDone = "OKAY, DONE";
+  static const String okayGotIt = "OKAY, GOT IT";
+  static const String goBack = "GO BACK";
+  static const String doneSelecting = "Done with selecting?";
+  static const String areYouConnected = "Wait, are you connected?";
+  static const String noSelection = "Oops! This is so heart breaking. You haven't selected a book, you expect things to be okay. You got to " +
           "select at least one book.\n\n By the way we can always bring you back here to select afresh. But for " +
           "now select at least one.";
-  static const String NoNewSelection = "Oops! You haven't selected anymore book to your original collection, maybe you just want to keep your original " +
+  static const String noNewSelection = "Oops! You haven't selected anymore book to your original collection, maybe you just want to keep your original " +
           "collection.\n\n By the way we can always bring you back here to select afresh. Well lets hope that is okay with you for now.";
-  static const String NoConnection = "Oops! This is so heart breaking. You don't seem to have a working internet connection.\n\n" +
+  static const String noConnection = "Oops! This is so heart breaking. You don't seem to have a working internet connection.\n\n" +
           "Kindly connect to a reliable internet either via Wi-Fi or Mobile Data then Retry again.";
 
-  static const String AppAbout = "<h3>What is vSongBook?</h3><p>... vSongBook (Virtual Songbook) is an application that gives users access to songs sung in church services among other places where praise and worship is carried out. Major songbooks include Songs of Worship, Nyimbo za Injili, Believers Songs, Redemption Songs and Tenzi za Rohoni. Other songbooks in various local dialects have been added over time and more are under way to be added.</p>" +
+  static const String appAbout = "<h3>What is vSongBook?</h3><p>... vSongBook (Virtual Songbook) is an application that gives users access to songs sung in church services among other places where praise and worship is carried out. Major songbooks include Songs of Worship, Nyimbo za Injili, Believers Songs, Redemption Songs and Tenzi za Rohoni. Other songbooks in various local dialects have been added over time and more are under way to be added.</p>" +
           "<hr><h3>What it is not ...</h3><p>... this is not a media player or tutor utility if you don't know how to sing a particular song. Be sure you know to sing most or all of the songs in it, otherwise feel free to customize the songs you want it have for you.</p>";
-  static const String AppHistory = "<p>vSongBook was first developed in September 2014 by Jack Siro while a student at KTTC. By then he was just trying his hands on Android and he just wanted make a little app to have the Songs of worship and Nyimbo za injili on his phone just like the Bible was an app on his phone.</p><p>Later while at home in December his father who came to his room to check on him and ask <i>some little computer questions</i> noticed an unfamiliar app on his phone. On learning and interacting with it though by then it had only 100 songs in English and Swahili books, he asked to have it on his phone. The happy father went to share it with his elder songs. It was at the End of Year Meetings at Mbale, Kenya that Brother Siro endosed the app there during one of his sermons.</p>" +
+  static const String appHistory = "<p>vSongBook was first developed in September 2014 by Jack Siro while a student at KTTC. By then he was just trying his hands on Android and he just wanted make a little app to have the Songs of worship and Nyimbo za injili on his phone just like the Bible was an app on his phone.</p><p>Later while at home in December his father who came to his room to check on him and ask <i>some little computer questions</i> noticed an unfamiliar app on his phone. On learning and interacting with it though by then it had only 100 songs in English and Swahili books, he asked to have it on his phone. The happy father went to share it with his elder songs. It was at the End of Year Meetings at Mbale, Kenya that Brother Siro endosed the app there during one of his sermons.</p>" +
           "<p>With the help of Brother Gitau while a student at JKUAT Taita Taveta and other youth believers the rest of the songs were able to available in soft copy. The app which resided on his personal website got shared and many started asking to have more songs and features on it.</p><p>The need to have it hosted on Play Store was becoming unavoidable but since the app was not being monetized it was hard to do so till Brother Ngalonde of ZimApps in Zimbabwe came through to allow him to host the app on his Play Store account in the midst of 2015. Towards the midst of 2016 he was already monetizing the app he was able to purchase his own Google Play Store account where to date he still hosts the app from.</p>" +
           "<p>With the help the likes Pastor Waheire, Brother Simon Muthama and Brother Kijusa the Nyimbo cia Kuinira Ngai (Kikuyu), Mbathi sya Kumutaiaa Ngai (Kikamba) and Tsinyimboa Tsya Nyasaye (Luhya) were made available in softcopy. Bro Simutami of Malawi was very supportive in having the Bemba Hymnal just like Sister Alunga was with the Third Exodus songs.</p>" +
           "<p>It was in the year 2016 that the need to have the app available on Windows Phone was realized but it was not until the midst of 2017 that this was made possible on the Windows App Store. A year later the app became available in Windows PCs which didn't have a specific place to download it from until in 2019 when it beaceme available on the new website www.appsmata.com launched by Jack Siro to cater for the projects that would fall under the umbrella of Appsmata Solutions the new brand he was now promoting.</p>" +
           "<p>vSongBook for iOS the latest product for the app became a reality in the midst of 2020 after a whole 3 years of trying to save and getting the requirements that were needed. However as the iOS platform is very expensive to develop for this goal took time to come to reality thanks Brother Danvick who was generaous with his MacBook and iPhone that this became possible.</p>" +
           "<p>This is not the end of the story because this project is still in progress and many fatures are underway to make it the best singing app for anyone wishing to sing from the comfort of their phone. Keep supporting it with your prayers, finance and whatever you got to keep it alive! Be blessed!</p>";
-  static const String AppThanks = "<h3>Special Thanks be to the following people/Organizations:</h3>" +
+  static const String appThanks = "<h3>Special Thanks be to the following people/Organizations:</h3>" +
           "<p>Pastor Siro, Sister Siro and the entire Kisii Church, " +
           "Brother George Gitau and  JKUAT Taita Taveta Youths, " +
           "Pastor Wakhanu, Pastor Mutonyi, Brother Timothy Mutonyi, " +

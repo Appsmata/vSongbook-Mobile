@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:vsongbook/models/callbacks/User.dart';
-import 'package:vsongbook/utils/Constants.dart';
+import 'package:vsongbook/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Preferences {
@@ -19,20 +19,20 @@ class Preferences {
   static Future<void> setCountryPhone(
       String country, String icode, String ccode, String mobile) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(SharedPreferenceKeys.User_Country_Name, country);
-    prefs.setString(SharedPreferenceKeys.User_Country_Icode, icode);
-    prefs.setString(SharedPreferenceKeys.User_Country_Ccode, ccode);
-    prefs.setString(SharedPreferenceKeys.User_Mobile, mobile);
+    prefs.setString(SharedPreferenceKeys.userCountryName, country);
+    prefs.setString(SharedPreferenceKeys.userCountryIcode, icode);
+    prefs.setString(SharedPreferenceKeys.userCountryCcode, ccode);
+    prefs.setString(SharedPreferenceKeys.userMobile, mobile);
   }
 
   static Future<bool> isUserLoggedIn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(SharedPreferenceKeys.Is_User_Loggedin);
+    return prefs.getBool(SharedPreferenceKeys.isUserLoggedin);
   }
 
   static Future<void> setUserLoggedIn(bool isLoggedIn) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.setBool(SharedPreferenceKeys.Is_User_Loggedin, isLoggedIn);
+    return prefs.setBool(SharedPreferenceKeys.isUserLoggedin, isLoggedIn);
   }
 
   static Future<String> getSharedPreferenceStr(String prefKey) async {
@@ -43,37 +43,37 @@ class Preferences {
   static Future<User> getUserProfile() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return User.fromJson(
-        json.decode(prefs.getString(SharedPreferenceKeys.User)));
+        json.decode(prefs.getString(SharedPreferenceKeys.user)));
   }
 
   static Future<void> setUserProfile(User user) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userProfileJson = json.encode(user);
-    return prefs.setString(SharedPreferenceKeys.User, userProfileJson);
+    return prefs.setString(SharedPreferenceKeys.user, userProfileJson);
   }
 
   static Future<bool> areAppBooksLoaded() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(SharedPreferenceKeys.App_Books_Loaded);
+    return prefs.getBool(SharedPreferenceKeys.appBooksLoaded);
   }
 
   static Future<void> setBooksLoaded(bool areBooksLoaded) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.setBool(SharedPreferenceKeys.App_Books_Loaded, areBooksLoaded);
+    return prefs.setBool(SharedPreferenceKeys.appBooksLoaded, areBooksLoaded);
   }
 
   static Future<void> setSelectedBooks(String books) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(SharedPreferenceKeys.Selected_Books, books);
+    prefs.setString(SharedPreferenceKeys.selectedBooks, books);
   }
 
   static Future<bool> areAppSongsLoaded() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(SharedPreferenceKeys.App_Songs_Loaded);
+    return prefs.getBool(SharedPreferenceKeys.appSongsLoaded);
   }
 
   static Future<void> setSongsLoaded(bool areSongsLoaded) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.setBool(SharedPreferenceKeys.App_Songs_Loaded, areSongsLoaded);
+    return prefs.setBool(SharedPreferenceKeys.appSongsLoaded, areSongsLoaded);
   }
 }

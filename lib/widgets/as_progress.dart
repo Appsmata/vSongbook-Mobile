@@ -38,8 +38,8 @@ class AsProgress extends StatefulWidget {
     progressState.showProgressWithText(title);
   }
 
-  static Widget getProgress(String title) {
-    return new AsProgress(
+  static Widget getAsProgress(String title) {
+    return AsProgress(
       backgroundColor: Colors.black12,
       color: Colors.black,
       containerColor: Colors.white,
@@ -69,13 +69,13 @@ class AsProgressState extends State<AsProgress> {
 
   @override
   Widget build(BuildContext context) {
-    return new Container(
+    return Container(
       child: !_opacity ? null : new Opacity(
         opacity: _opacity ? 1 : 0,
-        child: new Stack(
+        child: Stack(
           children: <Widget>[
             new Center(
-              child: new Container(
+              child: Container(
                 width: 300,
                 height: 120,
                 decoration: new BoxDecoration(
@@ -102,14 +102,14 @@ class AsProgressState extends State<AsProgress> {
       return _getCircularProgress();
     }
 
-    return new Center(
-      child: new Row(
+    return Center(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           _getCircularProgress(),
           new Container(
             margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-            child: new Text(
+            child: Text(
               text,
               style: new TextStyle(color: color, fontSize: 18),
             ),
@@ -120,7 +120,7 @@ class AsProgressState extends State<AsProgress> {
   }
 
   Widget _getCircularProgress() {
-    return new CircularProgressIndicator(
+    return CircularProgressIndicator(
         valueColor: new AlwaysStoppedAnimation(Colors.deepOrange));
   }
 

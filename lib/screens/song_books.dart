@@ -23,9 +23,9 @@ class SongBooks extends StatefulWidget {
 class SongBooksState extends State<SongBooks> {
   var appBar = AppBar();
   final globalKey = new GlobalKey<ScaffoldState>();
-  AsProgress asProgress = AsProgress.getProgress(LangStrings.Getting_Ready);
+  AsProgress progress = AsProgress.getAsProgress(LangStrings.gettingReady);
 
-  SqliteHelper db = SqliteHelper();
+  AppDatabase db = AppDatabase();
   Future<Database> dbFuture;
   List<BookItem<Book>> selected = [], bookList;
   List<BookModel> mybooks;
@@ -67,37 +67,37 @@ class SongBooksState extends State<SongBooks> {
     EventObject eventObject = await getSongbooks();
 
     switch (eventObject.id) {
-      case EventConstants.Request_Successful:
+      case EventConstants.requestSuccessful:
         {
           setState(() {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => justAMinuteDialog());
-            asProgress.hideProgress();
+            progress.hideProgress();
             books = eventObject.object;
             populateData();
           });
         }
         break;
 
-      case EventConstants.Request_Unsuccessful:
+      case EventConstants.requestUnsuccessful:
         {
           setState(() {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => noInternetDialog());
-            asProgress.hideProgress();
+            progress.hideProgress();
           });
         }
         break;
 
-      case EventConstants.No_Internet_Connection:
+      case EventConstants.noInternetConnection:
         {
           setState(() {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => noInternetDialog());
-            asProgress.hideProgress();
+            progress.hideProgress();
           });
         }
         break;
@@ -119,7 +119,7 @@ class SongBooksState extends State<SongBooks> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text(LangStrings.SetUpvSongBook),
+          title: Text(LangStrings.setUpTheApp),
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.refresh),
@@ -145,7 +145,7 @@ class SongBooksState extends State<SongBooks> {
                 context: context,
                 builder: (BuildContext context) => areYouDoneDialog());
           },
-          tooltip: LangStrings.Proceed,
+          tooltip: LangStrings.proceed,
           child: Icon(Icons.check),
         ),
       ),
@@ -162,11 +162,11 @@ class SongBooksState extends State<SongBooks> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  LangStrings.CreateCollection,
+                  LangStrings.createCollection,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 FlatButton(
-                  child: Text(LangStrings.LearnMore),
+                  child: Text(LangStrings.learnMore),
                   onPressed: () {
                     showDialog(
                         context: context,
@@ -175,12 +175,6 @@ class SongBooksState extends State<SongBooks> {
                 ),
               ],
             ),
-          ),
-          Container(
-            height: (MediaQuery.of(context).size.height -
-                (appBar.preferredSize.height * 2)),
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: asProgress,
           ),
           Container(
             height: (MediaQuery.of(context).size.height -
@@ -197,7 +191,7 @@ class SongBooksState extends State<SongBooks> {
             height: (MediaQuery.of(context).size.height -
                 (appBar.preferredSize.height * 2)),
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: asProgress,
+            child: progress,
           ),
         ],
       ),
@@ -205,22 +199,22 @@ class SongBooksState extends State<SongBooks> {
   }
 
   Widget loadingGettingReady() {
-    return new Container(
+    return Container(
       height: (MediaQuery.of(context).size.height -
           (appBar.preferredSize.height * 2)),
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: new Stack(
+      child: Stack(
         children: <Widget>[
-          new Center(child: new Container(width: 300, height: 120)),
+          new Center(child: Container(width: 300, height: 120)),
           new Center(
-            child: new Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 new CircularProgressIndicator(
                     valueColor: new AlwaysStoppedAnimation(Colors.deepOrange)),
                 new Container(
                   margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                  child: new Text(LangStrings.Getting_Ready,
+                  child: Text(LangStrings.gettingReady,
                       style: new TextStyle(fontSize: 18)),
                 )
               ],
@@ -232,13 +226,13 @@ class SongBooksState extends State<SongBooks> {
   }
 
   Widget justAMinuteDialog() {
-    return new AlertDialog(
+    return AlertDialog(
       title: new Text(
-        LangStrings.JustAMinute,
+        LangStrings.justAMinute,
         style: new TextStyle(color: Colors.deepOrange, fontSize: 25),
       ),
       content: new Text(
-        LangStrings.TakeTimeSelectingSongbooks,
+        LangStrings.takeTimeSelecting,
         style: new TextStyle(fontSize: 20),
       ),
       actions: <Widget>[
@@ -246,7 +240,7 @@ class SongBooksState extends State<SongBooks> {
           margin: EdgeInsets.all(5),
           child: FlatButton(
             child:
-                Text(LangStrings.OkayGotIt, style: new TextStyle(fontSize: 20)),
+                Text(LangStrings.okayGotIt, style: new TextStyle(fontSize: 20)),
             color: Colors.deepOrange,
             onPressed: () {
               Navigator.pop(context);
@@ -258,13 +252,13 @@ class SongBooksState extends State<SongBooks> {
   }
 
   Widget noInternetDialog() {
-    return new AlertDialog(
+    return AlertDialog(
       title: new Text(
-        LangStrings.AreYouConnected,
+        LangStrings.areYouConnected,
         style: new TextStyle(color: Colors.deepOrange, fontSize: 25),
       ),
       content: new Text(
-        LangStrings.NoConnection,
+        LangStrings.noConnection,
         style: new TextStyle(fontSize: 20),
       ),
       actions: <Widget>[
@@ -272,7 +266,7 @@ class SongBooksState extends State<SongBooks> {
           margin: EdgeInsets.all(5),
           child: FlatButton(
             child:
-                Text(LangStrings.OkayGotIt, style: new TextStyle(fontSize: 20)),
+                Text(LangStrings.okayGotIt, style: new TextStyle(fontSize: 20)),
             color: Colors.deepOrange,
             textColor: Colors.white,
             onPressed: () {
@@ -283,7 +277,7 @@ class SongBooksState extends State<SongBooks> {
         new Container(
           margin: EdgeInsets.all(5),
           child: FlatButton(
-            child: Text(LangStrings.Retry, style: new TextStyle(fontSize: 20)),
+            child: Text(LangStrings.retry, style: new TextStyle(fontSize: 20)),
             color: Colors.deepOrange,
             textColor: Colors.white,
             onPressed: () {
@@ -307,12 +301,12 @@ class SongBooksState extends State<SongBooks> {
             bookList[i].data.title +
             " (" +
             bookList[i].data.qcount +
-            LangStrings.SongsPrefix;
+            LangStrings.songsPrefix;
       }
     }
-    return new AlertDialog(
+    return AlertDialog(
       title: new Text(
-        LangStrings.DoneSelecting,
+        LangStrings.doneSelecting,
         style: new TextStyle(color: Colors.deepOrange, fontSize: 25),
       ),
       content: new Text(
@@ -323,7 +317,7 @@ class SongBooksState extends State<SongBooks> {
         new Container(
           margin: EdgeInsets.all(5),
           child: FlatButton(
-            child: Text(LangStrings.GoBack, style: new TextStyle(fontSize: 20)),
+            child: Text(LangStrings.goBack, style: new TextStyle(fontSize: 20)),
             color: Colors.deepOrange,
             textColor: Colors.white,
             onPressed: () {
@@ -335,7 +329,7 @@ class SongBooksState extends State<SongBooks> {
           margin: EdgeInsets.all(5),
           child: FlatButton(
             child:
-                Text(LangStrings.Proceed, style: new TextStyle(fontSize: 20)),
+                Text(LangStrings.proceed, style: new TextStyle(fontSize: 20)),
             color: Colors.deepOrange,
             textColor: Colors.white,
             onPressed: () {
@@ -421,7 +415,7 @@ class SongBooksState extends State<SongBooks> {
                         books[index].qcount +
                             " " +
                             books[index].backpath +
-                            LangStrings.SongsInside +
+                            LangStrings.songsInside +
                             books[index].content,
                         style: TextStyle(
                             color: bookList[index].isSelected
@@ -442,7 +436,7 @@ class SongBooksState extends State<SongBooks> {
   }
 
   Future<void> saveData() async {
-    SqliteHelper db = SqliteHelper();
+    AppDatabase db = AppDatabase();
     String selectedbooks = "";
 
     for (int i = 0; i < selected.length; i++) {
@@ -476,10 +470,10 @@ class SongBooksState extends State<SongBooks> {
   }
 
   void _goToNextScreen() {
-    asProgress.showProgress();
+    progress.showProgress();
     saveData();
 
-    asProgress.hideProgress();
+    progress.hideProgress();
     Navigator.pushReplacement(
         context, new MaterialPageRoute(builder: (context) => new AppStart()));
   }

@@ -20,7 +20,7 @@ class SongEdit extends StatefulWidget {
 }
 
 class SongEditState extends State<SongEdit> {
-  SqliteHelper db = SqliteHelper();
+  AppDatabase db = AppDatabase();
 
   String appBarTitle;
   SongModel song;
@@ -82,7 +82,7 @@ class SongEditState extends State<SongEdit> {
   Widget basicForm() {
     return Card(
       elevation: 2,
-      child: new Center(
+      child: Center(
         child: Container(
           padding: EdgeInsets.all(10),
           child: Column(
@@ -96,8 +96,8 @@ class SongEditState extends State<SongEdit> {
                     updateTitle();
                   },
                   decoration: InputDecoration(
-                      labelText: LangStrings.SongTitle,
-                      hintText: LangStrings.SongTitle,
+                      labelText: LangStrings.songTitle,
+                      hintText: LangStrings.songTitle,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0))),
                 ),
@@ -111,8 +111,8 @@ class SongEditState extends State<SongEdit> {
                     updateContent();
                   },
                   decoration: InputDecoration(
-                      labelText: LangStrings.SongContent,
-                      hintText: LangStrings.SongContent,
+                      labelText: LangStrings.songContent,
+                      hintText: LangStrings.songContent,
                       //helperText: LangStrings.SongContent,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0))),
@@ -129,7 +129,7 @@ class SongEditState extends State<SongEdit> {
   Widget extraForm() {
     return Card(
       elevation: 2,
-      child: new Center(
+      child: Center(
         child: Container(
           padding: EdgeInsets.all(10),
           child: Column(
@@ -150,8 +150,8 @@ class SongEditState extends State<SongEdit> {
                     updateKey();
                   },
                   decoration: InputDecoration(
-                      labelText: LangStrings.SongKey,
-                      hintText: LangStrings.SongKey,
+                      labelText: LangStrings.songKey,
+                      hintText: LangStrings.songKey,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0))),
                 ),
@@ -165,8 +165,8 @@ class SongEditState extends State<SongEdit> {
                     updateContent();
                   },
                   decoration: InputDecoration(
-                      labelText: LangStrings.SongNotes,
-                      hintText: LangStrings.SongNotes,
+                      labelText: LangStrings.songNotes,
+                      hintText: LangStrings.songNotes,
                       //helperText: LangStrings.SongContent,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0))),
@@ -182,8 +182,8 @@ class SongEditState extends State<SongEdit> {
                     updateAlias();
                   },
                   decoration: InputDecoration(
-                      labelText: LangStrings.SongNotes,
-                      hintText: LangStrings.SongNotes,
+                      labelText: LangStrings.songNotes,
+                      hintText: LangStrings.songNotes,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0))),
                 ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:backdrop/backdrop.dart';
-import 'package:vsongbook/utils/colored_tab_bar.dart';
+
+import 'package:vsongbook/utils/colored_tabbar.dart';
 import 'package:vsongbook/utils/constants.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
@@ -27,7 +27,7 @@ class AboutAppState extends State<AboutApp> {
           child: ListView(
             children: <Widget>[
               Html(
-                data: LangStrings.AppAbout,
+                data: LangStrings.appAbout,
                 style: {
                   "h3": Style(fontSize: FontSize(30.0)),
                   "p": Style(fontSize: FontSize(20.0)),
@@ -40,7 +40,7 @@ class AboutAppState extends State<AboutApp> {
         child: ListView(
           children: <Widget>[
             Html(
-              data: LangStrings.AppHistory,
+              data: LangStrings.appHistory,
               style: {
                 "h3": Style(fontSize: FontSize(30.0)),
                 "p": Style(fontSize: FontSize(20.0)),
@@ -54,7 +54,7 @@ class AboutAppState extends State<AboutApp> {
           child: ListView(
             children: <Widget>[
               Html(
-                data: LangStrings.AppThanks,
+                data: LangStrings.appThanks,
                 style: {
                   "h3": Style(fontSize: FontSize(30.0)),
                   "p": Style(fontSize: FontSize(20.0)),
@@ -68,18 +68,18 @@ class AboutAppState extends State<AboutApp> {
       onWillPop: () {
         moveToLastScreen();
       },
-      child: BackdropScaffold(
-        title: Text('About vSongBook App'),
-        iconPosition: BackdropIconPosition.action,
-        headerHeight: 120,
-        frontLayer: DefaultTabController(
-          length: 3,
-          child: Scaffold(
-            appBar: ColoredTabBar(
-              color: Theme.of(context).primaryColor,
-              tabBar: TabBar(tabs: _Titles),
+      child:  DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text(LangStrings.aboutTheApp + LangStrings.appName),
+            bottom: TabBar(
+              tabs: _Titles,
             ),
-            body: TabBarView(children: _Tabs),
+          ),
+          body: TabBarView(
+            children: _Tabs,
           ),
         ),
       ),

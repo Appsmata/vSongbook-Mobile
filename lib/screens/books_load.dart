@@ -11,6 +11,7 @@ import 'package:vsongbook/utils/preferences.dart';
 import 'package:vsongbook/utils/constants.dart';
 import 'package:vsongbook/helpers/app_database.dart';
 import 'package:vsongbook/screens/songs_load.dart';
+import 'package:animated_floatactionbuttons/animated_floatactionbuttons.dart';
 
 class BooksLoad extends StatefulWidget {
   @override
@@ -21,10 +22,10 @@ class BooksLoad extends StatefulWidget {
 
 class BooksLoadState extends State<BooksLoad> {
   var appBar = AppBar();
-  final globalKey = new GlobalKey<ScaffoldState>();
-  AsProgress asProgress = AsProgress.getProgress(LangStrings.Getting_Ready);
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  AsProgress progress = AsProgress.getAsProgress(LangStrings.gettingReady);
 
-  SqliteHelper databaseHelper = SqliteHelper();
+  AppDatabase databaseHelper = AppDatabase();
   List<BookItem<Book>> selected = [];
   List<BookItem<Book>> bookList;
   List<Book> books;
@@ -38,40 +39,42 @@ class BooksLoadState extends State<BooksLoad> {
   }
 
   void requestData() async {
+    progress.showProgress();
+
     EventObject eventObject = await getSongbooks();
 
     switch (eventObject.id) {
-      case EventConstants.Request_Successful:
+      case EventConstants.requestSuccessful:
         {
           setState(() {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => justAMinuteDialog());
-            asProgress.hideProgress();
+            progress.hideProgress();
             books = eventObject.object;
             populateData();
           });
         }
         break;
 
-      case EventConstants.Request_Unsuccessful:
+      case EventConstants.requestUnsuccessful:
         {
           setState(() {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => noInternetDialog());
-            asProgress.hideProgress();
+            progress.hideProgress();
           });
         }
         break;
 
-      case EventConstants.No_Internet_Connection:
+      case EventConstants.noInternetConnection:
         {
           setState(() {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => noInternetDialog());
-            asProgress.hideProgress();
+            progress.hideProgress();
           });
         }
         break;
@@ -83,12 +86,12 @@ class BooksLoadState extends State<BooksLoad> {
     if (books == null) {
       books = List<Book>();
       requestData();
+      //handleRefresh();
     }
 
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        title: Text(LangStrings.SetUpvSongBook),
+        title: Text(LangStrings.setUpTheApp + LangStrings.appName),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.refresh),
@@ -101,31 +104,45 @@ class BooksLoadState extends State<BooksLoad> {
             icon: Icon(Icons.check),
             onPressed: () {
               showDialog(
-                  context: context,
-                  builder: (BuildContext context) => areYouDoneDialog());
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.settings),
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) => settingsDialog());
+                context: context,
+                builder: (BuildContext context) => areYouDoneDialog()
+              );
             },
           ),
         ],
       ),
       body: mainBody(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) => areYouDoneDialog());
-        },
-        tooltip: LangStrings.Proceed,
-        child: Icon(Icons.check),
+      floatingActionButton: AnimatedFloatingActionButton(
+        fabButtons: floatingButtons(),
+        animatedIconData: AnimatedIcons.menu_close,
       ),
     );
+  }
+
+  List<Widget> floatingButtons() {
+    return <Widget>[
+      FloatingActionButton(
+        heroTag: "settings",
+        tooltip: LangStrings.appTheme,
+        child: Icon(Icons.settings),
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) => settingsDialog()
+          );
+        },
+      ),
+      FloatingActionButton(
+        heroTag: "proceed",
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) => areYouDoneDialog());
+        },
+        tooltip: LangStrings.proceed,
+        child: Icon(Icons.check),
+      ),
+    ];
   }
 
   Widget mainBody() {
@@ -138,11 +155,11 @@ class BooksLoadState extends State<BooksLoad> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  LangStrings.CreateCollection,
+                  LangStrings.createCollection,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 FlatButton(
-                  child: Text(LangStrings.LearnMore),
+                  child: Text(LangStrings.learnMore),
                   onPressed: () {
                     showDialog(
                         context: context,
@@ -153,21 +170,19 @@ class BooksLoadState extends State<BooksLoad> {
             ),
           ),
           Container(
-            height: (MediaQuery.of(context).size.height -
-                (appBar.preferredSize.height * 2)),
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            height: (MediaQuery.of(context).size.height - (appBar.preferredSize.height * 2)),
+            padding: const EdgeInsets.symmetric(horizontal: 5),
             margin: EdgeInsets.only(top: 50),
             child: ListView.builder(
               physics: BouncingScrollPhysics(),
-              itemCount: books.length,
-              itemBuilder: bookListView,
+                  itemCount: books.length,
+                  itemBuilder: bookListView,
             ),
           ),
           Container(
-            height: (MediaQuery.of(context).size.height -
-                (appBar.preferredSize.height * 2)),
+            height: (MediaQuery.of(context).size.height - (appBar.preferredSize.height * 2)),
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: asProgress,
+            child: progress,
           ),
         ],
       ),
@@ -175,9 +190,9 @@ class BooksLoadState extends State<BooksLoad> {
   }
 
   Widget settingsDialog() {
-    return new AlertDialog(
+    return AlertDialog(
       title: new Text(
-        LangStrings.DisplaySettings,
+        LangStrings.displaySettings,
         style: new TextStyle(color: Colors.deepOrange, fontSize: 25),
       ),
       content: new Container(
@@ -190,7 +205,7 @@ class BooksLoadState extends State<BooksLoad> {
               leading: Icon(settings.isDarkMode
                   ? Icons.brightness_4
                   : Icons.brightness_7),
-              title: Text(LangStrings.DarkMode),
+              title: Text(LangStrings.darkMode),
               trailing: Switch(
                 onChanged: (bool value) => settings.setDarkMode(value),
                 value: settings.isDarkMode,
@@ -205,7 +220,7 @@ class BooksLoadState extends State<BooksLoad> {
           margin: EdgeInsets.all(5),
           child: FlatButton(
             child:
-                Text(LangStrings.OkayDone, style: new TextStyle(fontSize: 20)),
+                Text(LangStrings.okayDone, style: new TextStyle(fontSize: 20)),
             color: Colors.deepOrange,
             //textColor: Colors.white,
             onPressed: () {
@@ -218,22 +233,22 @@ class BooksLoadState extends State<BooksLoad> {
   }
 
   Widget loadingGettingReady() {
-    return new Container(
+    return Container(
       height: (MediaQuery.of(context).size.height -
           (appBar.preferredSize.height * 2)),
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: new Stack(
+      child: Stack(
         children: <Widget>[
-          new Center(child: new Container(width: 300, height: 120)),
+          new Center(child: Container(width: 300, height: 120)),
           new Center(
-            child: new Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 new CircularProgressIndicator(
                     valueColor: new AlwaysStoppedAnimation(Colors.deepOrange)),
                 new Container(
                   margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                  child: new Text(LangStrings.Getting_Ready,
+                  child: Text(LangStrings.gettingReady,
                       style: new TextStyle(fontSize: 18)),
                 )
               ],
@@ -245,13 +260,13 @@ class BooksLoadState extends State<BooksLoad> {
   }
 
   Widget justAMinuteDialog() {
-    return new AlertDialog(
+    return AlertDialog(
       title: new Text(
-        LangStrings.JustAMinute,
+        LangStrings.justAMinute,
         style: new TextStyle(color: Colors.deepOrange, fontSize: 25),
       ),
       content: new Text(
-        LangStrings.TakeTimeSelectingSongbooks,
+        LangStrings.takeTimeSelecting,
         style: new TextStyle(fontSize: 20),
       ),
       actions: <Widget>[
@@ -259,7 +274,7 @@ class BooksLoadState extends State<BooksLoad> {
           margin: EdgeInsets.all(5),
           child: FlatButton(
             child:
-                Text(LangStrings.OkayGotIt, style: new TextStyle(fontSize: 20)),
+                Text(LangStrings.okayGotIt, style: new TextStyle(fontSize: 20)),
             color: Colors.deepOrange,
             //textColor: Colors.white,
             onPressed: () {
@@ -272,13 +287,13 @@ class BooksLoadState extends State<BooksLoad> {
   }
 
   Widget noInternetDialog() {
-    return new AlertDialog(
+    return AlertDialog(
       title: new Text(
-        LangStrings.AreYouConnected,
+        LangStrings.areYouConnected,
         style: new TextStyle(color: Colors.deepOrange, fontSize: 25),
       ),
       content: new Text(
-        LangStrings.NoConnection,
+        LangStrings.noConnection,
         style: new TextStyle(fontSize: 20),
       ),
       actions: <Widget>[
@@ -286,7 +301,7 @@ class BooksLoadState extends State<BooksLoad> {
           margin: EdgeInsets.all(5),
           child: FlatButton(
             child:
-                Text(LangStrings.OkayGotIt, style: new TextStyle(fontSize: 20)),
+                Text(LangStrings.okayGotIt, style: new TextStyle(fontSize: 20)),
             color: Colors.deepOrange,
             textColor: Colors.white,
             onPressed: () {
@@ -297,7 +312,7 @@ class BooksLoadState extends State<BooksLoad> {
         new Container(
           margin: EdgeInsets.all(5),
           child: FlatButton(
-            child: Text(LangStrings.Retry, style: new TextStyle(fontSize: 20)),
+            child: Text(LangStrings.retry, style: new TextStyle(fontSize: 20)),
             color: Colors.deepOrange,
             textColor: Colors.white,
             onPressed: () {
@@ -315,17 +330,12 @@ class BooksLoadState extends State<BooksLoad> {
     if (selected.length > 0) {
       String selectedbooks = "";
       for (int i = 0; i < selected.length; i++) {
-        selectedbooks = selectedbooks +
-            (i + 1).toString() +
-            ". " +
-            selected[i].data.title +
-            " (" +
-            selected[i].data.qcount +
-            LangStrings.SongsPrefix;
+        selectedbooks = selectedbooks + (i + 1).toString() +  ". " +
+            selected[i].data.title + " (" + selected[i].data.qcount + LangStrings.songsPrefix;
       }
-      return new AlertDialog(
+      return AlertDialog(
         title: new Text(
-          LangStrings.DoneSelecting,
+          LangStrings.doneSelecting,
           style: new TextStyle(color: Colors.deepOrange, fontSize: 25),
         ),
         content: new Text(
@@ -337,7 +347,7 @@ class BooksLoadState extends State<BooksLoad> {
             margin: EdgeInsets.all(5),
             child: FlatButton(
               child:
-                  Text(LangStrings.GoBack, style: new TextStyle(fontSize: 20)),
+                  Text(LangStrings.goBack, style: new TextStyle(fontSize: 20)),
               color: Colors.deepOrange,
               textColor: Colors.white,
               onPressed: () {
@@ -349,7 +359,7 @@ class BooksLoadState extends State<BooksLoad> {
             margin: EdgeInsets.all(5),
             child: FlatButton(
               child:
-                  Text(LangStrings.Proceed, style: new TextStyle(fontSize: 20)),
+                  Text(LangStrings.proceed, style: new TextStyle(fontSize: 20)),
               color: Colors.deepOrange,
               textColor: Colors.white,
               onPressed: () {
@@ -361,18 +371,18 @@ class BooksLoadState extends State<BooksLoad> {
         ],
       );
     } else {
-      return new AlertDialog(
+      return AlertDialog(
         title: new Text(
-          LangStrings.JustAMinute,
+          LangStrings.justAMinute,
           style: new TextStyle(color: Colors.orange, fontSize: 25),
         ),
         content: new Text(
-          LangStrings.NoSelection,
+          LangStrings.noSelection,
           style: new TextStyle(color: Colors.black, fontSize: 20),
         ),
         actions: <Widget>[
           new FlatButton(
-            child: new Text(LangStrings.OkayGotIt,
+            child: Text(LangStrings.okayGotIt,
                 style: new TextStyle(color: Colors.orange, fontSize: 20)),
             onPressed: () {
               Navigator.pop(context);
@@ -453,12 +463,11 @@ class BooksLoadState extends State<BooksLoad> {
                     ),
                     SizedBox(height: 10),
                     Container(
-                      width: 240,
                       child: Text(
                         books[index].qcount +
                             " " +
                             books[index].backpath +
-                            LangStrings.SongsInside +
+                            LangStrings.songsInside +
                             books[index].content,
                         style: TextStyle(
                             color: bookList[index].isSelected
@@ -479,7 +488,7 @@ class BooksLoadState extends State<BooksLoad> {
   }
 
   Future<void> saveData() async {
-    SqliteHelper db = SqliteHelper();
+    AppDatabase db = AppDatabase();
 
     for (int i = 0; i < selected.length; i++) {
       Book item = selected[i].data;
@@ -492,7 +501,7 @@ class BooksLoadState extends State<BooksLoad> {
   }
 
   void _goToNextScreen() {
-    asProgress.showProgress();
+    progress.showProgress();
     saveData();
 
     String selectedbooks = "";
@@ -503,7 +512,7 @@ class BooksLoadState extends State<BooksLoad> {
       selectedbooks = selectedbooks.substring(0, selectedbooks.length - 1);
     } catch (Exception) {}
 
-    asProgress.hideProgress();
+    progress.hideProgress();
     Preferences.setBooksLoaded(true);
     Preferences.setSelectedBooks(selectedbooks);
     Navigator.pushReplacement(context,

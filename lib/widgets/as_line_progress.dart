@@ -21,7 +21,7 @@ class AsLineProgress extends StatefulWidget {
   }
 
   static Widget setUp(double widthValue, double progressValue) {
-    return new AsLineProgress(
+    return AsLineProgress(
       measurement: widthValue ,
       progress: progressValue   
     );
@@ -36,7 +36,7 @@ class AsLineProgressState extends State<AsLineProgress> {
 
   @override
   Widget build(BuildContext context) {
-    return new LinearPercentIndicator(
+    return LinearPercentIndicator(
       width: measurement,
       lineHeight: 40,
       percent: progress,
