@@ -7,20 +7,20 @@ import 'package:vsongbook/helpers/app_database.dart';
 import 'package:vsongbook/models/song_model.dart';
 import 'package:vsongbook/utils/constants.dart';
 
-class SongEdit extends StatefulWidget {
+class EeSongEdit extends StatefulWidget {
   final String appBarTitle;
   final SongModel song;
 
-  SongEdit(this.song, this.appBarTitle);
+  EeSongEdit(this.song, this.appBarTitle);
 
   @override
   State<StatefulWidget> createState() {
-    return SongEditState(this.song, this.appBarTitle);
+    return EeSongEditState(this.song, this.appBarTitle);
   }
 }
 
-class SongEditState extends State<SongEdit> {
-  SqliteHelper db = SqliteHelper();
+class EeSongEditState extends State<EeSongEdit> {
+  AppDatabase db = AppDatabase();
 
   String appBarTitle;
   SongModel song;
@@ -30,7 +30,7 @@ class SongEditState extends State<SongEdit> {
   TextEditingController keyController = TextEditingController();
   TextEditingController aliasController = TextEditingController();
 
-  SongEditState(this.song, this.appBarTitle);
+  EeSongEditState(this.song, this.appBarTitle);
 
   @override
   Widget build(BuildContext context) {
@@ -96,8 +96,8 @@ class SongEditState extends State<SongEdit> {
                     updateTitle();
                   },
                   decoration: InputDecoration(
-                      labelText: LangStrings.SongTitle,
-                      hintText: LangStrings.SongTitle,
+                      labelText: LangStrings.songTitle,
+                      hintText: LangStrings.songTitle,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0))),
                 ),
@@ -111,8 +111,8 @@ class SongEditState extends State<SongEdit> {
                     updateContent();
                   },
                   decoration: InputDecoration(
-                      labelText: LangStrings.SongContent,
-                      hintText: LangStrings.SongContent,
+                      labelText: LangStrings.songContent,
+                      hintText: LangStrings.songContent,
                       //helperText: LangStrings.SongContent,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0))),
@@ -150,8 +150,8 @@ class SongEditState extends State<SongEdit> {
                     updateKey();
                   },
                   decoration: InputDecoration(
-                      labelText: LangStrings.SongKey,
-                      hintText: LangStrings.SongKey,
+                      labelText: LangStrings.songKey,
+                      hintText: LangStrings.songKey,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0))),
                 ),
@@ -165,8 +165,8 @@ class SongEditState extends State<SongEdit> {
                     updateContent();
                   },
                   decoration: InputDecoration(
-                      labelText: LangStrings.SongNotes,
-                      hintText: LangStrings.SongNotes,
+                      labelText: LangStrings.songNotes,
+                      hintText: LangStrings.songNotes,
                       //helperText: LangStrings.SongContent,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0))),
@@ -182,8 +182,8 @@ class SongEditState extends State<SongEdit> {
                     updateAlias();
                   },
                   decoration: InputDecoration(
-                      labelText: LangStrings.SongNotes,
-                      hintText: LangStrings.SongNotes,
+                      labelText: LangStrings.songNotes,
+                      hintText: LangStrings.songNotes,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0))),
                 ),

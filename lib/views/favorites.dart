@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:provider/provider.dart';
+import 'package:vsongbook/utils/constants.dart';
 import 'package:vsongbook/helpers/app_settings.dart';
 import 'package:vsongbook/models/book_model.dart';
 import 'package:vsongbook/models/song_model.dart';
 import 'package:vsongbook/helpers/app_database.dart';
 import 'package:vsongbook/screens/song_view.dart';
-import 'package:vsongbook/utils/constants.dart';
-import 'package:vsongbook/widgets/as_progress_widget.dart';
+import 'package:vsongbook/widgets/as_progress.dart';
 
-class AsFavorites extends StatefulWidget {
+class Favorites extends StatefulWidget {
   @override
-  createState() => AsFavoritesState();
+  createState() => FavoritesState();
 }
 
-class AsFavoritesState extends State<AsFavorites> {
-  AsProgressWidget progressWidget =
-      AsProgressWidget.getProgressWidget(LangStrings.Sis_Patience);
+class FavoritesState extends State<Favorites> {
+  AsProgress progress = AsProgress.getAsProgress(LangStrings.somePatience);
   TextEditingController txtSearch = new TextEditingController(text: "");
-  SqliteHelper db = SqliteHelper();
+  final ScrollController _scrollController = ScrollController();
+  AppDatabase db = AppDatabase();
 
   Future<Database> dbFuture;
   List<BookModel> books;
@@ -41,60 +41,23 @@ class AsFavoritesState extends State<AsFavorites> {
                   fit: BoxFit.cover)),
       child: new Stack(
         children: <Widget>[
-          new Container(
-            margin: EdgeInsets.only(top: 5),
+          Container(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: new Column(
-              children: <Widget>[
-                searchBox(),
-              ],
-            ),
+            child: progress,
           ),
           Container(
-            height: MediaQuery.of(context).size.height - 100,
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: progressWidget,
-          ),
-          Container(
-            height: MediaQuery.of(context).size.height - 100,
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            margin: EdgeInsets.only(top: 60),
-            child: ListView.builder(
-              itemCount: songs.length,
-              itemBuilder: songListView,
+            margin: EdgeInsets.only(top: 60),            
+            child: Scrollbar(
+              isAlwaysShown: true,
+              controller: _scrollController,
+              child: ListView.builder(
+                itemCount: songs.length,
+                itemBuilder: songListView,
+              ),
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget searchBox() {
-    return new Card(
-      elevation: 2,
-      child: new TextField(
-        controller: txtSearch,
-        style: TextStyle(fontSize: 18),
-        decoration: InputDecoration(
-            prefixIcon: Padding(
-              padding: const EdgeInsetsDirectional.only(end: 12.0),
-              child: IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () => searchSong(),
-              ),
-            ),
-            suffixIcon: Padding(
-              padding: const EdgeInsetsDirectional.only(end: 12.0),
-              child: IconButton(
-                icon: Icon(Icons.clear),
-                onPressed: () => clearSearch(),
-              ),
-            ),
-            hintText: LangStrings.SearchNow,
-            hintStyle: TextStyle(fontSize: 18)),
-        onChanged: (value) {
-          searchSong();
-        },
       ),
     );
   }
@@ -117,22 +80,20 @@ class AsFavoritesState extends State<AsFavorites> {
     }
 
     if (songs[index].content.contains("CHORUS")) {
-      songContent = songContent + LangStrings.HasChorus;
-      songContent = songContent + verses.length.toString() + LangStrings.Verses;
+      songContent = songContent + LangStrings.hasChorus;
+      songContent = songContent + verses.length.toString() + LangStrings.verses;
     } else {
-      songContent = songContent + LangStrings.NoChorus;
-      songContent = songContent + verses.length.toString() + LangStrings.Verses;
+      songContent = songContent + LangStrings.noChorus;
+      songContent = songContent + verses.length.toString() + LangStrings.verses;
     }
 
     return Card(
       elevation: 2,
       child: ListTile(
-        title: Text(songTitle,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        title: Text(songTitle, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         subtitle: Text(songContent, style: TextStyle(fontSize: 18)),
         onTap: () {
-          navigateToSong(songs[index], songTitle,
-              "Song #" + songs[index].number.toString() + " - " + songbook);
+          navigateToSong(songs[index], "Song #" + songs[index].number.toString() + " - " + songbook);
         },
       ),
     );
@@ -157,7 +118,7 @@ class AsFavoritesState extends State<AsFavorites> {
       songListFuture.then((songList) {
         setState(() {
           songs = songList;
-          progressWidget.hideProgress();
+          progress.hideProgress();
         });
       });
     });
@@ -187,11 +148,11 @@ class AsFavoritesState extends State<AsFavorites> {
     updateSongList();
   }
 
-  void navigateToSong(SongModel song, String title, String songbook) async {
+  void navigateToSong(SongModel song, String songbook) async {
     bool haschorus = false;
     if (song.content.contains("CHORUS")) haschorus = true;
     await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return SongView(song, haschorus, title, songbook);
+      return EeSongView(song, haschorus, songbook);
     }));
   }
 }

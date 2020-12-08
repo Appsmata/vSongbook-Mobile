@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:vsongbook/utils/constants.dart';
 import 'package:vsongbook/helpers/app_settings.dart';
 import 'package:vsongbook/screens/song_books.dart';
 import 'package:vsongbook/screens/about_app.dart';
 import 'package:vsongbook/screens/donate.dart';
 import 'package:vsongbook/screens/help_desk.dart';
 
-class AsNavDrawer extends StatefulWidget {
+class NavDrawer extends StatefulWidget {
   @override
-  createState() => new AsNavDrawerState();
+  createState() => new NavDrawerState();
 }
 
-class AsNavDrawerState extends State<AsNavDrawer> {
+class NavDrawerState extends State<NavDrawer> {
   final globalKey = new GlobalKey<ScaffoldState>();
 
   @override
@@ -26,7 +27,7 @@ class AsNavDrawerState extends State<AsNavDrawer> {
             onTap: () {},
             leading: Icon(
                 settings.isDarkMode ? Icons.brightness_4 : Icons.brightness_7),
-            title: Text('Dark Mode'),
+            title: Text(LangStrings.darkMode),
             trailing: Switch(
               onChanged: (bool value) => settings.setDarkMode(value),
               value: settings.isDarkMode,
@@ -36,41 +37,35 @@ class AsNavDrawerState extends State<AsNavDrawer> {
         Divider(),
         ListTile(
             leading: Icon(Icons.build),
-            title: Text('Manage Songbooks'),
+            title: Text(LangStrings.manageSongbooks),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return SongBooks();
+                return DdSongBooks();
               }));
             }),
         ListTile(
             leading: Icon(Icons.card_membership),
-            title: Text('Support us'),
+            title: Text(LangStrings.supportUs),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return Donate();
+                return GgDonate();
               }));
             }),
-        Divider(),
-        /*ListTile(
-          leading: Icon(Icons.settings),
-          title: Text('App Settings'),
-          //onTap: () => Navigator.pushReplacement( context, new MaterialPageRoute(builder: (context) => new XBasicScreen()))
-        ),
-        ListTile(leading: Icon(Icons.update), title: Text('App Updates')),*/
+        Divider(),        
         ListTile(
             leading: Icon(Icons.help),
-            title: Text('Help & Feedback'),
+            title: Text(LangStrings.helpFeedback),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return HelpDesk();
+                return GgHelpDesk();
               }));
             }),
         ListTile(
             leading: Icon(Icons.info),
-            title: Text('About vSongBook'),
+            title: Text(LangStrings.aboutTheApp + LangStrings.appName),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return AboutApp();
+                return GgAboutApp();
               }));
             }),
       ],
@@ -79,8 +74,8 @@ class AsNavDrawerState extends State<AsNavDrawer> {
 
   Widget drawerHeader() {
     return UserAccountsDrawerHeader(
-      accountName: Text('vSongBook v1.7.0'),
-      accountEmail: Text("Freedom to sing anywhere"),
+      accountName: Text(LangStrings.appName + LangStrings.appVersion),
+      accountEmail: Text(LangStrings.appSlogan),
       currentAccountPicture: CircleAvatar(
         child: new Image(
           image: new AssetImage("assets/images/appicon.png"),

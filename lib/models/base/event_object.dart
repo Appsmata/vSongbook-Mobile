@@ -1,4 +1,4 @@
-import 'package:vsongbook/utils/Constants.dart';
+import 'package:vsongbook/utils/constants.dart';
 
 class EventObject {
   int id;

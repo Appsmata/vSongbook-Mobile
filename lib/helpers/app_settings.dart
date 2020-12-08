@@ -3,18 +3,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vsongbook/utils/constants.dart';
 
 class AppSettings extends ChangeNotifier {
-  /*static final _kRoutenameToRouteMap = {
-    for (MyRoute route in kAllRoutes) route.routeName: route
-  };*/
-
+  
   final SharedPreferences _pref;
 
   AppSettings(this._pref);
 
-  bool get isDarkMode => _pref?.getBool(SharedPreferenceKeys.DarkMode) ?? false;
+  bool get isDarkMode => _pref?.getBool(SharedPreferenceKeys.darkMode) ?? false;
 
   void setDarkMode(bool val) {
-    _pref?.setBool(SharedPreferenceKeys.DarkMode, val);
+    _pref?.setBool(SharedPreferenceKeys.darkMode, val);
     notifyListeners();
   }
 
@@ -24,7 +21,7 @@ class AppSettings extends ChangeNotifier {
       val = false;
     else
       val = true;
-    _pref?.setBool(SharedPreferenceKeys.DarkMode, val);
+    _pref?.setBool(SharedPreferenceKeys.darkMode, val);
     notifyListeners();
   }
 }

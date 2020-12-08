@@ -38,7 +38,7 @@ class SplashPageState extends State<AppStart> {
   void _handleTapEvent() async {
     bool booksLoaded = await Preferences.areAppBooksLoaded();
     bool songsLoaded = await Preferences.areAppSongsLoaded();
-    String books = await Preferences.getSharedPreferenceStr(SharedPreferenceKeys.Selected_Books);
+    String books = await Preferences.getSharedPreferenceStr(SharedPreferenceKeys.selectedBooks);
 
       if (this.mounted) {
       setState(() {
@@ -46,14 +46,14 @@ class SplashPageState extends State<AppStart> {
           {
             if (songsLoaded != null && songsLoaded)
             {
-              Navigator.pushReplacement( context, new MaterialPageRoute(builder: (context) => new HomeView(books)));
+              Navigator.pushReplacement( context, new MaterialPageRoute(builder: (context) => new DdHomeView(books)));
             }
             else {
-              Navigator.pushReplacement( context, new MaterialPageRoute(builder: (context) => new SongsLoad())); 
+              Navigator.pushReplacement( context, new MaterialPageRoute(builder: (context) => new CcSongsLoad())); 
             }
           }
           else {
-            Navigator.pushReplacement( context, new MaterialPageRoute(builder: (context) => new BooksLoad()));
+            Navigator.pushReplacement( context, new MaterialPageRoute(builder: (context) => new CcBooksLoad()));
           }
       });
     }

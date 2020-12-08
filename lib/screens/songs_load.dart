@@ -10,32 +10,32 @@ import 'package:vsongbook/utils/preferences.dart';
 import 'package:vsongbook/utils/constants.dart';
 import 'package:vsongbook/helpers/app_database.dart';
 import 'package:vsongbook/screens/app_start.dart';
-import 'package:vsongbook/views/as_text_view.dart';
+import 'package:vsongbook/widgets/as_text_view.dart';
 import 'package:vsongbook/widgets/as_line_progress.dart';
 
-class SongsLoad extends StatefulWidget {
+class CcSongsLoad extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return SongsLoadState();
+    return CcSongsLoadState();
   }
 }
 
-class SongsLoadState extends State<SongsLoad> {
-  AsTextView textIndicator = AsTextView.setUp("Getting ready ...", 25, true);
+class CcSongsLoadState extends State<CcSongsLoad> {
+  AsTextView textIndicator = AsTextView.setUp(LangStrings.gettingReady, 25, true);
   AsTextView textProgress = AsTextView.setUp("", 25, true);
   AsLineProgress lineProgress = AsLineProgress.setUp(300, 0);
   final globalKey = new GlobalKey<ScaffoldState>();
 
-  SqliteHelper databaseHelper = SqliteHelper();
+  AppDatabase databaseHelper = AppDatabase();
   List<Song> songs;
 
   void requestData() async {
     String books = await Preferences.getSharedPreferenceStr(
-        SharedPreferenceKeys.Selected_Books);
+        SharedPreferenceKeys.selectedBooks);
     EventObject eventObject = await getSongs(books);
 
     switch (eventObject.id) {
-      case EventConstants.Request_Successful:
+      case EventConstants.requestSuccessful:
         {
           setState(() {
             //globalKey.currentState.showSnackBar(new SnackBar(content: new Text(LangStrings.Request_Successful)));
@@ -46,7 +46,7 @@ class SongsLoadState extends State<SongsLoad> {
         }
         break;
 
-      case EventConstants.Request_Unsuccessful:
+      case EventConstants.requestUnsuccessful:
         {
           setState(() {
             //globalKey.currentState.showSnackBar(new SnackBar(content: new Text(LangStrings.Request_Unsuccessful)));
@@ -55,7 +55,7 @@ class SongsLoadState extends State<SongsLoad> {
         }
         break;
 
-      case EventConstants.No_Internet_Connection:
+      case EventConstants.noInternetConnection:
         {
           setState(() {
             //globalKey.currentState.showSnackBar(new SnackBar(content: new Text(LangStrings.No_Internet_Connection)));
@@ -192,7 +192,7 @@ class SongsLoadState extends State<SongsLoad> {
   }
 
   Future<void> saveData() async {
-    SqliteHelper db = SqliteHelper();
+    AppDatabase db = AppDatabase();
 
     for (int i = 0; i < songs.length; i++) {
       int progress = (i / songs.length * 100).toInt();
@@ -239,7 +239,7 @@ class SongsLoadState extends State<SongsLoad> {
       String content =
           item.content.replaceAll("\n", "\\n").replaceAll("'", "''");
 
-      SongModel song = new SongModel(itemid, bookid, "S", number, title, alias,
+      SongModel song = new SongModel(itemid, bookid, "", "S", number, title, alias,
           content, "", "", userid, item.created);
       await db.insertSong(song);
     }

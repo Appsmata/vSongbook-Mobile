@@ -6,20 +6,19 @@ import 'package:vsongbook/models/song_model.dart';
 import 'package:vsongbook/helpers/app_database.dart';
 import 'package:vsongbook/screens/song_edit.dart';
 import 'package:vsongbook/screens/song_view.dart';
-//import 'package:vsongbook/utils/preferences.dart';
 import 'package:vsongbook/utils/constants.dart';
-import 'package:vsongbook/widgets/as_progress_widget.dart';
+import 'package:vsongbook/widgets/as_progress.dart';
 
-class AsSongPad extends StatefulWidget {
+class SongPad extends StatefulWidget {
   @override
-  createState() => AsSongPadState();
+  createState() => SongPadState();
 }
 
-class AsSongPadState extends State<AsSongPad> {
-  AsProgressWidget progressWidget =
-      AsProgressWidget.getProgressWidget(LangStrings.Sis_Patience);
+class SongPadState extends State<SongPad> {
+  AsProgress progress = AsProgress.getAsProgress(LangStrings.somePatience);
   TextEditingController txtSearch = new TextEditingController(text: "");
-  SqliteHelper db = SqliteHelper();
+  final ScrollController _scrollController = ScrollController();
+  AppDatabase db = AppDatabase();
 
   Future<Database> dbFuture;
   List<SongModel> songs;
@@ -39,27 +38,20 @@ class AsSongPadState extends State<AsSongPad> {
                   fit: BoxFit.cover)),
       child: new Stack(
         children: <Widget>[
-          new Container(
-            margin: EdgeInsets.only(top: 5),
+          Container(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: new Column(
-              children: <Widget>[
-                searchBox(),
-              ],
-            ),
+            child: progress,
           ),
           Container(
-            height: MediaQuery.of(context).size.height - 100,
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: progressWidget,
-          ),
-          Container(
-            height: MediaQuery.of(context).size.height - 100,
             padding: const EdgeInsets.symmetric(horizontal: 10),
             margin: EdgeInsets.only(top: 60),
-            child: ListView.builder(
-              itemCount: songs.length,
-              itemBuilder: songListView,
+            child: Scrollbar(
+              isAlwaysShown: true,
+              controller: _scrollController,
+              child: ListView.builder(
+                itemCount: songs.length,
+                itemBuilder: songListView,
+              ),
             ),
           ),
           Container(
@@ -68,7 +60,7 @@ class AsSongPadState extends State<AsSongPad> {
                 left: MediaQuery.of(context).size.width - 100),
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: FloatingActionButton(
-              tooltip: 'Add a Song',
+              tooltip: LangStrings.addASong,
               child: Icon(Icons.add),
               onPressed: newSong,
             ),
@@ -79,50 +71,19 @@ class AsSongPadState extends State<AsSongPad> {
   }
 
   void newSong() {
-    SongModel song =
-        new SongModel(0, Columns.ownsongs, "S", 0, "", "", "", "", "", 0, "");
-    navigateToDraft(song, 'Draft a Song');
+    SongModel song = new SongModel(0, Columns.ownsongs, "", "S", 0, "", "", "", "", "", 0, "");
+    navigateToDraft(song, LangStrings.draftASong);
   }
 
   void navigateToDraft(SongModel song, String title) async {
-    bool result =
-        await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return SongEdit(song, title);
-    }));
+      bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return EeSongEdit(song, title);
+      }
+    ));
 
     if (result == true) {
       updateListView();
     }
-  }
-
-  Widget searchBox() {
-    return new Card(
-      elevation: 2,
-      child: new TextField(
-        controller: txtSearch,
-        style: TextStyle(fontSize: 18),
-        decoration: InputDecoration(
-            prefixIcon: Padding(
-              padding: const EdgeInsetsDirectional.only(end: 12.0),
-              child: IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () => searchSong(),
-              ),
-            ),
-            suffixIcon: Padding(
-              padding: const EdgeInsetsDirectional.only(end: 12.0),
-              child: IconButton(
-                icon: Icon(Icons.clear),
-                onPressed: () => clearSearch(),
-              ),
-            ),
-            hintText: "Search a draft",
-            hintStyle: TextStyle(fontSize: 18)),
-        onChanged: (value) {
-          searchSong();
-        },
-      ),
-    );
   }
 
   Widget songListView(BuildContext context, int index) {
@@ -137,7 +98,7 @@ class AsSongPadState extends State<AsSongPad> {
         title: Text(songTitle, style: TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text(songContent),
         onTap: () {
-          navigateToSong(songs[index], songTitle);
+          navigateToSong(songs[index]);
         },
       ),
     );
@@ -150,7 +111,7 @@ class AsSongPadState extends State<AsSongPad> {
       songListFuture.then((songList) {
         setState(() {
           songs = songList;
-          progressWidget.hideProgress();
+          progress.hideProgress();
         });
       });
     });
@@ -180,11 +141,11 @@ class AsSongPadState extends State<AsSongPad> {
     updateListView();
   }
 
-  void navigateToSong(SongModel song, String title) async {
+  void navigateToSong(SongModel song) async {
     bool haschorus = false;
     if (song.content.contains("CHORUS")) haschorus = true;
     await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return SongView(song, haschorus, title, "My Own Songs");
+      return EeSongView(song, haschorus, "My Own Songs");
     }));
   }
 }

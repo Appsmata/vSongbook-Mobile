@@ -3,15 +3,15 @@ import 'package:provider/provider.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:vsongbook/helpers/app_settings.dart';
-import 'package:vsongbook/utils/Constants.dart';
+import 'package:vsongbook/utils/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class HelpDesk extends StatefulWidget {
+class GgHelpDesk extends StatefulWidget {
   @override
-  createState() => new HelpDeskState();
+  createState() => new GgHelpDeskState();
 }
 
-class HelpDeskState extends State<HelpDesk> {
+class GgHelpDeskState extends State<GgHelpDesk> {
   final globalKey = new GlobalKey<ScaffoldState>();
 
   @override

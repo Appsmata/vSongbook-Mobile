@@ -38,7 +38,7 @@ class AsProgress extends StatefulWidget {
     progressState.showProgressWithText(title);
   }
 
-  static Widget getProgress(String title) {
+  static Widget getAsProgress(String title) {
     return new AsProgress(
       backgroundColor: Colors.black12,
       color: Colors.black,

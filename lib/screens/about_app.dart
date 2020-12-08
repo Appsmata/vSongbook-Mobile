@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:backdrop/backdrop.dart';
-import 'package:vsongbook/utils/colored_tab_bar.dart';
+import 'package:vsongbook/utils/colored_tabbar.dart';
 import 'package:vsongbook/utils/constants.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 
-class AboutApp extends StatefulWidget {
+class GgAboutApp extends StatefulWidget {
   @override
-  createState() => new AboutAppState();
+  createState() => new GgAboutAppState();
 }
 
-class AboutAppState extends State<AboutApp> {
+class GgAboutAppState extends State<GgAboutApp> {
   final globalKey = new GlobalKey<ScaffoldState>();
 
   @override
