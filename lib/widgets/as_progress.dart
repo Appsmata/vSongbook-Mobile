@@ -70,8 +70,7 @@ class AsProgressState extends State<AsProgress> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: !_opacity ? null : new Opacity(
-        opacity: _opacity ? 1 : 0,
+      child: !_opacity ? null : new Opacity(opacity: _opacity ? 1 : 0,
         child: Stack(
           children: <Widget>[
             new Center(

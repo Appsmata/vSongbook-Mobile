@@ -14,7 +14,6 @@ import 'package:vsongbook/screens/song_view.dart';
 import 'package:vsongbook/views/song_item.dart';
 import 'package:vsongbook/widgets/as_progress.dart';
 import 'package:vsongbook/widgets/as_text_view.dart';
-import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 class SongList extends StatefulWidget {
   final int book;
@@ -36,7 +35,6 @@ class SongListState extends State<SongList> {
   TextEditingController txtSearch = new TextEditingController(text: "");
   AsTextView textResult = AsTextView.setUp(LangStrings.searchResult, 15, false);
   AppDatabase db = AppDatabase();
-  final GlobalKey<LiquidPullToRefreshState> _refreshIndicatorKey = GlobalKey<LiquidPullToRefreshState>();
   final ScrollController _scrollController = ScrollController();
 
   SongListState({this.book});

@@ -118,7 +118,6 @@ class SongBooksState extends State<SongBooks> {
       },
       child: Scaffold(
         appBar: AppBar(
-          centerTitle: true,
           title: Text(LangStrings.setUpTheApp),
           actions: <Widget>[
             IconButton(

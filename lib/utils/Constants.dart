@@ -97,6 +97,7 @@ class LangStrings {
   static const String userSignin = "Signing you in ...";
   static const String userChangePassword = "Changing ...";
   static const String userSignup = "Signing you up ...";
+  static const String fetchingData = "Fetching Data ...";
   static const String gettingReady = "Getting ready ...";
   static const String somePatience = "Eish! ... Some patience ...";
 
@@ -150,6 +151,7 @@ class LangStrings {
   static const String signupNow = "Not registered? Register now !";
   static const String signinNow = "Already registered? Login now !";
   static const String login = "Login";
+  static const String reload = "RELOAD";
   static const String proceed = "PROCEED";
   static const String register = "Register";
   static const String password = "Password";

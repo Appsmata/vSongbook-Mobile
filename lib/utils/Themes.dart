@@ -18,7 +18,7 @@ ThemeData _buildLightTheme() {
     accentColorBrightness: Brightness.dark,
     colorScheme: colorScheme,
     primaryColor: primaryColor,
-    buttonColor: primaryColor,
+    buttonColor: secondaryColor,
     indicatorColor: ColorUtils.white,
     toggleableActiveColor: ColorUtils.activeColor,
     splashColor: ColorUtils.splashColor,

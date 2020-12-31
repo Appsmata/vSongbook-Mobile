@@ -31,8 +31,7 @@ class SongView extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return SongViewState(
-        this.song, this.haschorus, this.book);
+    return SongViewState(this.song, this.haschorus, this.book);
   }
 }
 
@@ -69,7 +68,10 @@ class SongViewState extends State<SongView> {
   }
 
   void getListView() async {
-    await setContent();
+    try {
+      await setContent();
+    }
+    catch (Exception) { }
   }
 
   @override
