@@ -32,21 +32,20 @@ class BooksLoadState extends State<BooksLoad> {
   AppDatabase databaseHelper = AppDatabase();
   List<BookItem<Book>> selected = [];
   List<BookItem<Book>> bookList;
-  List<Book> books;
+  List<Book> books = List<Book>();
 
   bool darkModePressed = false;
 
-
   BooksLoadState();
-
-  void populateData() {
-    bookList = [];
-    for (int i = 0; i < books.length; i++)
-      bookList.add(BookItem<Book>(books[i]));
+  
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => requestData(context));
   }
 
-  void requestData() async {
-    books = List<Book>();
+  void requestData(BuildContext context) async {
     progress.showProgress();
 
     EventObject eventObject = await getSongbooks();
@@ -57,10 +56,12 @@ class BooksLoadState extends State<BooksLoad> {
           setState(() {
             showDialog(
                 context: context,
-                builder: (BuildContext context) => justAMinuteDialog());
+                builder: (context) => justAMinuteDialog());
             progress.hideProgress();
             books = eventObject.object;
-            populateData();
+            bookList = [];
+            for (int i = 0; i < books.length; i++)
+              bookList.add(BookItem<Book>(books[i]));
           });
         }
         break;
@@ -70,7 +71,7 @@ class BooksLoadState extends State<BooksLoad> {
           setState(() {
             showDialog(
                 context: context,
-                builder: (BuildContext context) => noInternetDialog());
+                builder: (context) => noInternetDialog());
             progress.hideProgress();
           });
         }
@@ -81,7 +82,7 @@ class BooksLoadState extends State<BooksLoad> {
           setState(() {
             showDialog(
               context: context,
-              builder: (BuildContext context) => noInternetDialog()
+              builder: (context) => noInternetDialog()
             );
             progress.hideProgress();
           });
@@ -89,11 +90,7 @@ class BooksLoadState extends State<BooksLoad> {
         break;
     }
   }
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => requestData());
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -148,8 +145,8 @@ class BooksLoadState extends State<BooksLoad> {
             margin: EdgeInsets.only(top: 50),
             child: ListView.builder(
               physics: BouncingScrollPhysics(),
-                  itemCount: books.length,
-                  itemBuilder: bookListView,
+              itemCount: books.length,
+              itemBuilder: bookListView,
             ),
           ),
           Container(
@@ -169,7 +166,7 @@ class BooksLoadState extends State<BooksLoad> {
                         label: Text(LangStrings.reload, style: TextStyle(color: ColorUtils.white)),
                         onPressed: () {
                           books = List<Book>();
-                          requestData();
+                          requestData(context);
                         },
                       ),
                     ),
@@ -367,7 +364,7 @@ class BooksLoadState extends State<BooksLoad> {
             },
           ),
         ),
-        new Container(
+        Container(
           margin: EdgeInsets.all(5),
           child: FlatButton(
             child: Text(LangStrings.retry, style: new TextStyle(fontSize: 20)),
@@ -376,7 +373,7 @@ class BooksLoadState extends State<BooksLoad> {
             onPressed: () {
               Navigator.pop(context);
               books = List<Book>();
-              requestData();
+              requestData(context);
             },
           ),
         ),
