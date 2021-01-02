@@ -39,7 +39,7 @@ class SongsLoadState extends State<SongsLoad> {
         {
           setState(() {
             //globalKey.currentState.showSnackBar(new SnackBar(content: new Text(LangStrings.Request_Successful)));
-            //progressDialog.hideProgress();
+            //progressDialog.hideWidget();
             songs = eventObject.object;
             _goToNextScreen();
           });
@@ -50,7 +50,7 @@ class SongsLoadState extends State<SongsLoad> {
         {
           setState(() {
             //globalKey.currentState.showSnackBar(new SnackBar(content: new Text(LangStrings.Request_Unsuccessful)));
-            //progressDialog.hideProgress();
+            //progressDialog.hideWidget();
           });
         }
         break;
@@ -59,7 +59,7 @@ class SongsLoadState extends State<SongsLoad> {
         {
           setState(() {
             //globalKey.currentState.showSnackBar(new SnackBar(content: new Text(LangStrings.No_Internet_Connection)));
-            //progressDialog.hideProgress();
+            //progressDialog.hideWidget();
           });
         }
         break;
@@ -235,7 +235,7 @@ class SongsLoadState extends State<SongsLoad> {
       int userid = item.userid == null ? 0 : int.parse(item.userid);
 
       String title = item.title.replaceAll("\n", "\\n").replaceAll("'", "''");
-      String alias = item.title.replaceAll("\n", "\\n").replaceAll("'", "''");
+      String alias = item.alias.replaceAll("\n", "\\n").replaceAll("'", "''");
       String content =
           item.content.replaceAll("\n", "\\n").replaceAll("'", "''");
 

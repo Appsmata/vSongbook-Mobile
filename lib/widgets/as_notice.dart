@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:vsongbook/utils/colors.dart';
 
-class AsProgress extends StatefulWidget {
+class AsNotice extends StatefulWidget {
   Color backgroundColor;
   Color color;
   Color containerColor;
   double borderRadius;
   String text;
-  AsProgressState progressState;
+  AsNoticeState noticeState;
 
-  AsProgress(
+  AsNotice(
     {
       this.backgroundColor = Colors.black54,
       this.color = Colors.white,
@@ -20,7 +20,7 @@ class AsProgress extends StatefulWidget {
   );
 
   @override
-  createState() => progressState = AsProgressState(
+  createState() => noticeState = AsNoticeState(
       backgroundColor: this.backgroundColor,
       color: this.color,
       containerColor: this.containerColor,
@@ -28,19 +28,19 @@ class AsProgress extends StatefulWidget {
       text: this.text);
 
   void hideWidget() {
-    progressState.hideWidget();
+    noticeState.hideWidget();
   }
 
   void showWidget() {
-    progressState.showWidget();
+    noticeState.showWidget();
   }
 
   void showWidgetWithText(String title) {
-    progressState.showWidgetWithText(title);
+    noticeState.showWidgetWithText(title);
   }
 
-  static Widget getProgress(String title) {
-    return AsProgress(
+  static Widget getNotice(String title) {
+    return AsNotice(
       backgroundColor: Colors.black12,
       color: Colors.black,
       containerColor: Colors.white,
@@ -50,7 +50,7 @@ class AsProgress extends StatefulWidget {
   }
 }
 
-class AsProgressState extends State<AsProgress> {
+class AsNoticeState extends State<AsNotice> {
   Color backgroundColor;
   Color color;
   Color containerColor;
@@ -58,7 +58,7 @@ class AsProgressState extends State<AsProgress> {
   String text;
   bool _opacity = false;
 
-  AsProgressState(    
+  AsNoticeState(    
     {
       this.backgroundColor = Colors.black54,
       this.color = Colors.white,
@@ -78,7 +78,7 @@ class AsProgressState extends State<AsProgress> {
             Center(
               child: Container(
                 width: 300,
-                height: 120,
+                height: 350,
                 decoration: BoxDecoration(
                   color: containerColor,
                   border: Border.all(color: ColorUtils.primaryColor),
@@ -99,30 +99,22 @@ class AsProgressState extends State<AsProgress> {
   }
 
   Widget _getCenterContent() {
-    if (text == null || text.isEmpty) {
-      return _getCircularProgress();
-    }
-
     return Center(
-      child: Row(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _getCircularProgress(),
+          Icon(Icons.warning, color: ColorUtils.primaryColor, size: 200),
           Container(
             margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+            width: 300,
             child: Text(
               text,
-              style: TextStyle(color: color, fontSize: 18),
+              style: TextStyle(color: color, fontSize: 25),
             ),
           )
         ],
       ),
     );
-  }
-
-  Widget _getCircularProgress() {
-    return CircularProgressIndicator(
-        valueColor: AlwaysStoppedAnimation(ColorUtils.primaryColor));
   }
 
   void hideWidget() {

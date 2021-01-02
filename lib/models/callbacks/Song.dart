@@ -2,6 +2,7 @@ class Song {
   String postid;
   String number;
   String title;
+  String alias;
   String content;
   String tags;
   String created;
@@ -15,6 +16,7 @@ class Song {
       {this.postid,
       this.number,
       this.title,
+      this.alias,
       this.content,
       this.tags,
       this.created,
@@ -28,6 +30,7 @@ class Song {
     postid = json['postid'];
     number = json['number'];
     title = json['title'];
+    alias = json['alias'];
     content = json['content'];
     tags = json['tags'];
     created = json['created'];
@@ -43,6 +46,7 @@ class Song {
     data['postid'] = this.postid;
     data['number'] = this.number;
     data['title'] = this.title;
+    data['alias'] = this.alias;
     data['content'] = this.content;
     data['tags'] = this.tags;
     data['created'] = this.created;

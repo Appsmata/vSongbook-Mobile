@@ -63,22 +63,22 @@ class APIResponseCode {
 }
 
 class SharedPreferenceKeys {
-  static const String isUserLoggedin = "vsbapp_user_signedin";
-  static const String userCountryName = "vsbapp_country_name";
-  static const String userCountryIcode = "vsbapp_country_icode";
-  static const String userCountryCcode = "vsbapp_country_ccode";
-  static const String appBooksLoaded = "vsbapp_books_loaded";
-  static const String appSongsLoaded = "vsbapp_songs_loaded";
-  static const String userMobile = "vsbapp_user_mobile";
-  static const String selectedBooks = "vsbapp_selected_books";
-  static const String user = "vsbapp_user";
-  static const String darkMode = "vsbapp_dark_mode";
-  static const String screenAwake = "vsbapp_screen_awake";
+  static const String isUserLoggedin = "songbook_user_signedin";
+  static const String userCountryName = "songbook_country_name";
+  static const String userCountryIcode = "songbook_country_icode";
+  static const String userCountryCcode = "songbook_country_ccode";
+  static const String appBooksLoaded = "songbook_books_loaded";
+  static const String appSongsLoaded = "songbook_songs_loaded";
+  static const String userMobile = "songbook_user_mobile";
+  static const String selectedBooks = "songbook_selected_books";
+  static const String user = "songbook_user";
+  static const String darkMode = "songbook_dark_mode";
+  static const String screenAwake = "songbook_screen_awake";
 }
 
 class LangStrings {
   static const String appName = "vSongBook";
-  static const String appVersion = " v1.7.6";
+  static const String appVersion = " v1.7.8";
   static const String appSlogan = "Freedom to sing anywhere";
 
   static const String appTheme = "Display Theme";
@@ -100,6 +100,8 @@ class LangStrings {
   static const String fetchingData = "Fetching Data ...";
   static const String gettingReady = "Getting ready ...";
   static const String somePatience = "Eish! ... Some patience ...";
+  static const String noFavs = "Oops! You are all caught up. Mmmmh... Why not start favouriting songs right away!";
+  static const String noDrafts = "Oops! You are all caught up. Mmmmh... Why not start drafting something right away!";
 
   static const String copySong = "Copy Song to Clipboard";
   static const String shareSong = "Share this Song";

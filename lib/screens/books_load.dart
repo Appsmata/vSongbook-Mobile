@@ -27,7 +27,7 @@ class BooksLoad extends StatefulWidget {
 class BooksLoadState extends State<BooksLoad> {
   var appBar = AppBar();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  AsProgress progress = AsProgress.getAsProgress(LangStrings.fetchingData);
+  AsProgress progress = AsProgress.getProgress(LangStrings.fetchingData);
 
   AppDatabase databaseHelper = AppDatabase();
   List<BookItem<Book>> selected = [];
@@ -41,12 +41,11 @@ class BooksLoadState extends State<BooksLoad> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => requestData(context));
+    WidgetsBinding.instance.addPostFrameCallback((_) => requestData(context));
   }
 
   void requestData(BuildContext context) async {
-    progress.showProgress();
+    progress.showWidget();
 
     EventObject eventObject = await getSongbooks();
 
@@ -57,7 +56,7 @@ class BooksLoadState extends State<BooksLoad> {
             showDialog(
                 context: context,
                 builder: (context) => justAMinuteDialog());
-            progress.hideProgress();
+            progress.hideWidget();
             books = eventObject.object;
             bookList = [];
             for (int i = 0; i < books.length; i++)
@@ -72,7 +71,7 @@ class BooksLoadState extends State<BooksLoad> {
             showDialog(
                 context: context,
                 builder: (context) => noInternetDialog());
-            progress.hideProgress();
+            progress.hideWidget();
           });
         }
         break;
@@ -84,7 +83,7 @@ class BooksLoadState extends State<BooksLoad> {
               context: context,
               builder: (context) => noInternetDialog()
             );
-            progress.hideProgress();
+            progress.hideWidget();
           });
         }
         break;
@@ -542,7 +541,7 @@ class BooksLoadState extends State<BooksLoad> {
   }
 
   void _goToNextScreen() {
-    progress.showProgress();
+    progress.showWidget();
     saveData();
 
     String selectedbooks = "";
@@ -553,7 +552,7 @@ class BooksLoadState extends State<BooksLoad> {
       selectedbooks = selectedbooks.substring(0, selectedbooks.length - 1);
     } catch (Exception) {}
 
-    progress.hideProgress();
+    progress.hideWidget();
     Preferences.setBooksLoaded(true);
     Preferences.setSelectedBooks(selectedbooks);
     Navigator.pushReplacement(context,

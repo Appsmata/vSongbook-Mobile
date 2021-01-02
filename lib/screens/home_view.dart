@@ -14,35 +14,35 @@ import 'package:vsongbook/helpers/app_search_delegate.dart';
 import 'package:vsongbook/views/nav_drawer.dart';
 
 class HomeView extends StatefulWidget {
-  final String bookstr;
-  HomeView(this.bookstr);
 
   @override
-  State<StatefulWidget> createState() {
-    return HomeViewState(this.bookstr);
-  }
+  createState() => new HomeViewState();
 }
 
 class HomeViewState extends State<HomeView> {
-  HomeViewState(this.bookstr);
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  int _lastIntegerSelected;
+  HomeViewState();
   NavDrawer navDrawer;
-  String bookstr;
 
   AppDatabase db = AppDatabase();
-  List<BookModel> bookList;
-  List<SongModel> songList;
+  List<BookModel> bookList = List<BookModel>();
+  List<SongModel> songList = List<SongModel>();
 	int count = 0;
 
-  void updateBookList() {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => updateBookList(context));
+  }
+
+  void updateBookList(BuildContext context) {
     final Future<Database> dbFuture = db.initializeDatabase();
     dbFuture.then((database) {
       Future<List<BookModel>> bookListFuture = db.getBookList();
       bookListFuture.then((bookList) {
         setState(() {
           this.bookList = bookList;
+          updateSongList();
         });
       });
     });
@@ -62,17 +62,9 @@ class HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    if (songList == null) {
-      bookList = List<BookModel>();
-      songList = List<SongModel>();
-      updateBookList();
-      updateSongList();
-    }
-
-    var books = this.bookstr.split(",");
-    SongList home = SongList.getList(int.parse(books[0]));
-    Favorites likes = Favorites();
-    SongPad drafts = SongPad();
+    SongList home = SongList(bookList);
+    Favorites likes = Favorites(bookList);
+    SongPad drafts = SongPad(bookList);
     
     final appPages = <Widget>[
       Center(child: home),

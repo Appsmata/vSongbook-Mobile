@@ -23,7 +23,7 @@ class SongBooks extends StatefulWidget {
 class SongBooksState extends State<SongBooks> {
   var appBar = AppBar();
   final globalKey = new GlobalKey<ScaffoldState>();
-  AsProgress progress = AsProgress.getAsProgress(LangStrings.gettingReady);
+  AsProgress progress = AsProgress.getProgress(LangStrings.gettingReady);
 
   AppDatabase db = AppDatabase();
   Future<Database> dbFuture;
@@ -73,7 +73,7 @@ class SongBooksState extends State<SongBooks> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => justAMinuteDialog());
-            progress.hideProgress();
+            progress.hideWidget();
             books = eventObject.object;
             populateData();
           });
@@ -86,7 +86,7 @@ class SongBooksState extends State<SongBooks> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => noInternetDialog());
-            progress.hideProgress();
+            progress.hideWidget();
           });
         }
         break;
@@ -97,7 +97,7 @@ class SongBooksState extends State<SongBooks> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => noInternetDialog());
-            progress.hideProgress();
+            progress.hideWidget();
           });
         }
         break;
@@ -469,10 +469,10 @@ class SongBooksState extends State<SongBooks> {
   }
 
   void _goToNextScreen() {
-    progress.showProgress();
+    progress.showWidget();
     saveData();
 
-    progress.hideProgress();
+    progress.hideWidget();
     Navigator.pushReplacement(
         context, new MaterialPageRoute(builder: (context) => new AppStart()));
   }

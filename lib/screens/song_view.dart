@@ -162,15 +162,19 @@ class SongViewState extends State<SongView> {
   }
 
   Widget topPanel() {
-    return Center(
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        height: 50,
+    String songtitle = song.number.toString() + ". " + refineTitle(song.title);
+
+    if (song.alias.length > 2 && song.title != song.alias) songtitle = songtitle + "\n" + refineTitle(song.alias);
+
+    return Container(
+      padding: const EdgeInsets.all(10),
+      height: 80,
+      child: Center(
         child: Text(
-          song.number.toString() + ". " + refineTitle(song.title),
+          songtitle,
           style: new TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 25,
+            fontSize: 25, 
             color: Provider.of<AppSettings>(context).isDarkMode ? Colors.white : Colors.black),
         ),
       ),
@@ -179,7 +183,7 @@ class SongViewState extends State<SongView> {
 
   Widget songViewer() {
     return Container(
-      height: MediaQuery.of(context).size.height - 138,
+      height: MediaQuery.of(context).size.height - 170,
       decoration: Provider.of<AppSettings>(context).isDarkMode ? BoxDecoration() : BoxDecoration(color: Colors.orange[100]),
       child: VerticalTabs(
         tabsWidth: 50,
@@ -235,7 +239,7 @@ class SongViewState extends State<SongView> {
         verseText(lyrics, nfontsize, image, controller),
         verseTitle(verseTitles[index]),
         Container(
-          margin: EdgeInsets.only(top: MediaQuery.of(context).size.height - 210, left: 15),
+          margin: EdgeInsets.only(top: MediaQuery.of(context).size.height - 250, left: 15),
           child: Row(
             children: [
               copyVerse(index, lyrics),
@@ -284,7 +288,7 @@ class SongViewState extends State<SongView> {
         Screenshot(
           controller: screenshotController,
           child: Container(
-            height: MediaQuery.of(context).size.height - 235,
+            height: MediaQuery.of(context).size.height - 275,
             margin: EdgeInsets.only(top: 25),
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
             decoration: Provider.of<AppSettings>(context).isDarkMode ? BoxDecoration() : BoxDecoration(color: Colors.orange[100]),

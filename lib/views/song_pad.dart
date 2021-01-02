@@ -1,58 +1,79 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:provider/provider.dart';
-import 'package:vsongbook/helpers/app_settings.dart';
+import 'package:vsongbook/models/book_model.dart';
 import 'package:vsongbook/models/song_model.dart';
 import 'package:vsongbook/helpers/app_database.dart';
 import 'package:vsongbook/screens/song_edit.dart';
-import 'package:vsongbook/screens/song_view.dart';
+import 'package:vsongbook/views/song_item.dart';
+import 'package:vsongbook/widgets/as_loader.dart';
+import 'package:vsongbook/widgets/as_notice.dart';
 import 'package:vsongbook/utils/constants.dart';
-import 'package:vsongbook/widgets/as_progress.dart';
 
 class SongPad extends StatefulWidget {
+	final List<BookModel> books;
+  const SongPad(this.books);
+
   @override
   createState() => SongPadState();
+
 }
 
 class SongPadState extends State<SongPad> {
-  AsProgress progress = AsProgress.getAsProgress(LangStrings.somePatience);
-  TextEditingController txtSearch = new TextEditingController(text: "");
-  final ScrollController _scrollController = ScrollController();
+  AsNotice notice = AsNotice.getNotice(LangStrings.noDrafts);
+  AsLoader loader = AsLoader();
   AppDatabase db = AppDatabase();
 
+  SongPadState();
   Future<Database> dbFuture;
-  List<SongModel> songs;
+  List<SongModel> songs = List<SongModel>();
+  int book;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => loadListView(context));
+  }
+
+  void loadListView(BuildContext context) {
+    loader.showWidget();
+    dbFuture = db.initializeDatabase();
+    dbFuture.then((database) {
+      Future<List<SongModel>> songListFuture = db.getSongList(Columns.ownsongs);
+      songListFuture.then((songList) {
+        setState(() {
+          songs = songList;
+          loader.hideWidget();
+          if (songs.length == 0) notice.showWidget();
+          else notice.hideWidget();
+        });
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (songs == null) {
-      songs = [];
-      updateListView();
-    }
     return Container(
-      decoration: Provider.of<AppSettings>(context).isDarkMode
-          ? BoxDecoration()
-          : BoxDecoration(
-              image: DecorationImage(
-                  image: new AssetImage("assets/images/bg.jpg"),
-                  fit: BoxFit.cover)),
-      child: Stack(
-        children: <Widget>[
+      child: Stack(  
+        children: <Widget>[          
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: progress,
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: ListView.builder(
+              itemCount: songs.length,
+              //itemBuilder: songListView,
+              itemBuilder: (BuildContext context, int index) {
+                return SongItem('SongDraft_' + songs[index].songid.toString(), songs[index], widget.books, context);
+              }
+            ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            margin: EdgeInsets.only(top: 60),
-            child: Scrollbar(
-              isAlwaysShown: true,
-              controller: _scrollController,
-              child: ListView.builder(
-                itemCount: songs.length,
-                itemBuilder: songListView,
-              ),
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: notice,
+          ),      
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: loader,
           ),
           Container(
             margin: EdgeInsets.only(
@@ -82,70 +103,8 @@ class SongPadState extends State<SongPad> {
     ));
 
     if (result == true) {
-      updateListView();
+      loadListView(context);
     }
   }
 
-  Widget songListView(BuildContext context, int index) {
-    String songTitle = songs[index].title;
-    String songContent =
-        songs[index].content.replaceAll("\\n", " ").replaceAll("CHORUS", " ");
-    if (songContent.length > 45)
-      songContent = songContent.substring(0, 45) + " ...";
-    return Card(
-      elevation: 2,
-      child: ListTile(
-        title: Text(songTitle, style: TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text(songContent),
-        onTap: () {
-          navigateToSong(songs[index]);
-        },
-      ),
-    );
-  }
-
-  void updateListView() {
-    dbFuture = db.initializeDatabase();
-    dbFuture.then((database) {
-      Future<List<SongModel>> songListFuture = db.getSongList(Columns.ownsongs);
-      songListFuture.then((songList) {
-        setState(() {
-          songs = songList;
-          progress.hideProgress();
-        });
-      });
-    });
-  }
-
-  void searchSong() {
-    String searchThis = txtSearch.text;
-    if (searchThis.length > 0) {
-      songs.clear();
-      dbFuture = db.initializeDatabase();
-      dbFuture.then((database) {
-        Future<List<SongModel>> songListFuture =
-            db.getDraftSearch(txtSearch.text);
-        songListFuture.then((songList) {
-          setState(() {
-            songs = songList;
-          });
-        });
-      });
-    } else
-      updateListView();
-  }
-
-  void clearSearch() {
-    txtSearch.clear();
-    songs.clear();
-    updateListView();
-  }
-
-  void navigateToSong(SongModel song) async {
-    bool haschorus = false;
-    if (song.content.contains("CHORUS")) haschorus = true;
-    await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return SongView(song, haschorus, "My Own Songs");
-    }));
-  }
 }
