@@ -236,11 +236,9 @@ class SongsLoadState extends State<SongsLoad> {
 
       String title = item.title.replaceAll("\n", "\\n").replaceAll("'", "''");
       String alias = item.alias.replaceAll("\n", "\\n").replaceAll("'", "''");
-      String content =
-          item.content.replaceAll("\n", "\\n").replaceAll("'", "''");
+      String content = item.content.replaceAll("\n", "\\n").replaceAll("'", "''");
 
-      SongModel song = new SongModel(itemid, bookid, "S", number, title, alias,
-          content, "", "", userid, item.created);
+      SongModel song = new SongModel(itemid, bookid, "S", number, title, alias, content, "", "", userid, item.created);
       await db.insertSong(song);
     }
   }
