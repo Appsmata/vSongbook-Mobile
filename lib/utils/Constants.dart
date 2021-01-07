@@ -78,15 +78,15 @@ class SharedPreferenceKeys {
 
 class LangStrings {
   static const String appName = "vSongBook";
-  static const String appVersion = " v1.7.8";
+  static const String appVersion = " v1.8.0";
   static const String appSlogan = "Freedom to sing anywhere";
 
   static const String appTheme = "Display Theme";
   static const String darkMode = "Dark Mode";
   static const String lightMode = "Light Mode";
   static const String screenAwake = "Screen Awake";
-  static const String screenAwakeOn = "Screen will be on indefinately when viewing a song";
-  static const String screenAwakeOff = "Screen will go off if inactive when viewing a song";
+  static const String screenAwakeOn = "Screen will be ON indefinately when viewing a song";
+  static const String screenAwakeOff = "Screen will go OFF if inactive when viewing a song";
   static const String isEnabled = " enabled";
   static const String isDisabled = " disabled";
 
@@ -193,6 +193,13 @@ class LangStrings {
   static const String aboutTheApp = "About ";
   static const String manageApp = "App Settings";
   static const String appSettings = " Settings";
+
+  static const String donateActionButton = "DONATE";
+  static const String laterActionButton = "LATER";
+  
+  static String donateDialogTitle = "DONATE NOW";
+  static const String donateDialogMessage = "vSongBook is a free app to give users like you freedom to sing anywhere anytime. We are non-profit " +
+  "and we rely on people like you to help us keep it from commercials to millions of people around the world.";
 
   static const String retry = "RETRY";
   static const String songsInside = " songs inside;\n";

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:vsongbook/screens/donate.dart';
 import 'package:vsongbook/utils/colors.dart';
 import 'package:vsongbook/utils/constants.dart';
 import 'package:vsongbook/views/favorites.dart';
@@ -12,6 +13,7 @@ import 'package:vsongbook/models/song_model.dart';
 import 'package:vsongbook/helpers/app_database.dart';
 import 'package:vsongbook/helpers/app_search_delegate.dart';
 import 'package:vsongbook/views/nav_drawer.dart';
+import 'package:app_prompter/app_prompter.dart';
 
 class HomeView extends StatefulWidget {
 
@@ -23,6 +25,17 @@ class HomeViewState extends State<HomeView> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   HomeViewState();
   NavDrawer navDrawer;
+
+  WidgetBuilder builder = buildProgressIndicator;
+
+  AppPrompter appPrompter = AppPrompter(
+    preferencesPrefix: 'appPrompter_',
+    minDays: 0,
+    minLaunches: 3,
+    remindDays: 2,
+    remindLaunches: 3
+  );
+
 
   AppDatabase db = AppDatabase();
   List<BookModel> bookList = List<BookModel>();
@@ -102,9 +115,47 @@ class HomeViewState extends State<HomeView> {
             ),
           ],
         ),
-        body: TabBarView(children: appPages),
+        body: Stack(              
+            children: <Widget>[
+              TabBarView(children: appPages),
+              AppPrompterBuilder(
+                builder: builder,
+                onInitialized: (context, appPrompter) {                    
+                  if (appPrompter.shouldOpenDialog) {
+                    appPrompter.showPromptDialog(
+                      context,
+                      title: LangStrings.donateDialogTitle, // The dialog title.
+                      message: LangStrings.donateDialogMessage, // The dialog message.
+                      actionButton: LangStrings.donateActionButton, // The dialog "action" button text.
+                      noButton: "", // The dialog "no" button text.
+                      laterButton: LangStrings.laterActionButton, // The dialog "later" button text.
+                      listener: (button) { // The button click listener (useful if you want to cancel the click event).
+                        switch(button) {
+                          case AppPrompterDialogButton.action:
+                            Navigator.push(context, MaterialPageRoute(builder: (context) {
+                              return Donate();
+                              })
+                            );
+                            break;
+                          case AppPrompterDialogButton.later:
+                          case AppPrompterDialogButton.no:
+                            //print('Clicked on "Later".');
+                            break;
+                        }
+                        
+                        return true; // Return false if you want to cancel the click event.
+                      },
+                      dialogStyle: DialogStyle(), // Custom dialog styles.
+                      onDismissed: () => appPrompter.callEvent(AppPrompterEventType.laterButtonPressed),
+                    );
+                  }
+                },
+              ),
+            ]
+          ),
         drawer: Drawer(child: navDrawer),
       ),
     );
   }
+  static Widget buildProgressIndicator(BuildContext context) => const Center();
 }

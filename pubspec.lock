@@ -22,6 +22,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.0"
+  app_prompter:
+    dependency: "direct main"
+    description:
+      name: app_prompter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1"
   archive:
     dependency: transitive
     description:
@@ -603,7 +610,7 @@ packages:
       name: pedantic
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.0+1"
+    version: "1.9.2"
   percent_indicator:
     dependency: "direct main"
     description:
@@ -797,7 +804,14 @@ packages:
       name: speech_to_text
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.7.0"
+    version: "3.1.0"
+  speech_to_text_platform_interface:
+    dependency: transitive
+    description:
+      name: speech_to_text_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.4.2"
   sqflite:
     dependency: "direct main"
     description:
