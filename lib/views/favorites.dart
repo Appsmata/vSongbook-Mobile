@@ -45,7 +45,7 @@ class FavoritesState extends State<Favorites> {
     loadListView();
   }
   
-  void loadListView() {
+  void loadListView() async {
     loader.showWidget();
     dbFuture = db.initializeDatabase();
     dbFuture.then((database) {
