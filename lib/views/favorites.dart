@@ -4,18 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:vsongbook/utils/colors.dart';
 import 'package:provider/provider.dart';
+import 'package:anisi_controls/anisi_controls.dart';
 import 'package:vsongbook/helpers/app_settings.dart';
 import 'package:vsongbook/models/book_model.dart';
 import 'package:vsongbook/models/song_model.dart';
 import 'package:vsongbook/helpers/app_database.dart';
 import 'package:vsongbook/screens/song_view.dart';
 import 'package:vsongbook/views/song_item.dart';
-import 'package:vsongbook/widgets/as_loader.dart';
-import 'package:vsongbook/widgets/as_notice.dart';
 import 'package:vsongbook/utils/constants.dart';
 
 class Favorites extends StatefulWidget {
 	final List<BookModel> books;
+  
   const Favorites(this.books);
 
   @override
@@ -24,9 +24,10 @@ class Favorites extends StatefulWidget {
 }
 
 class FavoritesState extends State<Favorites> {
-  AsNotice notice = AsNotice.getNotice(LangStrings.noFavs);
-  AsLoader loader = AsLoader();
   AppDatabase db = AppDatabase();
+
+  AsLoader loader = AsLoader.setUp(ColorUtils.primaryColor);
+  AsInformer notice = AsInformer.setUp(3, LangStrings.noFavs, Colors.red, Colors.transparent, Colors.white, 10);
 
   FavoritesState();
   Future<Database> dbFuture;
@@ -36,10 +37,15 @@ class FavoritesState extends State<Favorites> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => loadListView(context));
+    WidgetsBinding.instance.addPostFrameCallback((_) => initBuild(context));
   }
 
-  void loadListView(BuildContext context) {
+  /// Method to run anything that needs to be run immediately after Widget build
+  void initBuild(BuildContext context) async {
+    loadListView();
+  }
+  
+  void loadListView() {
     loader.showWidget();
     dbFuture = db.initializeDatabase();
     dbFuture.then((database) {
@@ -58,7 +64,7 @@ class FavoritesState extends State<Favorites> {
   void setCurrentBook(int _book) {
     book = _book;
     songs.clear();
-    loadListView(context);
+    loadListView();
   }
 
   @override
@@ -100,14 +106,15 @@ class FavoritesState extends State<Favorites> {
             ),
           ),
           Container(
-            //height: MediaQuery.of(context).size.height - 200,
-            padding: const EdgeInsets.symmetric(horizontal: 5),
+            height: 200,
             child: notice,
-          ),  
+          ),
           Container(
-            //height: MediaQuery.of(context).size.height - 200,
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: loader,
+            margin: EdgeInsets.only(top: 50),
+            height: 200,
+            child: Center(
+              child: loader,
+            ),
           ),
         ],
       ),
@@ -157,10 +164,4 @@ class FavoritesState extends State<Favorites> {
       return SongView(song, haschorus, songbook);
     }));
   }
-}
-
-class BookItem<T> {
-  bool isSelected = false;
-  T data;
-  BookItem(this.data);
 }

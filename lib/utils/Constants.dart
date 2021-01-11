@@ -78,7 +78,7 @@ class SharedPreferenceKeys {
 
 class LangStrings {
   static const String appName = "vSongBook";
-  static const String appVersion = " v1.8.0";
+  static const String appVersion = " v1.8.2";
   static const String appSlogan = "Freedom to sing anywhere";
 
   static const String appTheme = "Display Theme";
@@ -102,6 +102,7 @@ class LangStrings {
   static const String somePatience = "Eish! ... Some patience ...";
   static const String noFavs = "Oops! You are all caught up. Mmmmh... Why not start favouriting songs right away!";
   static const String noDrafts = "Oops! You are all caught up. Mmmmh... Why not start drafting something right away!";
+  static const String noSongs = "Oops! You are all caught up. Mmmmh... Head to manage your songbooks afresh!";
 
   static const String copySong = "Copy Song to Clipboard";
   static const String shareSong = "Share this Song";
@@ -125,7 +126,7 @@ class LangStrings {
   static const String signupSuspended = "Registration temporarily suspended. Try again soon";
   static const String signupUnpermited = "You have no permission to proceed";
   static const String enterPass = "Please enter your password";
-  static const String enterNewPass = "Please enter your new password";
+  static const String enterNewPass = "Please enter your password";
   static const String enterOldPass = "Please enter your old password";
   static const String enterEmail = "Please enter your email id";
   static const String enterPhone = "Please enter your Mobile Number";
@@ -158,7 +159,7 @@ class LangStrings {
   static const String register = "Register";
   static const String password = "Password";
   static const String oldPassword = "Old Password";
-  static const String newPassword = "New Password";
+  static const String newPassword = "Password";
   static const String changePassword = "Change Password";
   static const String logout = "Logout";
   static const String email = "Email Address";
@@ -223,7 +224,7 @@ class LangStrings {
   static const String appHistory = "<p>vSongBook was first developed in September 2014 by Jack Siro while a student at KTTC. By then he was just trying his hands on Android and he just wanted make a little app to have the Songs of worship and Nyimbo za injili on his phone just like the Bible was an app on his phone.</p><p>Later while at home in December his father who came to his room to check on him and ask <i>some little computer questions</i> noticed an unfamiliar app on his phone. On learning and interacting with it though by then it had only 100 songs in English and Swahili books, he asked to have it on his phone. The happy father went to share it with his elder songs. It was at the End of Year Meetings at Mbale, Kenya that Brother Siro endosed the app there during one of his sermons.</p>" +
           "<p>With the help of Brother Gitau while a student at JKUAT Taita Taveta and other youth believers the rest of the songs were able to available in soft copy. The app which resided on his personal website got shared and many started asking to have more songs and features on it.</p><p>The need to have it hosted on Play Store was becoming unavoidable but since the app was not being monetized it was hard to do so till Brother Ngalonde of ZimApps in Zimbabwe came through to allow him to host the app on his Play Store account in the midst of 2015. Towards the midst of 2016 he was already monetizing the app he was able to purchase his own Google Play Store account where to date he still hosts the app from.</p>" +
           "<p>With the help the likes Pastor Waheire, Brother Simon Muthama and Brother Kijusa the Nyimbo cia Kuinira Ngai (Kikuyu), Mbathi sya Kumutaiaa Ngai (Kikamba) and Tsinyimboa Tsya Nyasaye (Luhya) were made available in softcopy. Bro Simutami of Malawi was very supportive in having the Bemba Hymnal just like Sister Alunga was with the Third Exodus songs.</p>" +
-          "<p>It was in the year 2016 that the need to have the app available on Windows Phone was realized but it was not until the midst of 2017 that this was made possible on the Windows App Store. A year later the app became available in Windows PCs which didn't have a specific place to download it from until in 2019 when it beaceme available on the new website www.appsmata.com launched by Jack Siro to cater for the projects that would fall under the umbrella of Appsmata Solutions the new brand he was now promoting.</p>" +
+          "<p>It was in the year 2016 that the need to have the app available on Windows Phone was realized but it was not until the midst of 2017 that this was made possible on the Windows App Store. A year later the app became available in Windows PCs which didn't have a specific place to download it from until in 2019 when it beaceme available on the website www.appsmata.com launched by Jack Siro to cater for the projects that would fall under the umbrella of Appsmata Solutions the brand he was now promoting.</p>" +
           "<p>vSongBook for iOS the latest product for the app became a reality in the midst of 2020 after a whole 3 years of trying to save and getting the requirements that were needed. However as the iOS platform is very expensive to develop for this goal took time to come to reality thanks Brother Danvick who was generaous with his MacBook and iPhone that this became possible.</p>" +
           "<p>This is not the end of the story because this project is still in progress and many fatures are underway to make it the best singing app for anyone wishing to sing from the comfort of their phone. Keep supporting it with your prayers, finance and whatever you got to keep it alive! Be blessed!</p>";
   static const String appThanks = "<h3>Special Thanks be to the following people/Organizations:</h3>" +

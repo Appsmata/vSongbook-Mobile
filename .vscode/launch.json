@@ -6,7 +6,7 @@
     "configurations": [
     
         {
-            "name": "vsb",
+            "name": "vsbApp",
             "request": "launch",
             "type": "dart"
         }

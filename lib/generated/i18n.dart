@@ -41,7 +41,7 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<WidgetsLocali
 
   LocaleResolutionCallback resolution({Locale fallback}) {
     return (Locale locale, Iterable<Locale> supported) {
-      final Locale languageLocale = new Locale(locale.languageCode, "");
+      final Locale languageLocale = Locale(locale.languageCode, "");
       if (supported.contains(locale))
         return locale;
       else if (supported.contains(languageLocale))

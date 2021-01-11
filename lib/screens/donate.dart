@@ -5,11 +5,11 @@ import 'package:vsongbook/utils/constants.dart';
 
 class Donate extends StatefulWidget {
   @override
-  createState() => new DonateState();
+  createState() => DonateState();
 }
 
 class DonateState extends State<Donate> {
-  final globalKey = new GlobalKey<ScaffoldState>();
+  final globalKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +66,7 @@ class DonateState extends State<Donate> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: Image(
-                image: new AssetImage("assets/images/" + image + ".png"),
+                image: AssetImage("assets/images/" + image + ".png"),
               ),
             ),
           ),
@@ -78,7 +78,7 @@ class DonateState extends State<Donate> {
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 child: Text(
                   strText,
-                  style: new TextStyle(fontSize: 30),
+                  style: TextStyle(fontSize: 30),
                 ),
               ),
             ),
@@ -88,6 +88,7 @@ class DonateState extends State<Donate> {
     );
   }
 
+  /// Go back to the screen before the current one
   void moveToLastScreen() {
     Navigator.pop(context, true);
   }

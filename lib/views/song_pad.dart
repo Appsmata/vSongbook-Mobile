@@ -1,18 +1,21 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:anisi_controls/anisi_controls.dart';
+import 'package:vsongbook/helpers/app_settings.dart';
 import 'package:vsongbook/models/book_model.dart';
 import 'package:vsongbook/models/song_model.dart';
 import 'package:vsongbook/helpers/app_database.dart';
 import 'package:vsongbook/screens/song_edit.dart';
 import 'package:vsongbook/views/song_item.dart';
-import 'package:vsongbook/widgets/as_loader.dart';
-import 'package:vsongbook/widgets/as_notice.dart';
 import 'package:vsongbook/utils/constants.dart';
+import 'package:vsongbook/utils/colors.dart';
 
 class SongPad extends StatefulWidget {
 	final List<BookModel> books;
+
   const SongPad(this.books);
 
   @override
@@ -21,9 +24,10 @@ class SongPad extends StatefulWidget {
 }
 
 class SongPadState extends State<SongPad> {
-  AsNotice notice = AsNotice.getNotice(LangStrings.noDrafts);
-  AsLoader loader = AsLoader();
   AppDatabase db = AppDatabase();
+
+  AsLoader loader = AsLoader.setUp(ColorUtils.primaryColor);
+  AsInformer notice = AsInformer.setUp(3, LangStrings.noDrafts, Colors.red, Colors.transparent, Colors.white, 10);
 
   SongPadState();
   Future<Database> dbFuture;
@@ -33,10 +37,15 @@ class SongPadState extends State<SongPad> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => loadListView(context));
+    WidgetsBinding.instance.addPostFrameCallback((_) => initBuild(context));
   }
 
-  void loadListView(BuildContext context) {
+  /// Method to run anything that needs to be run immediately after Widget build
+  void initBuild(BuildContext context) async {
+    loadListView();
+  }
+  
+  void loadListView() {
     loader.showWidget();
     dbFuture = db.initializeDatabase();
     dbFuture.then((database) {
@@ -68,12 +77,15 @@ class SongPadState extends State<SongPad> {
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
+            height: 200,
             child: notice,
-          ),      
+          ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: loader,
+            margin: EdgeInsets.only(top: 50),
+            height: 200,
+            child: Center(
+              child: loader,
+            ),
           ),
           Container(
             margin: EdgeInsets.only(
@@ -92,7 +104,7 @@ class SongPadState extends State<SongPad> {
   }
 
   void newSong() {
-    SongModel song = new SongModel(0, Columns.ownsongs, "S", 0, "", "", "", "", "", 0, "");
+    SongModel song = SongModel(0, Columns.ownsongs, "S", 0, "", "", "", "", "", 0, "");
     navigateToDraft(song, LangStrings.draftASong);
   }
 
@@ -103,7 +115,7 @@ class SongPadState extends State<SongPad> {
     ));
 
     if (result == true) {
-      loadListView(context);
+      loadListView();
     }
   }
 

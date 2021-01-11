@@ -46,7 +46,7 @@ class _MyApplication extends StatelessWidget {
     return MaterialApp(
       title: LangStrings.appName,
       theme: Provider.of<AppSettings>(context).isDarkMode ? asDarkTheme : asLightTheme,
-      home: new AppStart(),
+      home: AppStart(),
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: analytics),
       ],

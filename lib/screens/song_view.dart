@@ -37,7 +37,7 @@ class SongView extends StatefulWidget {
 
 class SongViewState extends State<SongView> {
   SongViewState(this.song, this.haschorus, this.book);
-  final globalKey = new GlobalKey<ScaffoldState>();
+  final globalKey = GlobalKey<ScaffoldState>();
   AppDatabase db = AppDatabase();
 
   var appBar = AppBar(), songVerses;
@@ -172,7 +172,7 @@ class SongViewState extends State<SongView> {
       child: Center(
         child: Text(
           songtitle,
-          style: new TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 25, 
             color: Provider.of<AppSettings>(context).isDarkMode ? Colors.white : Colors.black),
@@ -197,7 +197,7 @@ class SongViewState extends State<SongView> {
             return Tab(
               child: Center(
                 child: Text(verseInfos[index],
-                  style: new TextStyle(
+                  style: TextStyle(
                     fontSize: 35,
                     fontWeight: FontWeight.bold,
                     color: Colors.black)
@@ -260,18 +260,18 @@ class SongViewState extends State<SongView> {
         margin: EdgeInsets.only(top: 10, left: 10),
         child: Column(
           children: <Widget>[
-            new Container(
+            Container(
               width: 200,
               height: 50,
-              decoration: new BoxDecoration( color: Provider.of<AppSettings>(context).isDarkMode ? Colors.black : Colors.orange,
+              decoration: BoxDecoration( color: Provider.of<AppSettings>(context).isDarkMode ? Colors.black : Colors.orange,
                 border: Border.all(color: Colors.white),
                 boxShadow: [BoxShadow(blurRadius: 5)],
-                borderRadius: new BorderRadius.all(new Radius.circular(5))
+                borderRadius: BorderRadius.all(Radius.circular(5))
               ),
               child: Center(
                 child: Text(
                   verseTitle,
-                  style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                 ),
               ),
             ),
@@ -299,7 +299,7 @@ class SongViewState extends State<SongView> {
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: Text(
                     lyrics,
-                    style: new TextStyle(fontSize: fontsize),
+                    style: TextStyle(fontSize: fontsize),
                   ),
                 ),
               )
@@ -321,8 +321,8 @@ class SongViewState extends State<SongView> {
         tooltip: LangStrings.copyVerse,
         onPressed: () async {
           Clipboard.setData(ClipboardData(text: lyrics));
-          globalKey.currentState.showSnackBar(new SnackBar(
-            content: new Text(LangStrings.verseCopied),
+          globalKey.currentState.showSnackBar(SnackBar(
+            content: Text(LangStrings.verseCopied),
           ));
         }
       ),
@@ -385,8 +385,8 @@ class SongViewState extends State<SongView> {
         tooltip: LangStrings.copySong,
         onPressed: () async {
           Clipboard.setData(ClipboardData(text: songTitle + "\n\n" + songContent));
-          globalKey.currentState.showSnackBar(new SnackBar(
-            content: new Text(LangStrings.songCopied),
+          globalKey.currentState.showSnackBar(SnackBar(
+            content: Text(LangStrings.songCopied),
           ));
         }
       ),
@@ -470,16 +470,16 @@ class SongViewState extends State<SongView> {
       db.favouriteSong(song, false);
     else
       db.favouriteSong(song, true);
-    globalKey.currentState.showSnackBar(new SnackBar(
-      content: new Text(songTitle + " " + LangStrings.songLiked),
+    globalKey.currentState.showSnackBar(SnackBar(
+      content: Text(songTitle + " " + LangStrings.songLiked),
     ));
     //notifyListeners();
   }
 
   Widget settingsDialog() {
     return AlertDialog(
-      title: new Text(LangStrings.quickSettings),
-      content: new Container(
+      title: Text(LangStrings.quickSettings),
+      content: Container(
         height: 150,
         width: double.maxFinite,
         child: ListView(children: <Widget>[
@@ -508,9 +508,9 @@ class SongViewState extends State<SongView> {
         ]),
       ),
       actions: <Widget>[
-        new Container(
+        Container(
           child: FlatButton(
-            child: Text(LangStrings.okayDone, style: new TextStyle(fontSize: 20)),
+            child: Text(LangStrings.okayDone, style: TextStyle(fontSize: 20)),
             color: Colors.deepOrange,
             onPressed: () {
               Navigator.pop(context);
@@ -557,6 +557,7 @@ class SongViewState extends State<SongView> {
     }
   }
 
+  /// Go back to the screen before the current one
   void moveToLastScreen() {
     Navigator.pop(context, true);
   }

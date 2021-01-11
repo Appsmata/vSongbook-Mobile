@@ -10,11 +10,11 @@ import 'package:vsongbook/screens/preferences.dart';
 
 class NavDrawer extends StatefulWidget {
   @override
-  createState() => new NavDrawerState();
+  createState() => NavDrawerState();
 }
 
 class NavDrawerState extends State<NavDrawer> {
-  final globalKey = new GlobalKey<ScaffoldState>();
+  final globalKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +96,7 @@ class NavDrawerState extends State<NavDrawer> {
       accountEmail: Text(LangStrings.appSlogan),
       currentAccountPicture: CircleAvatar(
         child: Image(
-          image: new AssetImage("assets/images/appicon.png"),
+          image: AssetImage("assets/images/appicon.png"),
           height: 75,
           width: 75,
         ),

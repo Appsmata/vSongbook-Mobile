@@ -16,9 +16,10 @@ import 'package:vsongbook/views/nav_drawer.dart';
 import 'package:app_prompter/app_prompter.dart';
 
 class HomeView extends StatefulWidget {
+  HomeView();
 
   @override
-  createState() => new HomeViewState();
+  createState() => HomeViewState();
 }
 
 class HomeViewState extends State<HomeView> {
@@ -98,7 +99,7 @@ class HomeViewState extends State<HomeView> {
       child: Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          iconTheme: new IconThemeData(color: ColorUtils.white),
+          iconTheme: IconThemeData(color: ColorUtils.white),
           title: const Text(LangStrings.appName),
           centerTitle: true,
           bottom: TabBar(tabs: appTabs),

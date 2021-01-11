@@ -92,7 +92,7 @@ class AppSearchDelegate extends SearchDelegate<List> {
   void filterNow() async {
     if (query.isNotEmpty)
     {
-      List<SongModel> tmpList = new List<SongModel>();
+      List<SongModel> tmpList = List<SongModel>();
       for(int i = 0; i < songList.length; i++) {
         
         if (isNumeric(query)) {

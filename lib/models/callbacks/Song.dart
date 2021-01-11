@@ -42,7 +42,7 @@ class Song {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['postid'] = this.postid;
     data['number'] = this.number;
     data['title'] = this.title;

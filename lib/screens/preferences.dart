@@ -7,11 +7,11 @@ import 'package:vsongbook/helpers/app_settings.dart';
 
 class Preferences extends StatefulWidget {
   @override
-  createState() => new PreferencesState();
+  createState() => PreferencesState();
 }
 
 class PreferencesState extends State<Preferences> {
-  final globalKey = new GlobalKey<ScaffoldState>();
+  final globalKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +69,7 @@ class PreferencesState extends State<Preferences> {
     });
   }
 
+  /// Go back to the screen before the current one
   void moveToLastScreen() {
     Navigator.pop(context, true);
   }

@@ -22,7 +22,7 @@ class Book {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['categoryid'] = this.categoryid;
     data['title'] = this.title;
     data['tags'] = this.tags;

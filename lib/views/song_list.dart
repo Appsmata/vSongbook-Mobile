@@ -4,18 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:vsongbook/utils/colors.dart';
 import 'package:provider/provider.dart';
+import 'package:anisi_controls/anisi_controls.dart';
 import 'package:vsongbook/helpers/app_settings.dart';
+import 'package:vsongbook/models/list_item.dart';
 import 'package:vsongbook/models/book_model.dart';
 import 'package:vsongbook/models/song_model.dart';
 import 'package:vsongbook/helpers/app_database.dart';
 import 'package:vsongbook/screens/song_view.dart';
 import 'package:vsongbook/views/song_item.dart';
-import 'package:vsongbook/widgets/as_loader.dart';
 import 'package:vsongbook/utils/constants.dart';
 import 'package:vsongbook/utils/preferences.dart';
 
 class SongList extends StatefulWidget {
 	final List<BookModel> books;
+  
   const SongList(this.books);
 
   @override
@@ -24,28 +26,32 @@ class SongList extends StatefulWidget {
 }
 
 class SongListState extends State<SongList> {
-  AsLoader loader = AsLoader();
   AppDatabase db = AppDatabase();
+
+  AsLoader loader = AsLoader.setUp(ColorUtils.primaryColor);
+  AsInformer notice = AsInformer.setUp(3, LangStrings.noSongs, Colors.red, Colors.transparent, Colors.white, 10);
 
   SongListState();
   Future<Database> dbFuture;
+  List<ListItem<BookModel>> selected = [];
+  List<ListItem<BookModel>> bookList;
   List<SongModel> songs = List<SongModel>();
   int book;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => initLoad(context));
+    WidgetsBinding.instance.addPostFrameCallback((_) => initBuild(context));
   }
 
-  void initLoad(BuildContext context) async {
-    loader.showWidget();
+  /// Method to run anything that needs to be run immediately after Widget build
+  void initBuild(BuildContext context) async {
     String bookstr = await Preferences.getSharedPreferenceStr(SharedPreferenceKeys.selectedBooks);
     var bookids = bookstr.split(",");
     book = int.parse(bookids[0]);
     loadListView();
   }
-
+  
   void loadListView() async {
     loader.showWidget();
     
@@ -56,15 +62,11 @@ class SongListState extends State<SongList> {
         setState(() {
           songs = songList;
           loader.hideWidget();
+          if (songs.length == 0) notice.showWidget();
+          else notice.hideWidget();
         });
       });
     });
-  }
-
-  void setCurrentBook(int _book) {
-    book = _book;
-    songs.clear();
-    loadListView();
   }
 
   @override
@@ -106,13 +108,40 @@ class SongListState extends State<SongList> {
             ),
           ),
           Container(
-            height: MediaQuery.of(context).size.height - 200,
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: loader,
+            height: 200,
+            child: notice,
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 50),
+            height: 200,
+            child: Center(
+              child: loader,
+            ),
           ),
         ],
       ),
     );
+  }
+
+  void setCurrentBook(int _book) {
+    book = _book;
+    songs.clear();
+    loadListView();
+  }
+
+  void onBookSelected(ListItem tapped) {
+    setState(() {
+      tapped.isSelected = !tapped.isSelected;
+    });
+    if (tapped.isSelected) {
+      try {
+        selected.add(tapped);
+      } catch (Exception) {}
+    } else {
+      try {
+        selected.remove(tapped);
+      } catch (Exception) {}
+    }
   }
 
   Widget bookListView(BuildContext context, int index) {
@@ -158,10 +187,4 @@ class SongListState extends State<SongList> {
       return SongView(song, haschorus, songbook);
     }));
   }
-}
-
-class BookItem<T> {
-  bool isSelected = false;
-  T data;
-  BookItem(this.data);
 }
