@@ -195,8 +195,8 @@ class LangStrings {
   static const String manageApp = "App Settings";
   static const String appSettings = " Settings";
 
-  static const String donateActionButton = "DONATE";
-  static const String laterActionButton = "LATER";
+  static const String donateActionButton = "OKAY GOT IT";
+  static const String laterActionButton = "REMIND ME LATER";
   
   static String donateDialogTitle = "DONATE NOW";
   static const String donateDialogMessage = "vSongBook is a free app to give users like you freedom to sing anywhere anytime. We are non-profit " +

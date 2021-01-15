@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:vsongbook/screens/donate.dart';
+import 'package:speech_to_text/speech_recognition_error.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart';
+
 import 'package:vsongbook/utils/colors.dart';
 import 'package:vsongbook/utils/constants.dart';
 import 'package:vsongbook/views/favorites.dart';
@@ -41,12 +45,117 @@ class HomeViewState extends State<HomeView> {
   AppDatabase db = AppDatabase();
   List<BookModel> bookList = List<BookModel>();
   List<SongModel> songList = List<SongModel>();
+  String searchStr = '';
 	int count = 0;
+  
+  bool _hasSpeech = false;
+  double level = 0.0;
+  double minSoundLevel = 50000;
+  double maxSoundLevel = -50000;
+  String lastWords = '';
+  String lastError = '';
+  String lastStatus = '';
+  String _currentLocaleId = '';
+  int resultListened = 0;
+  List<LocaleName> _localeNames = [];
+  final SpeechToText speech = SpeechToText();
+
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => updateBookList(context));
+  }
+
+  Future<void> initSpeechState() async {
+    var hasSpeech = await speech.initialize(
+        onError: errorListener, onStatus: statusListener, debugLogging: true);
+    if (hasSpeech) {
+      _localeNames = await speech.locales();
+
+      var systemLocale = await speech.systemLocale();
+      _currentLocaleId = systemLocale.localeId;
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      _hasSpeech = hasSpeech;
+    });
+  }
+
+  void startListening() {
+    lastWords = '';
+    lastError = '';
+    speech.listen(
+        onResult: resultListener,
+        listenFor: Duration(seconds: 5),
+        pauseFor: Duration(seconds: 5),
+        partialResults: false,
+        localeId: _currentLocaleId,
+        onSoundLevelChange: soundLevelListener,
+        cancelOnError: true,
+        listenMode: ListenMode.confirmation);
+    setState(() { });
+  }
+
+  void stopListening() async {
+    speech.stop();
+    setState(() {
+      level = 0.0;
+    });
+  }
+
+  void cancelListening() {
+    speech.cancel();
+    setState(() {
+      level = 0.0;
+    });
+  }
+
+  void resultListener(SpeechRecognitionResult result) {
+    ++resultListened;
+    print('Result listener $resultListened');
+    setState(() {
+      lastWords = '${result.recognizedWords} - ${result.finalResult}';
+      searchStr = lastWords;
+    });
+    
+    showSearch(
+      context: context,
+      delegate: AppSearchDelegate(context, bookList, songList, searchStr),
+    );
+  }
+
+  void soundLevelListener(double level) {
+    minSoundLevel = min(minSoundLevel, level);
+    maxSoundLevel = max(maxSoundLevel, level);
+    // print("sound level $level: $minSoundLevel - $maxSoundLevel ");
+    setState(() {
+      this.level = level;
+    });
+  }
+
+  void errorListener(SpeechRecognitionError error) {
+    // print("Received error status: $error, listening: ${speech.isListening}");
+    setState(() {
+      lastError = '${error.errorMsg} - ${error.permanent}';
+    });
+  }
+
+  void statusListener(String status) {
+    // print(
+    // 'Received listener status: $status, listening: ${speech.isListening}');
+    setState(() {
+      lastStatus = '$status';
+    });
+  }
+
+  void _switchLang(selectedVal) {
+    setState(() {
+      _currentLocaleId = selectedVal;
+    });
+    print(selectedVal);
   }
 
   void updateBookList(BuildContext context) {
@@ -110,8 +219,15 @@ class HomeViewState extends State<HomeView> {
               onPressed: () async {
                 final List selected = await showSearch(
                   context: context,
-                  delegate: AppSearchDelegate(context, bookList, songList),
+                  delegate: AppSearchDelegate(context, bookList, songList, searchStr),
                 );
+              },
+            ),
+            IconButton(
+              tooltip: LangStrings.searchNow,
+              icon: const Icon(Icons.mic),
+              onPressed: () async {
+                !_hasSpeech || speech.isListening ? null : startListening;
               },
             ),
           ],
@@ -133,11 +249,9 @@ class HomeViewState extends State<HomeView> {
                       listener: (button) { // The button click listener (useful if you want to cancel the click event).
                         switch(button) {
                           case AppPrompterDialogButton.action:
-                            Navigator.push(context, MaterialPageRoute(builder: (context) {
-                              return Donate();
-                              })
-                            );
-                            break;
+                            //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Donate()));
+                            //break;
+                          case AppPrompterDialogButton.action:
                           case AppPrompterDialogButton.later:
                           case AppPrompterDialogButton.no:
                             //print('Clicked on "Later".');
