@@ -4,7 +4,7 @@ part of 'User.dart';
 // Generator: JsonSerializableGenerator
 // **************************************************************************
 
-User _$UserFromJson(Map<String, dynamic> json) => new User(
+User _$UserFromJson(Map<String, dynamic> json) => User(
     userid: json['userid'] as String,
     firstname: json['firstname'] as String,
     lastname: json['lastname'] as String,

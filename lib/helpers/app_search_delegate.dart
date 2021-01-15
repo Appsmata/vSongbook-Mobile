@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
 import 'package:vsongbook/helpers/app_settings.dart';
 import "package:vsongbook/helpers/app_base.dart";
@@ -10,11 +11,13 @@ import 'package:vsongbook/views/song_item.dart';
 
 class AppSearchDelegate extends SearchDelegate<List> {
 
+  String searchStr;
 	List<BookModel> bookList;
 	List<SongModel> songList, filtered;
-
-	AppSearchDelegate(BuildContext context, this.bookList, this.songList) {
+  
+	AppSearchDelegate(BuildContext context, this.bookList, this.songList, this.searchStr) {
     filtered = songList;
+    query = searchStr;
   }
 
   @override
@@ -92,7 +95,7 @@ class AppSearchDelegate extends SearchDelegate<List> {
   void filterNow() async {
     if (query.isNotEmpty)
     {
-      List<SongModel> tmpList = new List<SongModel>();
+      List<SongModel> tmpList = List<SongModel>();
       for(int i = 0; i < songList.length; i++) {
         
         if (isNumeric(query)) {

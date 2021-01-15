@@ -8,11 +8,11 @@ import 'package:url_launcher/url_launcher.dart';
 
 class HelpDesk extends StatefulWidget {
   @override
-  createState() => new HelpDeskState();
+  createState() => HelpDeskState();
 }
 
 class HelpDeskState extends State<HelpDesk> {
-  final globalKey = new GlobalKey<ScaffoldState>();
+  final globalKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +67,7 @@ class HelpDeskState extends State<HelpDesk> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: Image(
-                image: new AssetImage("assets/images/" + image + ".png"),
+                image: AssetImage("assets/images/" + image + ".png"),
                 height: 200.0,
               ),
             ),
@@ -99,6 +99,7 @@ class HelpDeskState extends State<HelpDesk> {
     if (await canLaunch(url)) await launch(url);
   }
 
+  /// Go back to the screen before the current one
   void moveToLastScreen() {
     Navigator.pop(context, true);
   }

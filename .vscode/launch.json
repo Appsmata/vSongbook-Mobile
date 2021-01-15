@@ -6,7 +6,7 @@
     "configurations": [
     
         {
-            "name": "vsb",
+            "name": "vSongBook",
             "request": "launch",
             "type": "dart"
         }

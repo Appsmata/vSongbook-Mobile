@@ -4,18 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:vsongbook/screens/books_load.dart';
 import 'package:vsongbook/screens/songs_load.dart';
 import 'package:vsongbook/screens/home_view.dart';
-import 'package:vsongbook/utils/constants.dart';
 import 'package:vsongbook/utils/preferences.dart';
 
 class AppStart extends StatefulWidget {
+  AppStart();
+
   @override
-  createState() => new SplashPageState();
+  createState() => new AppStartState();
 }
 
-class SplashPageState extends State<AppStart> {
+class AppStartState extends State<AppStart> {
   final globalKey = new GlobalKey<ScaffoldState>();
 
-@override
+  AppStartState();
+
+  @override
   Widget build(BuildContext context) {
     new Future.delayed(const Duration(seconds: 3), _handleTapEvent);
     return MaterialApp(
@@ -38,7 +41,6 @@ class SplashPageState extends State<AppStart> {
   void _handleTapEvent() async {
     bool booksLoaded = await Preferences.areAppBooksLoaded();
     bool songsLoaded = await Preferences.areAppSongsLoaded();
-    String books = await Preferences.getSharedPreferenceStr(SharedPreferenceKeys.selectedBooks);
 
       if (this.mounted) {
       setState(() {
@@ -46,7 +48,7 @@ class SplashPageState extends State<AppStart> {
           {
             if (songsLoaded != null && songsLoaded)
             {
-              Navigator.pushReplacement( context, new MaterialPageRoute(builder: (context) => new HomeView(books)));
+              Navigator.pushReplacement( context, new MaterialPageRoute(builder: (context) => new HomeView()));
             }
             else {
               Navigator.pushReplacement( context, new MaterialPageRoute(builder: (context) => new SongsLoad())); 

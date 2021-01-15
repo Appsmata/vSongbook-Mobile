@@ -6,10 +6,10 @@ part of 'UserResponse.dart';
 // Generator: JsonSerializableGenerator
 // **************************************************************************
 
-UserResponse _$UserResponseFromJson(Map<String, dynamic> json) => new UserResponse(
+UserResponse _$UserResponseFromJson(Map<String, dynamic> json) => UserResponse(
     result: json['result'] as String,
     message: json['message'] as String,
-    user: json['user'] == null ? null : new User.fromJson(json['user'] as Map<String, dynamic>));
+    user: json['user'] == null ? null : User.fromJson(json['user'] as Map<String, dynamic>));
 
 abstract class _$UserResponseSerializerMixin {
   String get result;

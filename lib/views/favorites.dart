@@ -1,60 +1,119 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:vsongbook/utils/colors.dart';
 import 'package:provider/provider.dart';
-import 'package:vsongbook/utils/constants.dart';
+import 'package:anisi_controls/anisi_controls.dart';
 import 'package:vsongbook/helpers/app_settings.dart';
 import 'package:vsongbook/models/book_model.dart';
 import 'package:vsongbook/models/song_model.dart';
 import 'package:vsongbook/helpers/app_database.dart';
 import 'package:vsongbook/screens/song_view.dart';
-import 'package:vsongbook/widgets/as_progress.dart';
+import 'package:vsongbook/views/song_item.dart';
+import 'package:vsongbook/utils/constants.dart';
 
 class Favorites extends StatefulWidget {
+	final List<BookModel> books;
+  
+  const Favorites(this.books);
+
   @override
   createState() => FavoritesState();
+
 }
 
 class FavoritesState extends State<Favorites> {
-  AsProgress progress = AsProgress.getAsProgress(LangStrings.somePatience);
-  TextEditingController txtSearch = new TextEditingController(text: "");
-  final ScrollController _scrollController = ScrollController();
   AppDatabase db = AppDatabase();
 
+  AsLoader loader = AsLoader.setUp(ColorUtils.primaryColor);
+  AsInformer notice = AsInformer.setUp(3, LangStrings.noFavs, Colors.red, Colors.transparent, Colors.white, 10);
+
+  FavoritesState();
   Future<Database> dbFuture;
-  List<BookModel> books;
-  List<SongModel> songs;
+  List<SongModel> songs = List<SongModel>();
+  int book;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => initBuild(context));
+  }
+
+  /// Method to run anything that needs to be run immediately after Widget build
+  void initBuild(BuildContext context) async {
+    loadListView();
+  }
+  
+  void loadListView() async {
+    loader.showWidget();
+    dbFuture = db.initializeDatabase();
+    dbFuture.then((database) {
+      Future<List<SongModel>> songListFuture = db.getFavorites();
+      songListFuture.then((songList) {
+        setState(() {
+          songs = songList;
+          loader.hideWidget();
+          if (songs.length == 0) notice.showWidget();
+          else notice.hideWidget();
+        });
+      });
+    });
+  }
+
+  void setCurrentBook(int _book) {
+    book = _book;
+    songs.clear();
+    loadListView();
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (songs == null) {
-      books = [];
-      songs = [];
-      updateBookList();
-      updateSongList();
-    }
     return Container(
-      decoration: Provider.of<AppSettings>(context).isDarkMode
-          ? BoxDecoration()
-          : BoxDecoration(
-              image: DecorationImage(
-                  image: new AssetImage("assets/images/bg.jpg"),
-                  fit: BoxFit.cover)),
       child: Stack(
         children: <Widget>[
+          /*Container(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  height: 105,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    physics: BouncingScrollPhysics(),
+                    itemCount: books.length,
+                    itemBuilder: booksView,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: progress,
+            margin: EdgeInsets.only(top: 98),
+            child: Divider(),
+          ),*/
+          
+          Container(
+            //height: MediaQuery.of(context).size.height - 150,
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            //margin: EdgeInsets.only(top: 105),
+            child: ListView.builder(
+              itemCount: songs.length,
+              itemBuilder: (BuildContext context, int index) {
+                return SongItem('SongFavs_' + songs[index].songid.toString(), songs[index], widget.books, context);
+              }
+            ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            margin: EdgeInsets.only(top: 60),            
-            child: Scrollbar(
-              isAlwaysShown: true,
-              controller: _scrollController,
-              child: ListView.builder(
-                itemCount: songs.length,
-                itemBuilder: songListView,
-              ),
+            height: 200,
+            child: notice,
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 50),
+            height: 200,
+            child: Center(
+              child: loader,
             ),
           ),
         ],
@@ -62,90 +121,40 @@ class FavoritesState extends State<Favorites> {
     );
   }
 
-  Widget songListView(BuildContext context, int index) {
-    int category = songs[index].bookid;
-    String songbook = "";
-    String songTitle = songs[index].title;
-
-    var verses = songs[index].content.split("\\n\\n");
-    var songConts = songs[index].content.split("\\n");
-    String songContent = songConts[0] + ' ' + songConts[1] + " ...";
-
-    try {
-      BookModel curbook = books.firstWhere((i) => i.categoryid == category);
-      songContent = songContent + "\n" + curbook.title + "; ";
-      songbook = curbook.title;
-    } catch (Exception) {
-      songContent = songContent + "\n";
-    }
-
-    if (songs[index].content.contains("CHORUS")) {
-      songContent = songContent + LangStrings.hasChorus;
-      songContent = songContent + verses.length.toString() + LangStrings.verses;
-    } else {
-      songContent = songContent + LangStrings.noChorus;
-      songContent = songContent + verses.length.toString() + LangStrings.verses;
-    }
-
-    return Card(
-      elevation: 2,
-      child: ListTile(
-        title: Text(songTitle, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-        subtitle: Text(songContent, style: TextStyle(fontSize: 18)),
+  Widget booksView(BuildContext context, int index) {
+    return Container(
+      width: 100,
+      padding: const EdgeInsets.only(bottom: 5),
+      child: GestureDetector(
         onTap: () {
-          navigateToSong(songs[index], "Song #" + songs[index].number.toString() + " - " + songbook);
+          setCurrentBook(widget.books[index].categoryid);
         },
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(50),
+            side: BorderSide(color: Provider.of<AppSettings>(context).isDarkMode ? ColorUtils.white : ColorUtils.secondaryColor, width: 1.5),
+          ),      
+          color: Provider.of<AppSettings>(context).isDarkMode ? ColorUtils.black : ColorUtils.primaryColor,
+          elevation: 5,
+          child: Hero(
+            tag: widget.books[index].bookid,
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              child: Center(
+                child: Text(
+                  widget.books[index].title + ' (' + widget.books[index].qcount.toString() + ')',
+                  style: TextStyle(
+                    fontSize: 15, color: ColorUtils.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
     );
-  }
-
-  void updateBookList() {
-    dbFuture = db.initializeDatabase();
-    dbFuture.then((database) {
-      Future<List<BookModel>> bookListFuture = db.getBookList();
-      bookListFuture.then((bookList) {
-        setState(() {
-          books = bookList;
-        });
-      });
-    });
-  }
-
-  void updateSongList() {
-    dbFuture = db.initializeDatabase();
-    dbFuture.then((database) {
-      Future<List<SongModel>> songListFuture = db.getFavorites();
-      songListFuture.then((songList) {
-        setState(() {
-          songs = songList;
-          progress.hideProgress();
-        });
-      });
-    });
-  }
-
-  void searchSong() {
-    String searchThis = txtSearch.text;
-    if (searchThis.length > 0) {
-      songs.clear();
-      dbFuture = db.initializeDatabase();
-      dbFuture.then((database) {
-        Future<List<SongModel>> songListFuture =
-            db.getFavSearch(txtSearch.text);
-        songListFuture.then((songList) {
-          setState(() {
-            songs = songList;
-          });
-        });
-      });
-    } else
-      updateSongList();
-  }
-
-  void clearSearch() {
-    txtSearch.clear();
-    songs.clear();
-    updateSongList();
   }
 
   void navigateToSong(SongModel song, String songbook) async {

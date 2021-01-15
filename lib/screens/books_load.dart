@@ -1,46 +1,58 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:anisi_controls/anisi_controls.dart';
 import 'package:vsongbook/helpers/app_settings.dart';
+import 'package:vsongbook/models/list_item.dart';
 import 'package:vsongbook/models/book_model.dart';
-import 'package:vsongbook/widgets/as_progress.dart';
 import 'package:vsongbook/helpers/app_futures.dart';
 import 'package:vsongbook/models/base/event_object.dart';
 import 'package:vsongbook/models/callbacks/Book.dart';
 import 'package:vsongbook/utils/preferences.dart';
 import 'package:vsongbook/utils/constants.dart';
+import 'package:vsongbook/utils/colors.dart';
 import 'package:vsongbook/helpers/app_database.dart';
 import 'package:vsongbook/screens/songs_load.dart';
-import 'package:animated_floatactionbuttons/animated_floatactionbuttons.dart';
+import 'package:vsongbook/screens/about_app.dart';
+import 'package:vsongbook/screens/donate.dart';
+import 'package:vsongbook/screens/help_desk.dart';
 
 class BooksLoad extends StatefulWidget {
+  BooksLoad();
+
   @override
-  State<StatefulWidget> createState() {
-    return BooksLoadState();
-  }
+  createState() => BooksLoadState();
 }
 
 class BooksLoadState extends State<BooksLoad> {
-  var appBar = AppBar();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  AsProgress progress = AsProgress.getAsProgress(LangStrings.gettingReady);
+  
+  var appBar = AppBar();
 
+  BooksLoadState();
+
+  AsInformer informer = AsInformer.setUp(1, LangStrings.fetchingData, ColorUtils.primaryColor, Colors.transparent, Colors.white, 10);
   AppDatabase databaseHelper = AppDatabase();
-  List<BookItem<Book>> selected = [];
-  List<BookItem<Book>> bookList;
-  List<Book> books;
+  List<ListItem<Book>> selected = [];
+  List<ListItem<Book>> bookList;
+  List<Book> books = List<Book>();
 
-  bool darkModePressed = false;
 
-  void populateData() {
-    bookList = [];
-    for (int i = 0; i < books.length; i++)
-      bookList.add(BookItem<Book>(books[i]));
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => initBuild(context));
   }
 
-  void requestData() async {
-    progress.showProgress();
+  /// Method to run anything that needs to be run immediately after Widget build
+  void initBuild(BuildContext context) async {
+    requestData();
+  }
 
+  /// Method to request data either from the db or server
+  void requestData() async {
+    informer.showWidget();
+    
     EventObject eventObject = await getSongbooks();
 
     switch (eventObject.id) {
@@ -49,10 +61,12 @@ class BooksLoadState extends State<BooksLoad> {
           setState(() {
             showDialog(
                 context: context,
-                builder: (BuildContext context) => justAMinuteDialog());
-            progress.hideProgress();
+                builder: (context) => justAMinuteDialog());
+            informer.hideWidget();
             books = eventObject.object;
-            populateData();
+            bookList = [];
+            for (int i = 0; i < books.length; i++)
+              bookList.add(ListItem<Book>(books[i]));
           });
         }
         break;
@@ -62,8 +76,8 @@ class BooksLoadState extends State<BooksLoad> {
           setState(() {
             showDialog(
                 context: context,
-                builder: (BuildContext context) => noInternetDialog());
-            progress.hideProgress();
+                builder: (context) => noInternetDialog());
+            informer.hideWidget();
           });
         }
         break;
@@ -72,77 +86,36 @@ class BooksLoadState extends State<BooksLoad> {
         {
           setState(() {
             showDialog(
-                context: context,
-                builder: (BuildContext context) => noInternetDialog());
-            progress.hideProgress();
+              context: context,
+              builder: (context) => noInternetDialog()
+            );
+            informer.hideWidget();
           });
         }
         break;
     }
   }
-
+  
   @override
   Widget build(BuildContext context) {
-    if (books == null) {
-      books = List<Book>();
-      requestData();
-      //handleRefresh();
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text(LangStrings.setUpTheApp + LangStrings.appName),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: () {
-              books = List<Book>();
-              requestData();
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.check),
+            icon: Icon(Icons.settings),
             onPressed: () {
               showDialog(
                 context: context,
-                builder: (BuildContext context) => areYouDoneDialog()
+                builder: (BuildContext context) => settingsDialog()
               );
             },
           ),
+          menuPopup(),
         ],
       ),
       body: mainBody(),
-      floatingActionButton: AnimatedFloatingActionButton(
-        fabButtons: floatingButtons(),
-        animatedIconData: AnimatedIcons.menu_close,
-      ),
     );
-  }
-
-  List<Widget> floatingButtons() {
-    return <Widget>[
-      FloatingActionButton(
-        heroTag: "settings",
-        tooltip: LangStrings.appTheme,
-        child: Icon(Icons.settings),
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) => settingsDialog()
-          );
-        },
-      ),
-      FloatingActionButton(
-        heroTag: "proceed",
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) => areYouDoneDialog());
-        },
-        tooltip: LangStrings.proceed,
-        child: Icon(Icons.check),
-      ),
-    ];
   }
 
   Widget mainBody() {
@@ -160,42 +133,133 @@ class BooksLoadState extends State<BooksLoad> {
                 ),
                 FlatButton(
                   child: Text(LangStrings.learnMore),
+                  color: Colors.deepOrange,
                   onPressed: () {
                     showDialog(
-                        context: context,
-                        builder: (BuildContext context) => justAMinuteDialog());
+                      context: context,
+                      builder: (BuildContext context) => justAMinuteDialog()
+                    );
                   },
                 ),
               ],
             ),
           ),
           Container(
-            height: (MediaQuery.of(context).size.height - (appBar.preferredSize.height * 2)),
+            height: (MediaQuery.of(context).size.height - (appBar.preferredSize.height * 2) - 50),
             padding: const EdgeInsets.symmetric(horizontal: 5),
             margin: EdgeInsets.only(top: 50),
             child: ListView.builder(
               physics: BouncingScrollPhysics(),
-                  itemCount: books.length,
-                  itemBuilder: bookListView,
+              itemCount: books.length,
+              itemBuilder: bookListView,
             ),
           ),
           Container(
-            height: (MediaQuery.of(context).size.height - (appBar.preferredSize.height * 2)),
+            height: 100,
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            margin: EdgeInsets.only(top: (MediaQuery.of(context).size.height - (appBar.preferredSize.height * 2) - 60)),
+            child: Center(
+              child: Container(
+                width: 300,
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      child: FloatingActionButton.extended(
+                        heroTag: "reload",
+                        icon: Icon(Icons.refresh, color: ColorUtils.white),
+                        label: Text(LangStrings.reload, style: TextStyle(color: ColorUtils.white)),
+                        onPressed: () {
+                          books = List<Book>();
+                          requestData();
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      child: FloatingActionButton.extended(
+                        heroTag: "proceed",
+                        icon: Icon(Icons.check, color: ColorUtils.white),
+                        label: Text(LangStrings.proceed, style: TextStyle(color: ColorUtils.white)),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) => areYouDoneDialog()
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                )
+              )
+            ),
+          ),
+          Container(            
+            margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.4),
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: progress,
+            child: Center(
+              child: informer,
+            ),
           ),
         ],
       ),
     );
   }
 
+  Widget menuPopup() => PopupMenuButton<int>(
+    itemBuilder: (context) => [
+      PopupMenuItem(
+        value: 1,
+        child: Text(LangStrings.supportUs),
+      ),
+      PopupMenuItem(
+        value: 2,
+        child: Text(LangStrings.helpFeedback),
+      ),
+      PopupMenuItem(
+        value: 3,
+        child: Text(LangStrings.aboutTheApp + LangStrings.appName),
+      ),
+    ],
+    onCanceled: () { },
+    onSelected: (value) {
+      selectedMenu(value, context);
+    },
+    icon: Icon(
+      Theme.of(context).platform == TargetPlatform.iOS ? Icons.more_horiz : Icons.more_vert,
+    ),
+  );
+
+  void selectedMenu(int menu, BuildContext context) {
+    switch (menu) {
+      case 1:
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return Donate();
+          })
+        );
+        break;
+      case 2:
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return HelpDesk();
+          })
+        );
+        break;
+      case 3:
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return AboutApp();
+          })
+        );
+        break;
+    }
+  }
+
   Widget settingsDialog() {
     return AlertDialog(
-      title: new Text(
+      title: Text(
         LangStrings.displaySettings,
-        style: new TextStyle(color: Colors.deepOrange, fontSize: 25),
+        style: TextStyle(color: Colors.deepOrange, fontSize: 25),
       ),
-      content: new Container(
+      content: Container(
         height: 50,
         width: double.maxFinite,
         child: ListView(children: <Widget>[
@@ -207,7 +271,9 @@ class BooksLoadState extends State<BooksLoad> {
                   : Icons.brightness_7),
               title: Text(LangStrings.darkMode),
               trailing: Switch(
-                onChanged: (bool value) => settings.setDarkMode(value),
+                onChanged: (bool value) {
+                  settings.setDarkMode(value);
+                },
                 value: settings.isDarkMode,
               ),
             );
@@ -216,13 +282,12 @@ class BooksLoadState extends State<BooksLoad> {
         ]),
       ),
       actions: <Widget>[
-        new Container(
+        Container(
           margin: EdgeInsets.all(5),
           child: FlatButton(
             child:
-                Text(LangStrings.okayDone, style: new TextStyle(fontSize: 20)),
+            Text(LangStrings.okayDone, style: TextStyle(fontSize: 20)),
             color: Colors.deepOrange,
-            //textColor: Colors.white,
             onPressed: () {
               Navigator.pop(context);
             },
@@ -234,22 +299,21 @@ class BooksLoadState extends State<BooksLoad> {
 
   Widget loadingGettingReady() {
     return Container(
-      height: (MediaQuery.of(context).size.height -
-          (appBar.preferredSize.height * 2)),
+      height: (MediaQuery.of(context).size.height - (appBar.preferredSize.height * 2)),
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Stack(
         children: <Widget>[
-          new Center(child: Container(width: 300, height: 120)),
-          new Center(
+          Center(child: Container(width: 300, height: 120)),
+          Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                new CircularProgressIndicator(
-                    valueColor: new AlwaysStoppedAnimation(Colors.deepOrange)),
-                new Container(
+                CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation(Colors.deepOrange)),
+                Container(
                   margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                   child: Text(LangStrings.gettingReady,
-                      style: new TextStyle(fontSize: 18)),
+                      style: TextStyle(fontSize: 18)),
                 )
               ],
             ),
@@ -261,20 +325,20 @@ class BooksLoadState extends State<BooksLoad> {
 
   Widget justAMinuteDialog() {
     return AlertDialog(
-      title: new Text(
+      title: Text(
         LangStrings.justAMinute,
-        style: new TextStyle(color: Colors.deepOrange, fontSize: 25),
+        style: TextStyle(color: Colors.deepOrange, fontSize: 25),
       ),
-      content: new Text(
+      content: Text(
         LangStrings.takeTimeSelecting,
-        style: new TextStyle(fontSize: 20),
+        style: TextStyle(fontSize: 20),
       ),
       actions: <Widget>[
-        new Container(
+        Container(
           margin: EdgeInsets.all(5),
           child: FlatButton(
             child:
-                Text(LangStrings.okayGotIt, style: new TextStyle(fontSize: 20)),
+                Text(LangStrings.okayGotIt, style: TextStyle(fontSize: 20)),
             color: Colors.deepOrange,
             //textColor: Colors.white,
             onPressed: () {
@@ -288,20 +352,20 @@ class BooksLoadState extends State<BooksLoad> {
 
   Widget noInternetDialog() {
     return AlertDialog(
-      title: new Text(
+      title: Text(
         LangStrings.areYouConnected,
-        style: new TextStyle(color: Colors.deepOrange, fontSize: 25),
+        style: TextStyle(color: Colors.deepOrange, fontSize: 25),
       ),
-      content: new Text(
+      content: Text(
         LangStrings.noConnection,
-        style: new TextStyle(fontSize: 20),
+        style: TextStyle(fontSize: 20),
       ),
       actions: <Widget>[
-        new Container(
+        Container(
           margin: EdgeInsets.all(5),
           child: FlatButton(
             child:
-                Text(LangStrings.okayGotIt, style: new TextStyle(fontSize: 20)),
+                Text(LangStrings.okayGotIt, style: TextStyle(fontSize: 20)),
             color: Colors.deepOrange,
             textColor: Colors.white,
             onPressed: () {
@@ -309,10 +373,10 @@ class BooksLoadState extends State<BooksLoad> {
             },
           ),
         ),
-        new Container(
+        Container(
           margin: EdgeInsets.all(5),
           child: FlatButton(
-            child: Text(LangStrings.retry, style: new TextStyle(fontSize: 20)),
+            child: Text(LangStrings.retry, style: TextStyle(fontSize: 20)),
             color: Colors.deepOrange,
             textColor: Colors.white,
             onPressed: () {
@@ -334,20 +398,20 @@ class BooksLoadState extends State<BooksLoad> {
             selected[i].data.title + " (" + selected[i].data.qcount + LangStrings.songsPrefix;
       }
       return AlertDialog(
-        title: new Text(
+        title: Text(
           LangStrings.doneSelecting,
-          style: new TextStyle(color: Colors.deepOrange, fontSize: 25),
+          style: TextStyle(color: Colors.deepOrange, fontSize: 25),
         ),
-        content: new Text(
+        content: Text(
           selectedbooks,
-          style: new TextStyle(fontSize: 20),
+          style: TextStyle(fontSize: 20),
         ),
         actions: <Widget>[
-          new Container(
+          Container(
             margin: EdgeInsets.all(5),
             child: FlatButton(
               child:
-                  Text(LangStrings.goBack, style: new TextStyle(fontSize: 20)),
+                  Text(LangStrings.goBack, style: TextStyle(fontSize: 20)),
               color: Colors.deepOrange,
               textColor: Colors.white,
               onPressed: () {
@@ -355,16 +419,16 @@ class BooksLoadState extends State<BooksLoad> {
               },
             ),
           ),
-          new Container(
+          Container(
             margin: EdgeInsets.all(5),
             child: FlatButton(
               child:
-                  Text(LangStrings.proceed, style: new TextStyle(fontSize: 20)),
+                  Text(LangStrings.proceed, style: TextStyle(fontSize: 20)),
               color: Colors.deepOrange,
               textColor: Colors.white,
               onPressed: () {
                 Navigator.pop(context);
-                _goToNextScreen();
+                goToNextScreen();
               },
             ),
           ),
@@ -372,18 +436,18 @@ class BooksLoadState extends State<BooksLoad> {
       );
     } else {
       return AlertDialog(
-        title: new Text(
+        title: Text(
           LangStrings.justAMinute,
-          style: new TextStyle(color: Colors.orange, fontSize: 25),
+          style: TextStyle(color: Colors.orange, fontSize: 25),
         ),
-        content: new Text(
+        content: Text(
           LangStrings.noSelection,
-          style: new TextStyle(color: Colors.black, fontSize: 20),
+          style: TextStyle(color: Colors.black, fontSize: 20),
         ),
         actions: <Widget>[
-          new FlatButton(
+          FlatButton(
             child: Text(LangStrings.okayGotIt,
-                style: new TextStyle(color: Colors.orange, fontSize: 20)),
+                style: TextStyle(color: Colors.orange, fontSize: 20)),
             onPressed: () {
               Navigator.pop(context);
             },
@@ -393,7 +457,7 @@ class BooksLoadState extends State<BooksLoad> {
     }
   }
 
-  void onItemSelected(BookItem tapped) {
+  void onBookSelected(ListItem tapped) {
     setState(() {
       tapped.isSelected = !tapped.isSelected;
     });
@@ -411,16 +475,14 @@ class BooksLoadState extends State<BooksLoad> {
   Widget bookListView(BuildContext context, int index) {
     return GestureDetector(
       onTap: () {
-        onItemSelected(bookList[index]);
+        onBookSelected(bookList[index]);
       },
       onLongPress: () {
-        onItemSelected(bookList[index]);
+        onBookSelected(bookList[index]);
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 4),
-        //color: Colors.white,
         child: Card(
-          //color: bookList[index].isSelected ? Colors.deepOrange : Colors.white,
           color: bookList[index].isSelected
               ? Colors.deepOrange
               : Provider.of<AppSettings>(context).isDarkMode
@@ -432,49 +494,37 @@ class BooksLoadState extends State<BooksLoad> {
               Hero(
                 tag: books[index].categoryid,
                 child: Container(
-                  height: 120,
-                  width: 100,
+                  height: 80,
+                  width: 70,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(5),
                         topLeft: Radius.circular(5)),
                     image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: new AssetImage("assets/images/book.jpg")),
+                        image: AssetImage("assets/images/book.jpg")),
                   ),
                 ),
               ),
               Container(
-                padding: const EdgeInsets.all(10),
-                height: 120,
+                margin: EdgeInsets.only(left: 5),
+                height: 70,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
                       books[index].title,
                       style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: bookList[index].isSelected
-                              ? Colors.white
-                              : Provider.of<AppSettings>(context).isDarkMode
-                                  ? Colors.white
-                                  : Colors.black),
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: bookList[index].isSelected ? Colors.white : Provider.of<AppSettings>(context).isDarkMode ? Colors.white : Colors.black
+                      ),
                     ),
-                    SizedBox(height: 10),
-                    Container(
-                      child: Text(
-                        books[index].qcount +
-                            " " +
-                            books[index].backpath +
-                            LangStrings.songsInside +
-                            books[index].content,
-                        style: TextStyle(
-                            color: bookList[index].isSelected
-                                ? Colors.white
-                                : Provider.of<AppSettings>(context).isDarkMode
-                                    ? Colors.white
-                                    : Colors.black),
+                    SizedBox(height: 5),
+                    Text(books[index].qcount + " " + books[index].backpath + LangStrings.songsInside + books[index].content,
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: bookList[index].isSelected ? Colors.white : Provider.of<AppSettings>(context).isDarkMode ? Colors.white : Colors.black
                       ),
                     ),
                   ],
@@ -494,14 +544,15 @@ class BooksLoadState extends State<BooksLoad> {
       Book item = selected[i].data;
       int songs = int.parse(item.qcount);
       int cartid = int.parse(item.categoryid);
-      BookModel book = new BookModel(cartid, 1, item.title, item.tags, songs,
+      BookModel book = BookModel(cartid, 1, item.title, item.tags, songs,
           i + 1, item.content, item.backpath);
       await db.insertBook(book);
     }
   }
 
-  void _goToNextScreen() {
-    progress.showProgress();
+  /// Proceed to a newer screen
+  void goToNextScreen() {
+    informer.showWidget();
     saveData();
 
     String selectedbooks = "";
@@ -512,16 +563,10 @@ class BooksLoadState extends State<BooksLoad> {
       selectedbooks = selectedbooks.substring(0, selectedbooks.length - 1);
     } catch (Exception) {}
 
-    progress.hideProgress();
+    informer.hideWidget();
     Preferences.setBooksLoaded(true);
     Preferences.setSelectedBooks(selectedbooks);
     Navigator.pushReplacement(context,
-        new MaterialPageRoute(builder: (context) => new SongsLoad()));
+        MaterialPageRoute(builder: (context) => SongsLoad()));
   }
-}
-
-class BookItem<T> {
-  bool isSelected = false;
-  T data;
-  BookItem(this.data);
 }

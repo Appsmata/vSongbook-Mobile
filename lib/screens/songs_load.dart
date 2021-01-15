@@ -1,34 +1,50 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:vsongbook/helpers/app_settings.dart';
-import 'package:vsongbook/models/song_model.dart';
+import 'package:anisi_controls/anisi_controls.dart';
 import 'package:vsongbook/helpers/app_futures.dart';
 import 'package:vsongbook/models/base/event_object.dart';
-import 'package:vsongbook/models/callbacks/Song.dart';
 import 'package:vsongbook/utils/preferences.dart';
 import 'package:vsongbook/utils/constants.dart';
+import 'package:vsongbook/utils/colors.dart';
 import 'package:vsongbook/helpers/app_database.dart';
+import 'package:vsongbook/models/callbacks/Song.dart';
+import 'package:vsongbook/models/song_model.dart';
 import 'package:vsongbook/screens/app_start.dart';
-import 'package:vsongbook/widgets/as_text_view.dart';
-import 'package:vsongbook/widgets/as_line_progress.dart';
 
 class SongsLoad extends StatefulWidget {
+  SongsLoad();
+
   @override
-  State<StatefulWidget> createState() {
-    return SongsLoadState();
-  }
+  createState() => SongsLoadState();
 }
 
 class SongsLoadState extends State<SongsLoad> {
-  AsTextView textIndicator = AsTextView.setUp(LangStrings.gettingReady, 25, true);
-  AsTextView textProgress = AsTextView.setUp("", 25, true);
-  AsLineProgress lineProgress = AsLineProgress.setUp(300, 0);
-  final globalKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> globalKey = GlobalKey<ScaffoldState>();
+  SongsLoadState();
 
+  AsLoader loader = AsLoader.setUp(ColorUtils.primaryColor);
+  AsLineProgress progress = AsLineProgress.setUp(0, Colors.black, ColorUtils.primaryColor, ColorUtils.secondaryColor);
+  AsInformer informer = AsInformer.setUp(1, LangStrings.gettingReady, ColorUtils.primaryColor, Colors.transparent, Colors.white, 10);
+  
   AppDatabase databaseHelper = AppDatabase();
-  List<Song> songs;
+  List<Song> songs = List<Song>();
 
+  double mHeight, mWidth;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => initBuild(context));
+  }
+
+  /// Method to run anything that needs to be run immediately after Widget build
+  void initBuild(BuildContext context) async {
+    loader.showWidget();
+    informer.showWidget();
+    requestData();
+  }
+
+  /// Method to request data either from the db or server
   void requestData() async {
     String books = await Preferences.getSharedPreferenceStr(
         SharedPreferenceKeys.selectedBooks);
@@ -38,8 +54,6 @@ class SongsLoadState extends State<SongsLoad> {
       case EventConstants.requestSuccessful:
         {
           setState(() {
-            //globalKey.currentState.showSnackBar(new SnackBar(content: new Text(LangStrings.Request_Successful)));
-            //progressDialog.hideProgress();
             songs = eventObject.object;
             _goToNextScreen();
           });
@@ -49,8 +63,8 @@ class SongsLoadState extends State<SongsLoad> {
       case EventConstants.requestUnsuccessful:
         {
           setState(() {
-            //globalKey.currentState.showSnackBar(new SnackBar(content: new Text(LangStrings.Request_Unsuccessful)));
-            //progressDialog.hideProgress();
+            //globalKey.currentState.showSnackBar(SnackBar(content: Text(LangStrings.Request_Unsuccessful)));
+            informer.hideWidget();
           });
         }
         break;
@@ -58,8 +72,8 @@ class SongsLoadState extends State<SongsLoad> {
       case EventConstants.noInternetConnection:
         {
           setState(() {
-            //globalKey.currentState.showSnackBar(new SnackBar(content: new Text(LangStrings.No_Internet_Connection)));
-            //progressDialog.hideProgress();
+            //globalKey.currentState.showSnackBar(SnackBar(content: Text(LangStrings.No_Internet_Connection)));
+            informer.hideWidget();
           });
         }
         break;
@@ -68,163 +82,101 @@ class SongsLoadState extends State<SongsLoad> {
 
   @override
   Widget build(BuildContext context) {
-    if (songs == null) {
-      songs = List<Song>();
-      requestData();
-    }
-
     return Scaffold(
       key: globalKey,
-      body: Center(
-        child: Container(
-          constraints: BoxConstraints.expand(),
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: new AssetImage("assets/images/bg.jpg"),
-                  fit: BoxFit.cover)),
-          child: Column(
-            children: <Widget>[
-              Stack(
-                children: <Widget>[
-                  _appIcon(),
-                  _appLoading(),
-                ],
+      body: mainBody(),
+    );
+  }
+
+  Widget mainBody() {
+    mHeight = MediaQuery.of(context).size.height;
+    mWidth = MediaQuery.of(context).size.width;
+    
+    return Container(
+      constraints: BoxConstraints.expand(),
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/bg.jpg"),
+          fit: BoxFit.cover)
+      ),
+      child: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            appIconLoader(),
+            Container(
+              margin: EdgeInsets.only(top: mHeight / 15.12),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Center(
+                child: informer,
               ),
-              _appLabel(),
-              Stack(
-                children: <Widget>[
-                  _appProgress(),
-                  _appProgressText(),
-                ],
+            ),
+            Container(
+              margin: EdgeInsets.only(top: mHeight / 30.24),
+              width: mWidth / 1.125,
+              child: Center(
+                child: progress,
               ),
-            ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget appIconLoader() {
+    return Stack(
+      children: <Widget>[
+        Center(
+          child: Container(
+            margin: EdgeInsets.only(top: mHeight / 6.3),
+            child: Image(
+              image: AssetImage("assets/images/appicon.png"),
+              width: mWidth / 1.125,
+            ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _appIcon() {
-    return Center(
-      child: Container(
-        child: Image(
-          image: new AssetImage("assets/images/appicon.png"),
-          height: 450,
-          width: 300,
+        Center(
+          child: Container(
+            margin: EdgeInsets.only(top: mHeight / 5.21),
+            child: loader,
+          ),
         ),
-        margin: EdgeInsets.only(top: 75),
-      ),
+      ],
     );
   }
 
-  Widget _appLoading() {
-    return Center(
-      child: Container(
-        child: CircularProgressIndicator(
-            valueColor: new AlwaysStoppedAnimation(Colors.white)),
-        margin: EdgeInsets.only(top: 200),
-      ),
-    );
-  }
-
-  Widget _appLabel() {
-    return Center(
-      child: Container(
-        height: 100,
-        width: 350,
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        decoration: Provider.of<AppSettings>(context).isDarkMode
-            ? BoxDecoration()
-            : BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.orange),
-                boxShadow: [BoxShadow(blurRadius: 5)],
-                borderRadius: new BorderRadius.all(new Radius.circular(10))),
-        child: Stack(
-          children: <Widget>[
-            new Center(child: Container(width: 300, height: 120)),
-            new Center(
-              child: Container(
-                margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                child: textIndicator,
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _appProgress() {
-    return Center(
-      child: Container(
-        height: 100,
-        width: 350,
-        margin: EdgeInsets.only(top: 20),
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Stack(
-          children: <Widget>[
-            new Center(
-              child: lineProgress,
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _appProgressText() {
-    return Center(
-      child: Container(
-        height: 100,
-        width: 350,
-        margin: EdgeInsets.only(top: 20),
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Stack(
-          children: <Widget>[
-            new Center(
-              child: textProgress,
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
+  /// Save the data selected to the db
   Future<void> saveData() async {
     AppDatabase db = AppDatabase();
 
     for (int i = 0; i < songs.length; i++) {
-      int progress = (i / songs.length * 100).toInt();
-      String progresStr = (progress / 100).toStringAsFixed(1);
+      int progressValue = (i / songs.length * 100).toInt();
+      progress.setProgress(progressValue);
 
-      textProgress.setText(progress.toString() + " %");
-      lineProgress.setProgress(double.parse(progresStr));
-
-      switch (progress) {
+      switch (progressValue) {
         case 1:
-          textIndicator.setText("On your marks ...");
+          informer.setText("On your marks ...");
           break;
         case 5:
-          textIndicator.setText("Set, Ready ...");
+          informer.setText("Set, Ready ...");
           break;
         case 10:
-          textIndicator.setText("Loading songs ...");
+          informer.setText("Loading songs ...");
           break;
         case 20:
-          textIndicator.setText("Patience pays ...");
+          informer.setText("Patience pays ...");
           break;
         case 40:
-          textIndicator.setText("Loading songs ...");
+          informer.setText("Loading songs ...");
           break;
         case 75:
-          textIndicator.setText("Thanks for your patience!");
+          informer.setText("Thanks for your patience!");
           break;
         case 85:
-          textIndicator.setText("Finishing up");
+          informer.setText("Finishing up");
           break;
         case 95:
-          textIndicator.setText("Almost done");
+          informer.setText("Almost done");
           break;
       }
 
@@ -235,20 +187,19 @@ class SongsLoadState extends State<SongsLoad> {
       int userid = item.userid == null ? 0 : int.parse(item.userid);
 
       String title = item.title.replaceAll("\n", "\\n").replaceAll("'", "''");
-      String alias = item.title.replaceAll("\n", "\\n").replaceAll("'", "''");
-      String content =
-          item.content.replaceAll("\n", "\\n").replaceAll("'", "''");
+      String alias = item.alias.replaceAll("\n", "\\n").replaceAll("'", "''");
+      String content = item.content.replaceAll("\n", "\\n").replaceAll("'", "''");
 
-      SongModel song = new SongModel(itemid, bookid, "S", number, title, alias,
-          content, "", "", userid, item.created);
+      SongModel song = SongModel(itemid, bookid, "S", number, title, alias, content, "", "", userid, item.created);
       await db.insertSong(song);
     }
   }
 
+  /// Proceed to a newer screen
   Future<void> _goToNextScreen() async {
     await saveData();
     Preferences.setSongsLoaded(true);
     Navigator.pushReplacement(
-        context, new MaterialPageRoute(builder: (context) => new AppStart()));
+      context, MaterialPageRoute(builder: (context) => AppStart()));
   }
 }

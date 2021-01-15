@@ -32,7 +32,7 @@ class AppDatabase {
   Future<Database> initializeDatabase() async {
     // Get the directory path for both Android and iOS to store database.
     Directory docsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(docsDirectory.path, 'vSongBook.db');
+    String path = join(docsDirectory.path, 'vSongBookApp.db');
 
     // Open/create the database at a given path
     var vsbDatabase = await openDatabase(path, version: 1, onCreate: _createDb);
@@ -132,20 +132,16 @@ class AppDatabase {
 
   Future<int> favouriteSong(SongModel song, bool isFavorited) async {
     var db = await this.database;
-    if (isFavorited)
-      song.isfav = 1;
-    else
-      song.isfav = 0;
-    var result = await db.rawUpdate("UPDATE " + Tables.songs +
-        " SET " + Columns.isfav + "=" + song.isfav.toString() +
-        " WHERE " + Columns.songid + "=" + song.songid.toString());
+    if (isFavorited) song.isfav = 1;
+    else song.isfav = 0;
+    var result = await db.rawUpdate("UPDATE " + Tables.songs + " SET " + Columns.isfav + "=" + song.isfav.toString() + 
+      " WHERE " + Columns.songid + "=" + song.songid.toString());
     return result;
   }
 
   Future<int> deleteSong(int songID) async {
     var db = await this.database;
-    int result = await db.rawDelete("DELETE FROM " + Tables.songs +
-        " WHERE " + Columns.songid + "=" + songID.toString());
+    int result = await db.rawDelete("DELETE FROM " + Tables.songs + " WHERE " + Columns.songid + "=" + songID.toString());
     return result;
   }
 

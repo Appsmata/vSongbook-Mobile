@@ -31,14 +31,13 @@ class SongView extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return SongViewState(
-        this.song, this.haschorus, this.book);
+    return SongViewState(this.song, this.haschorus, this.book);
   }
 }
 
 class SongViewState extends State<SongView> {
   SongViewState(this.song, this.haschorus, this.book);
-  final globalKey = new GlobalKey<ScaffoldState>();
+  final globalKey = GlobalKey<ScaffoldState>();
   AppDatabase db = AppDatabase();
 
   var appBar = AppBar(), songVerses;
@@ -69,7 +68,10 @@ class SongViewState extends State<SongView> {
   }
 
   void getListView() async {
-    await setContent();
+    try {
+      await setContent();
+    }
+    catch (Exception) { }
   }
 
   @override
@@ -160,15 +162,19 @@ class SongViewState extends State<SongView> {
   }
 
   Widget topPanel() {
-    return Center(
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        height: 50,
+    String songtitle = song.number.toString() + ". " + refineTitle(song.title);
+
+    if (song.alias.length > 2 && song.title != song.alias) songtitle = songtitle + "\n" + refineTitle(song.alias);
+
+    return Container(
+      padding: const EdgeInsets.all(10),
+      height: 80,
+      child: Center(
         child: Text(
-          song.number.toString() + ". " + refineTitle(song.title),
-          style: new TextStyle(
+          songtitle,
+          style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 25,
+            fontSize: 25, 
             color: Provider.of<AppSettings>(context).isDarkMode ? Colors.white : Colors.black),
         ),
       ),
@@ -177,7 +183,7 @@ class SongViewState extends State<SongView> {
 
   Widget songViewer() {
     return Container(
-      height: MediaQuery.of(context).size.height - 138,
+      height: MediaQuery.of(context).size.height - 170,
       decoration: Provider.of<AppSettings>(context).isDarkMode ? BoxDecoration() : BoxDecoration(color: Colors.orange[100]),
       child: VerticalTabs(
         tabsWidth: 50,
@@ -191,7 +197,7 @@ class SongViewState extends State<SongView> {
             return Tab(
               child: Center(
                 child: Text(verseInfos[index],
-                  style: new TextStyle(
+                  style: TextStyle(
                     fontSize: 35,
                     fontWeight: FontWeight.bold,
                     color: Colors.black)
@@ -233,7 +239,7 @@ class SongViewState extends State<SongView> {
         verseText(lyrics, nfontsize, image, controller),
         verseTitle(verseTitles[index]),
         Container(
-          margin: EdgeInsets.only(top: MediaQuery.of(context).size.height - 210, left: 15),
+          margin: EdgeInsets.only(top: MediaQuery.of(context).size.height - 250, left: 15),
           child: Row(
             children: [
               copyVerse(index, lyrics),
@@ -254,18 +260,18 @@ class SongViewState extends State<SongView> {
         margin: EdgeInsets.only(top: 10, left: 10),
         child: Column(
           children: <Widget>[
-            new Container(
+            Container(
               width: 200,
               height: 50,
-              decoration: new BoxDecoration( color: Provider.of<AppSettings>(context).isDarkMode ? Colors.black : Colors.orange,
+              decoration: BoxDecoration( color: Provider.of<AppSettings>(context).isDarkMode ? Colors.black : Colors.orange,
                 border: Border.all(color: Colors.white),
                 boxShadow: [BoxShadow(blurRadius: 5)],
-                borderRadius: new BorderRadius.all(new Radius.circular(5))
+                borderRadius: BorderRadius.all(Radius.circular(5))
               ),
               child: Center(
                 child: Text(
                   verseTitle,
-                  style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                 ),
               ),
             ),
@@ -282,7 +288,7 @@ class SongViewState extends State<SongView> {
         Screenshot(
           controller: screenshotController,
           child: Container(
-            height: MediaQuery.of(context).size.height - 235,
+            height: MediaQuery.of(context).size.height - 275,
             margin: EdgeInsets.only(top: 25),
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
             decoration: Provider.of<AppSettings>(context).isDarkMode ? BoxDecoration() : BoxDecoration(color: Colors.orange[100]),
@@ -293,7 +299,7 @@ class SongViewState extends State<SongView> {
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: Text(
                     lyrics,
-                    style: new TextStyle(fontSize: fontsize),
+                    style: TextStyle(fontSize: fontsize),
                   ),
                 ),
               )
@@ -315,8 +321,8 @@ class SongViewState extends State<SongView> {
         tooltip: LangStrings.copyVerse,
         onPressed: () async {
           Clipboard.setData(ClipboardData(text: lyrics));
-          globalKey.currentState.showSnackBar(new SnackBar(
-            content: new Text(LangStrings.verseCopied),
+          globalKey.currentState.showSnackBar(SnackBar(
+            content: Text(LangStrings.verseCopied),
           ));
         }
       ),
@@ -379,8 +385,8 @@ class SongViewState extends State<SongView> {
         tooltip: LangStrings.copySong,
         onPressed: () async {
           Clipboard.setData(ClipboardData(text: songTitle + "\n\n" + songContent));
-          globalKey.currentState.showSnackBar(new SnackBar(
-            content: new Text(LangStrings.songCopied),
+          globalKey.currentState.showSnackBar(SnackBar(
+            content: Text(LangStrings.songCopied),
           ));
         }
       ),
@@ -464,16 +470,16 @@ class SongViewState extends State<SongView> {
       db.favouriteSong(song, false);
     else
       db.favouriteSong(song, true);
-    globalKey.currentState.showSnackBar(new SnackBar(
-      content: new Text(songTitle + " " + LangStrings.songLiked),
+    globalKey.currentState.showSnackBar(SnackBar(
+      content: Text(songTitle + " " + LangStrings.songLiked),
     ));
     //notifyListeners();
   }
 
   Widget settingsDialog() {
     return AlertDialog(
-      title: new Text(LangStrings.quickSettings),
-      content: new Container(
+      title: Text(LangStrings.quickSettings),
+      content: Container(
         height: 150,
         width: double.maxFinite,
         child: ListView(children: <Widget>[
@@ -502,9 +508,9 @@ class SongViewState extends State<SongView> {
         ]),
       ),
       actions: <Widget>[
-        new Container(
+        Container(
           child: FlatButton(
-            child: Text(LangStrings.okayDone, style: new TextStyle(fontSize: 20)),
+            child: Text(LangStrings.okayDone, style: TextStyle(fontSize: 20)),
             color: Colors.deepOrange,
             onPressed: () {
               Navigator.pop(context);
@@ -551,6 +557,7 @@ class SongViewState extends State<SongView> {
     }
   }
 
+  /// Go back to the screen before the current one
   void moveToLastScreen() {
     Navigator.pop(context, true);
   }

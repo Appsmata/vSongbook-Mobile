@@ -67,7 +67,7 @@ class SongEditState extends State<SongEdit> {
           ? BoxDecoration()
           : BoxDecoration(
               image: DecorationImage(
-                  image: new AssetImage("assets/images/bg.jpg"),
+                  image: AssetImage("assets/images/bg.jpg"),
                   fit: BoxFit.cover)),
       child: ListView(
         padding: EdgeInsets.all(8.0),
@@ -138,7 +138,7 @@ class SongEditState extends State<SongEdit> {
                 padding: EdgeInsets.only(top: 0),
                 child: Text(
                   "Extra Details (Optional)",
-                  style: new TextStyle(fontSize: 25),
+                  style: TextStyle(fontSize: 25),
                 ),
               ),
               Padding(
@@ -233,6 +233,7 @@ class SongEditState extends State<SongEdit> {
     showDialog(context: context, builder: (_) => alertDialog);
   }
 
+  /// Go back to the screen before the current one
   void moveToLastScreen() {
     Navigator.pop(context, true);
   }

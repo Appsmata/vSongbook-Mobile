@@ -7,11 +7,11 @@ import 'package:flutter_html/style.dart';
 
 class AboutApp extends StatefulWidget {
   @override
-  createState() => new AboutAppState();
+  createState() => AboutAppState();
 }
 
 class AboutAppState extends State<AboutApp> {
-  final globalKey = new GlobalKey<ScaffoldState>();
+  final globalKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +86,7 @@ class AboutAppState extends State<AboutApp> {
     );
   }
 
+  /// Go back to the screen before the current one
   void moveToLastScreen() {
     Navigator.pop(context, true);
   }

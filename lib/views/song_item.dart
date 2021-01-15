@@ -51,8 +51,8 @@ class SongItem extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(songTitle, maxLines: 1, style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
-                  Text(refineContent(verses[0]), maxLines: 2, style: new TextStyle(fontSize: 18)),
+                  Text(songTitle, maxLines: 1, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
+                  Text(refineContent(verses[0]), maxLines: 2, style: TextStyle(fontSize: 18)),
                   Container(
                     height: 35,
                     child: ListView(
@@ -85,7 +85,7 @@ class SongItem extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.all(5),
           margin: EdgeInsets.only(top: 5, left: 5),
-          decoration: new BoxDecoration( 
+          decoration: BoxDecoration( 
             color: Provider.of<AppSettings>(context).isDarkMode ? ColorUtils.black : ColorUtils.primaryColor,
             border: Border.all(color: Provider.of<AppSettings>(context).isDarkMode ? ColorUtils.white : ColorUtils.secondaryColor),
             borderRadius: BorderRadius.only(topRight: Radius.circular(5), bottomLeft: Radius.circular(5)),
