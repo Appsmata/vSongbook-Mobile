@@ -1,19 +1,16 @@
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:vsongbook/utils/constants.dart';
-import 'package:vsongbook/utils/themes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vsongbook/helpers/app_settings.dart';
-import 'package:vsongbook/screens/app_splash.dart';
-import 'package:vsongbook/screens/app_start.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
+
+import 'utils/app_utils.dart';
+import 'utils/themes.dart';
+import 'services/app_settings.dart';
+import 'views/app_splash.dart';
+import 'views/app_start.dart';
 
 void main() {
-  Crashlytics.instance.enableInDevMode = true;
-  // Pass all uncaught errors from the framework to Crashlytics.
-  FlutterError.onError = Crashlytics.instance.recordFlutterError;
   runApp(MyApplication());
 }
 

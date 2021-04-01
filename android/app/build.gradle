@@ -24,11 +24,28 @@ if (flutterVersionName == null) {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
+def keystorePropertiesFile = rootProject.file('keystore.properties')
 def keystoreProperties = new Properties()
-def keystorePropertiesFile = rootProject.file('key.properties')
+def configured = true
+
 if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+    try {
+        keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+    } catch (IOException e) {
+        configured = false
+        logger.error('Release signing information not found.')
+    }
+}
+else {
+    configured = false
+    logger.error('keystore information not found.')
+}
+
+if (!configured) {
+    logger.error('The app could not be configured for release signing. In app purchases will not be testable. See `example/README.md` for more info and instructions.')
 }
 
 android {
@@ -42,11 +59,11 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.jackson_siro.visongbook"
+        applicationId keystoreProperties['appId']
+        versionCode keystoreProperties['versionCode'].toInteger()
+        versionName keystoreProperties['versionName']
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 92
-        versionName "1.8.3"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -62,10 +79,24 @@ android {
     }
 
     buildTypes {
-        release {
-            //multiDexKeepProguard file('multidex-config.pro')
-            signingConfig signingConfigs.release
+        debug {
+            if (configured) {
+                signingConfig signingConfigs.release
+            } else {
+                signingConfig signingConfigs.debug
+            }
         }
+        release {
+            if (configured) {
+                signingConfig signingConfigs.release
+            } else {
+                signingConfig signingConfigs.debug
+            }
+        }
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
     }
 }
 
@@ -74,13 +105,11 @@ flutter {
 }
 
 dependencies {
+    implementation 'androidx.multidex:multidex:2.0.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    testImplementation 'junit:junit:4.12'
-    implementation 'androidx.multidex:multidex:2.0.0'
-    androidTestImplementation 'androidx.test:runner:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    testImplementation 'junit:junit:4.13.1'
+    testImplementation 'org.mockito:mockito-core:2.17.0'
+    testImplementation 'org.json:json:20180813'
+    androidTestImplementation 'androidx.test:runner:1.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }
-
-apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.crashlytics'
