@@ -1,6 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.jackson_siro.visongbook">
-
+    package="virtual.songbook">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -17,14 +16,13 @@
         </intent>
     </queries>-->
     
-    <application
-        android:name="io.flutter.app.FlutterApplication"
+   <application
         android:label="vSongBook"
         android:allowBackup="true"
         android:supportsRtl="true"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true" >
-        
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -32,6 +30,14 @@
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
+            <meta-data
+              android:name="io.flutter.embedding.android.NormalTheme"
+              android:resource="@style/NormalTheme"
+              />
+            <meta-data
+              android:name="io.flutter.embedding.android.SplashScreenDrawable"
+              android:resource="@drawable/launch_background"
+              />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

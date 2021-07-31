@@ -1,14 +1,14 @@
 name: vsongbook
 description: Freedom to sing anywhere anytime
-version: 1.8.2
+version: 0.0.1
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
-
+  
 dependencies:
   flutter:
     sdk: flutter
-  
+
   animated_floatactionbuttons: ^0.1.0 
   anisi_controls: ^0.0.9
   async: ^2.5.0
