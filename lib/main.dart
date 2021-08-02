@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
+//import 'package:firebase_analytics/firebase_analytics.dart';
+//import 'package:firebase_analytics/observer.dart';
 
 import 'utils/app_utils.dart';
 import 'utils/themes.dart';
 import 'services/app_settings.dart';
-import 'views/app_splash.dart';
-import 'views/app_start.dart';
+import 'ui/pages/app_splash.dart';
+import 'ui/pages/app_start.dart';
 
 void main() {
   runApp(MyApplication());
@@ -36,16 +36,19 @@ class MyApplication extends StatelessWidget {
 }
 
 class _MyApplication extends StatelessWidget {
-  final FirebaseAnalytics analytics = FirebaseAnalytics();
+  //final FirebaseAnalytics analytics = FirebaseAnalytics();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: LangStrings.appName,
-      theme: Provider.of<AppSettings>(context).isDarkMode ? asDarkTheme : asLightTheme,
+      title: AppStrings.appName,
+      debugShowCheckedModeBanner: false,
+      theme: Provider.of<AppSettings>(context).isDarkMode
+          ? asDarkTheme
+          : asLightTheme,
       home: AppStart(),
       navigatorObservers: [
-        FirebaseAnalyticsObserver(analytics: analytics),
+        //FirebaseAnalyticsObserver(analytics: analytics),
       ],
     );
   }

@@ -7,41 +7,39 @@ import '../utils/colors.dart';
 import '../utils/app_utils.dart';
 import '../data/models/book_model.dart';
 import '../data/models/song_model.dart';
-import '../widgets/song_item.dart';
+import '../ui/views/song_item.dart';
 
 class AppSearchDelegate extends SearchDelegate<List> {
-
   String searchStr;
-	List<BookModel> bookList;
-	List<SongModel> songList, filtered;
-  
-	AppSearchDelegate(BuildContext context, this.bookList, this.songList, this.searchStr) {
+  List<BookModel> bookList;
+  List<SongModel> songList, filtered;
+
+  AppSearchDelegate(
+      BuildContext context, this.bookList, this.songList, this.searchStr) {
     filtered = songList;
     query = searchStr;
   }
 
   @override
-  String get searchFieldLabel => LangStrings.searchNow;
+  String get searchFieldLabel => AppStrings.searchNow;
 
-	@override
+  @override
   ThemeData appBarTheme(BuildContext context) {
     return ThemeData(
-			primaryColor: Provider.of<AppSettings>(context).isDarkMode ? ColorUtils.black : ColorUtils.primaryColor,
-			accentIconTheme: IconThemeData(color: Colors.white),
-			primaryIconTheme: IconThemeData(color: Colors.white),
-			textTheme: TextTheme(
-				title: TextStyle(
-						color: Color(0xFFFBF5E8)
-				),
-			),
-			primaryTextTheme: TextTheme(
-				title: TextStyle(
-          color: Colors.white
-				),
-			),
-		);
+      primaryColor: Provider.of<AppSettings>(context).isDarkMode
+          ? ColorUtils.black
+          : ColorUtils.primaryColor,
+      accentIconTheme: IconThemeData(color: Colors.white),
+      primaryIconTheme: IconThemeData(color: Colors.white),
+      textTheme: TextTheme(
+        title: TextStyle(color: Color(0xFFFBF5E8)),
+      ),
+      primaryTextTheme: TextTheme(
+        title: TextStyle(color: Colors.white),
+      ),
+    );
   }
-  
+
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
@@ -50,7 +48,7 @@ class AppSearchDelegate extends SearchDelegate<List> {
         onPressed: () {
           query = '';
           filtered = songList;
-					showSuggestions(context);
+          showSuggestions(context);
         },
       ),
     ];
@@ -58,12 +56,13 @@ class AppSearchDelegate extends SearchDelegate<List> {
 
   @override
   Widget buildLeading(BuildContext context) {
-		return IconButton(
-			icon: AnimatedIcon(icon: AnimatedIcons.menu_arrow, progress: transitionAnimation),
-			onPressed: () {
-				close(context, null);
-			},
-		);
+    return IconButton(
+      icon: AnimatedIcon(
+          icon: AnimatedIcons.menu_arrow, progress: transitionAnimation),
+      onPressed: () {
+        close(context, null);
+      },
+    );
   }
 
   // Function triggered when "ENTER" is pressed.
@@ -84,38 +83,35 @@ class AppSearchDelegate extends SearchDelegate<List> {
   Widget _buildItems(BuildContext context) {
     return Container(
       child: ListView.builder(
-        itemCount: filtered.length,
-        itemBuilder: (context, index) {
-          return SongItem('SongSearch_' + filtered[index].songid.toString(), filtered[index], bookList, context);
-        }
-      ),
+          itemCount: filtered.length,
+          itemBuilder: (context, index) {
+            return SongItem('SongSearch_' + filtered[index].songid.toString(),
+                filtered[index], bookList, context);
+          }),
     );
   }
 
   void filterNow() async {
-    if (query.isNotEmpty)
-    {
+    if (query.isNotEmpty) {
       List<SongModel> tmpList = [];
-      for(int i = 0; i < songList.length; i++) {
-        
+      for (int i = 0; i < songList.length; i++) {
         if (isNumeric(query)) {
-          if(songList[i].number.compareTo(int.parse(query)) == 0){
+          if (songList[i].number.compareTo(int.parse(query)) == 0) {
             tmpList.add(songList[i]);
           }
-        }
-        
-        else if(
-          refineTitle(songList[i].title).toLowerCase().contains(query.toLowerCase()) || 
-          refineTitle(songList[i].alias).toLowerCase().contains(query.toLowerCase()) || 
-          refineTitle(songList[i].content).toLowerCase().contains(query.toLowerCase())
-          ) 
-        {
+        } else if (refineTitle(songList[i].title)
+                .toLowerCase()
+                .contains(query.toLowerCase()) ||
+            refineTitle(songList[i].alias)
+                .toLowerCase()
+                .contains(query.toLowerCase()) ||
+            refineTitle(songList[i].content)
+                .toLowerCase()
+                .contains(query.toLowerCase())) {
           tmpList.add(songList[i]);
         }
-
       }
       filtered = tmpList;
     }
   }
-  
 }

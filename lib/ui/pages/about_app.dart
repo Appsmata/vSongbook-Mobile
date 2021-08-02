@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 
-import '../utils/app_utils.dart';
+import '../../utils/app_utils.dart';
 
 class AboutApp extends StatefulWidget {
   @override
@@ -26,7 +26,7 @@ class AboutAppState extends State<AboutApp> {
           child: ListView(
             children: <Widget>[
               Html(
-                data: LangStrings.appAbout,
+                data: AppStrings.appAbout,
                 style: {
                   "h3": Style(fontSize: FontSize(30.0)),
                   "p": Style(fontSize: FontSize(20.0)),
@@ -39,7 +39,7 @@ class AboutAppState extends State<AboutApp> {
         child: ListView(
           children: <Widget>[
             Html(
-              data: LangStrings.appHistory,
+              data: AppStrings.appHistory,
               style: {
                 "h3": Style(fontSize: FontSize(30.0)),
                 "p": Style(fontSize: FontSize(20.0)),
@@ -53,7 +53,7 @@ class AboutAppState extends State<AboutApp> {
           child: ListView(
             children: <Widget>[
               Html(
-                data: LangStrings.appThanks,
+                data: AppStrings.appThanks,
                 style: {
                   "h3": Style(fontSize: FontSize(30.0)),
                   "p": Style(fontSize: FontSize(20.0)),
@@ -67,12 +67,12 @@ class AboutAppState extends State<AboutApp> {
       onWillPop: () {
         moveToLastScreen();
       },
-      child:  DefaultTabController(
+      child: DefaultTabController(
         length: 3,
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text(LangStrings.aboutTheApp + LangStrings.appName),
+            title: Text(AppStrings.aboutTheApp + AppStrings.appName),
             bottom: TabBar(
               tabs: _Titles,
             ),

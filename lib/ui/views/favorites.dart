@@ -2,40 +2,37 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
-import '../utils/colors.dart';
 import 'package:provider/provider.dart';
-import 'package:anisi_controls/anisi_controls.dart';
 
-import '../services/app_settings.dart';
-import '../data/models/list_item.dart';
-import '../data/models/book_model.dart';
-import '../data/models/song_model.dart';
-import '../data/app_database.dart';
-import '../utils/app_utils.dart';
-import '../utils/preferences.dart';
-import '../views/song_view.dart';
-import '../widgets/song_item.dart';
+import '../../utils/colors.dart';
+import '../../services/app_settings.dart';
+import '../../data/models/book_model.dart';
+import '../../data/models/song_model.dart';
+import '../../data/app_database.dart';
+import '../../utils/app_utils.dart';
+import '../widgets/as_informer.dart';
+import '../widgets/as_loader.dart';
+import '../pages/song_view.dart';
+import 'song_item.dart';
 
-class SongList extends StatefulWidget {
-	final List<BookModel> books;
-  
-  const SongList(this.books);
+class Favorites extends StatefulWidget {
+  final List<BookModel> books;
+
+  const Favorites(this.books);
 
   @override
-  createState() => SongListState();
-
+  createState() => FavoritesState();
 }
 
-class SongListState extends State<SongList> {
+class FavoritesState extends State<Favorites> {
   AppDatabase db = AppDatabase();
 
   AsLoader loader = AsLoader.setUp(ColorUtils.primaryColor);
-  AsInformer notice = AsInformer.setUp(3, LangStrings.noSongs, Colors.red, Colors.transparent, Colors.white, 10);
+  AsInformer notice = AsInformer.setUp(
+      3, AppStrings.noFavs, Colors.red, Colors.transparent, Colors.white, 10);
 
-  SongListState();
+  FavoritesState();
   Future<Database> dbFuture;
-  List<ListItem<BookModel>> selected = [];
-  List<ListItem<BookModel>> bookList;
   List<SongModel> songs = [];
   int book;
 
@@ -47,27 +44,31 @@ class SongListState extends State<SongList> {
 
   /// Method to run anything that needs to be run immediately after Widget build
   void initBuild(BuildContext context) async {
-    String bookstr = await Preferences.getSharedPreferenceStr(SharedPreferenceKeys.selectedBooks);
-    var bookids = bookstr.split(",");
-    book = int.parse(bookids[0]);
     loadListView();
   }
-  
+
   void loadListView() async {
     loader.showWidget();
-    
     dbFuture = db.initializeDatabase();
     dbFuture.then((database) {
-      Future<List<SongModel>> songListFuture = db.getSongList(book);
+      Future<List<SongModel>> songListFuture = db.getFavorites();
       songListFuture.then((songList) {
         setState(() {
           songs = songList;
           loader.hideWidget();
-          if (songs.length == 0) notice.showWidget();
-          else notice.hideWidget();
+          if (songs.length == 0)
+            notice.show();
+          else
+            notice.hide();
         });
       });
     });
+  }
+
+  void setCurrentBook(int _book) {
+    book = _book;
+    songs.clear();
+    loadListView();
   }
 
   @override
@@ -75,7 +76,7 @@ class SongListState extends State<SongList> {
     return Container(
       child: Stack(
         children: <Widget>[
-          Container(
+          /*Container(
             padding: const EdgeInsets.symmetric(horizontal: 5),
             child: Column(
               children: <Widget>[
@@ -84,8 +85,8 @@ class SongListState extends State<SongList> {
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     physics: BouncingScrollPhysics(),
-                    itemCount: widget.books.length,
-                    itemBuilder: bookListView,
+                    itemCount: books.length,
+                    itemBuilder: booksView,
                   ),
                 ),
               ],
@@ -95,18 +96,18 @@ class SongListState extends State<SongList> {
           Container(
             margin: EdgeInsets.only(top: 98),
             child: Divider(),
-          ),
-          
+          ),*/
+
           Container(
-            height: MediaQuery.of(context).size.height - 150,
+            //height: MediaQuery.of(context).size.height - 150,
             padding: const EdgeInsets.symmetric(horizontal: 5),
-            margin: EdgeInsets.only(top: 105),
+            //margin: EdgeInsets.only(top: 105),
             child: ListView.builder(
-              itemCount: songs.length,
-              itemBuilder: (BuildContext context, int index) {
-                return SongItem('SongIndex_' + songs[index].songid.toString(), songs[index], widget.books, context);
-              }
-            ),
+                itemCount: songs.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return SongItem('SongFavs_' + songs[index].songid.toString(),
+                      songs[index], widget.books, context);
+                }),
           ),
           Container(
             height: 200,
@@ -124,28 +125,7 @@ class SongListState extends State<SongList> {
     );
   }
 
-  void setCurrentBook(int _book) {
-    book = _book;
-    songs.clear();
-    loadListView();
-  }
-
-  void onBookSelected(ListItem tapped) {
-    setState(() {
-      tapped.isSelected = !tapped.isSelected;
-    });
-    if (tapped.isSelected) {
-      try {
-        selected.add(tapped);
-      } catch (Exception) {}
-    } else {
-      try {
-        selected.remove(tapped);
-      } catch (Exception) {}
-    }
-  }
-
-  Widget bookListView(BuildContext context, int index) {
+  Widget booksView(BuildContext context, int index) {
     return Container(
       width: 100,
       padding: const EdgeInsets.only(bottom: 5),
@@ -156,9 +136,15 @@ class SongListState extends State<SongList> {
         child: Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(50),
-            side: BorderSide(color: Provider.of<AppSettings>(context).isDarkMode ? ColorUtils.white : ColorUtils.secondaryColor, width: 1.5),
-          ),      
-          color: Provider.of<AppSettings>(context).isDarkMode ? ColorUtils.black : ColorUtils.primaryColor,
+            side: BorderSide(
+                color: Provider.of<AppSettings>(context).isDarkMode
+                    ? ColorUtils.white
+                    : ColorUtils.secondaryColor,
+                width: 1.5),
+          ),
+          color: Provider.of<AppSettings>(context).isDarkMode
+              ? ColorUtils.black
+              : ColorUtils.primaryColor,
           elevation: 5,
           child: Hero(
             tag: widget.books[index].bookid,
@@ -166,9 +152,13 @@ class SongListState extends State<SongList> {
               padding: const EdgeInsets.all(10),
               child: Center(
                 child: Text(
-                  widget.books[index].title + ' (' + widget.books[index].qcount.toString() + ')',
+                  widget.books[index].title +
+                      ' (' +
+                      widget.books[index].qcount.toString() +
+                      ')',
                   style: TextStyle(
-                    fontSize: 15, color: ColorUtils.white,
+                    fontSize: 15,
+                    color: ColorUtils.white,
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,

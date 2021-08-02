@@ -9,8 +9,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  animated_floatactionbuttons: ^0.1.0 
-  anisi_controls: ^0.0.9
+  animated_floatactionbuttons: ^0.1.0
   async: ^2.5.0
   change_app_package_name: ^0.1.2
   cupertino_icons: ^1.0.2
@@ -28,6 +27,7 @@ dependencies:
   json_serializable: ^4.1.0
   matrix_gesture_detector: ^0.1.0
   path_provider: ^2.0.1
+  percent_indicator: ^3.0.1
   provider: ^5.0.0
   responsive_widgets: ^2.0.1
   screenshot: ^0.3.0

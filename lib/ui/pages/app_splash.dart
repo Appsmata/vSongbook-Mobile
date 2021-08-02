@@ -8,7 +8,13 @@ class AppSplash extends StatelessWidget {
     return Container(
       constraints: BoxConstraints.expand(),
       color: Colors.white,
-      child: Center(child: Image.asset('assets/images/appicon.png', height: 64, width: 64)),
+      child: Center(
+        child: Image.asset(
+          'assets/images/appicon.png',
+          height: 64,
+          width: 64,
+        ),
+      ),
     );
   }
 }

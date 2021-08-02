@@ -22,13 +22,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.0"
-  anisi_controls:
-    dependency: "direct main"
-    description:
-      name: anisi_controls
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.9"
   archive:
     dependency: transitive
     description:
@@ -619,7 +612,7 @@ packages:
     source: hosted
     version: "1.11.1"
   percent_indicator:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: percent_indicator
       url: "https://pub.dartlang.org"

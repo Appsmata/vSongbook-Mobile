@@ -2,20 +2,20 @@ import 'dart:async';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:anisi_controls/anisi_controls.dart';
 
-import '../services/app_settings.dart';
-import '../data/models/list_item.dart';
-import '../data/models/book_model.dart';
-import '../services/app_futures.dart';
-import '../data/base/event_object.dart';
-import '../data/callbacks/Book.dart';
-import '../data/app_database.dart';
-import '../utils/colors.dart';
-import '../utils/api_utils.dart';
-import '../utils/app_utils.dart';
-import '../utils/preferences.dart';
-import '../views/app_start.dart';
+import '../../services/app_settings.dart';
+import '../../data/models/list_item.dart';
+import '../../data/models/book_model.dart';
+import '../../services/app_futures.dart';
+import '../../data/base/event_object.dart';
+import '../../data/callbacks/Book.dart';
+import '../../data/app_database.dart';
+import '../../utils/colors.dart';
+import '../../utils/api_utils.dart';
+import '../../utils/app_utils.dart';
+import '../../utils/preferences.dart';
+import '../widgets/as_informer.dart';
+import 'app_start.dart';
 
 class SongBooks extends StatefulWidget {
   SongBooks();
@@ -28,8 +28,9 @@ class SongBooksState extends State<SongBooks> {
   final globalKey = GlobalKey<ScaffoldState>();
 
   var appBar = AppBar();
-  
-  AsInformer progress = AsInformer.setUp(1, LangStrings.fetchingData, ColorUtils.primaryColor, Colors.white, Colors.transparent, 10);
+
+  AsInformer progress = AsInformer.setUp(1, AppStrings.fetchingData,
+      ColorUtils.primaryColor, Colors.white, Colors.transparent, 10);
 
   AppDatabase db = AppDatabase();
   Future<Database> dbFuture;
@@ -48,7 +49,7 @@ class SongBooksState extends State<SongBooks> {
   void initBuild(BuildContext context) async {
     requestData();
   }
-  
+
   void populateData() {
     bookList = [];
     for (int i = 0; i < books.length; i++) {
@@ -91,7 +92,7 @@ class SongBooksState extends State<SongBooks> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => justAMinuteDialog());
-            progress.hideWidget();
+            progress.hide();
             books = eventObject.object;
             populateData();
           });
@@ -104,7 +105,7 @@ class SongBooksState extends State<SongBooks> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => noInternetDialog());
-            progress.hideWidget();
+            progress.hide();
           });
         }
         break;
@@ -115,7 +116,7 @@ class SongBooksState extends State<SongBooks> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => noInternetDialog());
-            progress.hideWidget();
+            progress.hide();
           });
         }
         break;
@@ -136,7 +137,7 @@ class SongBooksState extends State<SongBooks> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(LangStrings.setUpTheApp),
+          title: Text(AppStrings.setUpTheApp),
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.refresh),
@@ -162,7 +163,7 @@ class SongBooksState extends State<SongBooks> {
                 context: context,
                 builder: (BuildContext context) => areYouDoneDialog());
           },
-          tooltip: LangStrings.proceed,
+          tooltip: AppStrings.proceed,
           child: Icon(Icons.check),
         ),
       ),
@@ -179,11 +180,11 @@ class SongBooksState extends State<SongBooks> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  LangStrings.createCollection,
+                  AppStrings.createCollection,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 FlatButton(
-                  child: Text(LangStrings.learnMore),
+                  child: Text(AppStrings.learnMore),
                   onPressed: () {
                     showDialog(
                         context: context,
@@ -231,7 +232,7 @@ class SongBooksState extends State<SongBooks> {
                     valueColor: AlwaysStoppedAnimation(Colors.deepOrange)),
                 Container(
                   margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                  child: Text(LangStrings.gettingReady,
+                  child: Text(AppStrings.gettingReady,
                       style: TextStyle(fontSize: 18)),
                 )
               ],
@@ -245,19 +246,18 @@ class SongBooksState extends State<SongBooks> {
   Widget justAMinuteDialog() {
     return AlertDialog(
       title: Text(
-        LangStrings.justAMinute,
+        AppStrings.justAMinute,
         style: TextStyle(color: Colors.deepOrange, fontSize: 25),
       ),
       content: Text(
-        LangStrings.takeTimeSelecting,
+        AppStrings.takeTimeSelecting,
         style: TextStyle(fontSize: 20),
       ),
       actions: <Widget>[
         Container(
           margin: EdgeInsets.all(5),
           child: FlatButton(
-            child:
-                Text(LangStrings.okayGotIt, style: TextStyle(fontSize: 20)),
+            child: Text(AppStrings.okayGotIt, style: TextStyle(fontSize: 20)),
             color: Colors.deepOrange,
             onPressed: () {
               Navigator.pop(context);
@@ -271,19 +271,18 @@ class SongBooksState extends State<SongBooks> {
   Widget noInternetDialog() {
     return AlertDialog(
       title: Text(
-        LangStrings.areYouConnected,
+        AppStrings.areYouConnected,
         style: TextStyle(color: Colors.deepOrange, fontSize: 25),
       ),
       content: Text(
-        LangStrings.noConnection,
+        AppStrings.noConnection,
         style: TextStyle(fontSize: 20),
       ),
       actions: <Widget>[
         Container(
           margin: EdgeInsets.all(5),
           child: FlatButton(
-            child:
-                Text(LangStrings.okayGotIt, style: TextStyle(fontSize: 20)),
+            child: Text(AppStrings.okayGotIt, style: TextStyle(fontSize: 20)),
             color: Colors.deepOrange,
             textColor: Colors.white,
             onPressed: () {
@@ -294,7 +293,7 @@ class SongBooksState extends State<SongBooks> {
         Container(
           margin: EdgeInsets.all(5),
           child: FlatButton(
-            child: Text(LangStrings.retry, style: TextStyle(fontSize: 20)),
+            child: Text(AppStrings.retry, style: TextStyle(fontSize: 20)),
             color: Colors.deepOrange,
             textColor: Colors.white,
             onPressed: () {
@@ -318,12 +317,12 @@ class SongBooksState extends State<SongBooks> {
             bookList[i].data.title +
             " (" +
             bookList[i].data.qcount +
-            LangStrings.songsPrefix;
+            AppStrings.songsPrefix;
       }
     }
     return AlertDialog(
       title: Text(
-        LangStrings.doneSelecting,
+        AppStrings.doneSelecting,
         style: TextStyle(color: Colors.deepOrange, fontSize: 25),
       ),
       content: Text(
@@ -334,7 +333,7 @@ class SongBooksState extends State<SongBooks> {
         Container(
           margin: EdgeInsets.all(5),
           child: FlatButton(
-            child: Text(LangStrings.goBack, style: TextStyle(fontSize: 20)),
+            child: Text(AppStrings.goBack, style: TextStyle(fontSize: 20)),
             color: Colors.deepOrange,
             textColor: Colors.white,
             onPressed: () {
@@ -345,8 +344,7 @@ class SongBooksState extends State<SongBooks> {
         Container(
           margin: EdgeInsets.all(5),
           child: FlatButton(
-            child:
-                Text(LangStrings.proceed, style: TextStyle(fontSize: 20)),
+            child: Text(AppStrings.proceed, style: TextStyle(fontSize: 20)),
             color: Colors.deepOrange,
             textColor: Colors.white,
             onPressed: () {
@@ -432,7 +430,7 @@ class SongBooksState extends State<SongBooks> {
                         books[index].qcount +
                             " " +
                             books[index].backpath +
-                            LangStrings.songsInside +
+                            AppStrings.songsInside +
                             books[index].content,
                         style: TextStyle(
                             color: bookList[index].isSelected
@@ -460,8 +458,8 @@ class SongBooksState extends State<SongBooks> {
       Book item = selected[i].data;
       int songs = int.parse(item.qcount);
       int cartid = int.parse(item.categoryid);
-      BookModel book = BookModel(cartid, 1, item.title, item.tags, songs,
-          i + 1, item.content, item.backpath);
+      BookModel book = BookModel(cartid, 1, item.title, item.tags, songs, i + 1,
+          item.content, item.backpath);
 
       if (backpathStr.length > 1) {
         if (backpathStr.contains(selected[i].data.backpath))
@@ -488,12 +486,12 @@ class SongBooksState extends State<SongBooks> {
 
   /// Proceed to a newer screen
   void goToNextScreen() {
-    progress.showWidget();
+    progress.show();
     saveData();
 
-    progress.hideWidget();
+    progress.hide();
     Navigator.pushReplacement(
-      context, MaterialPageRoute(builder: (context) => AppStart()));
+        context, MaterialPageRoute(builder: (context) => AppStart()));
   }
 
   /// Go back to the screen before the current one

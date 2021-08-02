@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
-import '../services/app_settings.dart';
-import '../utils/app_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../services/app_settings.dart';
+import '../../utils/app_utils.dart';
 
 class HelpDesk extends StatefulWidget {
   @override
@@ -17,14 +18,14 @@ class HelpDeskState extends State<HelpDesk> {
   @override
   Widget build(BuildContext context) {
     final tabPages = <Widget>[
-      tabContent("help1", LangStrings.helpTab1Content),
-      tabContent("help2", LangStrings.helpTab2Content),
-      tabContent("help3", LangStrings.helpTab3Content),
+      tabContent("help1", AppStrings.helpTab1Content),
+      tabContent("help2", AppStrings.helpTab2Content),
+      tabContent("help3", AppStrings.helpTab3Content),
     ];
     final tabTitles = <Tab>[
-      Tab(text: LangStrings.helpTab1Title),
-      Tab(text: LangStrings.helpTab2Title),
-      Tab(text: LangStrings.helpTab3Title),
+      Tab(text: AppStrings.helpTab1Title),
+      Tab(text: AppStrings.helpTab2Title),
+      Tab(text: AppStrings.helpTab3Title),
     ];
 
     return WillPopScope(
@@ -36,7 +37,7 @@ class HelpDeskState extends State<HelpDesk> {
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text(LangStrings.helpTabPage),
+            title: Text(AppStrings.helpTabPage),
             bottom: TabBar(
               tabs: tabTitles,
             ),

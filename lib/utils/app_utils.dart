@@ -12,7 +12,7 @@ class SharedPreferenceKeys {
   static const String screenAwake = "songbook_screen_awake";
 }
 
-class LangStrings {
+class AppStrings {
   static const String appName = "vSongBook";
   static const String appVersion = " v1.8.2";
   static const String appSlogan = "Freedom to sing anywhere";
@@ -21,6 +21,7 @@ class LangStrings {
   static const String darkMode = "Dark Mode";
   static const String lightMode = "Light Mode";
   static const String screenAwake = "Screen Awake";
+  static const String invalidRequest = "Invalid Request";
   static const String screenAwakeOn =
       "Screen will be ON indefinately when viewing a song";
   static const String screenAwakeOff =
@@ -151,7 +152,7 @@ class LangStrings {
 
   static const String retry = "RETRY";
   static const String songsInside = " songs inside;\n";
-  static const String songsPrefix = " songs).\n";
+  static const String songsPrefix = " songs.\n";
   static const String displaySettings = "Display Preferences";
   static const String okayDone = "OKAY, DONE";
   static const String okayGotIt = "OKAY, GOT IT";

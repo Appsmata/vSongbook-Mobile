@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../services/app_settings.dart';
-import '../utils/app_utils.dart';
+
+import '../../services/app_settings.dart';
+import '../../utils/app_utils.dart';
 
 class Donate extends StatefulWidget {
   @override
@@ -14,16 +15,16 @@ class DonateState extends State<Donate> {
   @override
   Widget build(BuildContext context) {
     final tabPages = <Widget>[
-      tabContent("donation1", LangStrings.donateTab1Content),
-      tabContent("donation2", LangStrings.donateTab2Content),
-      tabContent("donation3", LangStrings.donateTab3Content),
-      tabContent("donation4", LangStrings.donateTab4Content),
+      tabContent("donation1", AppStrings.donateTab1Content),
+      tabContent("donation2", AppStrings.donateTab2Content),
+      tabContent("donation3", AppStrings.donateTab3Content),
+      tabContent("donation4", AppStrings.donateTab4Content),
     ];
     final tabTitles = <Tab>[
-      Tab(text: LangStrings.donateTab1Title),
-      Tab(text: LangStrings.donateTab2Title),
-      Tab(text: LangStrings.donateTab3Title),
-      Tab(text: LangStrings.donateTab4Title),
+      Tab(text: AppStrings.donateTab1Title),
+      Tab(text: AppStrings.donateTab2Title),
+      Tab(text: AppStrings.donateTab3Title),
+      Tab(text: AppStrings.donateTab4Title),
     ];
 
     return WillPopScope(
@@ -35,7 +36,7 @@ class DonateState extends State<Donate> {
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text(LangStrings.donateTabPage),
+            title: Text(AppStrings.donateTabPage),
             bottom: TabBar(
               tabs: tabTitles,
             ),

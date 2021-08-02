@@ -7,16 +7,16 @@ import 'package:sqflite/sqflite.dart';
 //import 'package:speech_to_text/speech_recognition_result.dart';
 //import 'package:speech_to_text/speech_to_text.dart';
 
-import '../utils/colors.dart';
-import '../utils/app_utils.dart';
-import '../widgets/favorites.dart';
-import '../widgets/song_list.dart';
-import '../widgets/song_pad.dart';
-import '../widgets/nav_drawer.dart';
-import '../data/models/book_model.dart';
-import '../data/models/song_model.dart';
-import '../data/app_database.dart';
-import '../services/app_search_delegate.dart';
+import '../../utils/colors.dart';
+import '../../utils/app_utils.dart';
+import '../../data/models/book_model.dart';
+import '../../data/models/song_model.dart';
+import '../../data/app_database.dart';
+import '../../services/app_search_delegate.dart';
+import '../views/favorites.dart';
+import '../views/song_list.dart';
+import '../views/song_pad.dart';
+import '../views/nav_drawer.dart';
 
 class HomeView extends StatefulWidget {
   HomeView();
@@ -36,8 +36,8 @@ class HomeViewState extends State<HomeView> {
   List<BookModel> bookList = [];
   List<SongModel> songList = [];
   String searchStr = '';
-	int count = 0;
-  
+  int count = 0;
+
   bool _hasSpeech = false;
   double level = 0.0;
   double minSoundLevel = 50000;
@@ -50,13 +50,13 @@ class HomeViewState extends State<HomeView> {
   //List<LocaleName> _localeNames = [];
   //final SpeechToText speech = SpeechToText();
 
-
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => updateBookList(context));
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => updateBookList(context));
   }
-  
+
   /*
   Future<void> initSpeechState() async {
     var hasSpeech = await speech.initialize(
@@ -179,7 +179,7 @@ class HomeViewState extends State<HomeView> {
     SongList home = SongList(bookList);
     Favorites likes = Favorites(bookList);
     SongPad drafts = SongPad(bookList);
-    
+
     final appPages = <Widget>[
       Center(child: home),
       Center(child: likes),
@@ -200,22 +200,23 @@ class HomeViewState extends State<HomeView> {
         key: _scaffoldKey,
         appBar: AppBar(
           iconTheme: IconThemeData(color: ColorUtils.white),
-          title: const Text(LangStrings.appName),
+          title: const Text(AppStrings.appName),
           centerTitle: true,
           bottom: TabBar(tabs: appTabs),
           actions: <Widget>[
             IconButton(
-              tooltip: LangStrings.searchNow,
+              tooltip: AppStrings.searchNow,
               icon: const Icon(Icons.search),
               onPressed: () async {
                 final List selected = await showSearch(
                   context: context,
-                  delegate: AppSearchDelegate(context, bookList, songList, searchStr),
+                  delegate:
+                      AppSearchDelegate(context, bookList, songList, searchStr),
                 );
               },
             ),
             IconButton(
-              tooltip: LangStrings.searchNow,
+              tooltip: AppStrings.searchNow,
               icon: const Icon(Icons.mic),
               onPressed: () async {
                 //!_hasSpeech || speech.isListening ? null : startListening;
@@ -223,13 +224,13 @@ class HomeViewState extends State<HomeView> {
             ),
           ],
         ),
-        body: Container(              
-          child:
-            TabBarView(children: appPages),
-          ),
+        body: Container(
+          child: TabBarView(children: appPages),
+        ),
         drawer: Drawer(child: navDrawer),
       ),
     );
   }
+
   static Widget buildProgressIndicator(BuildContext context) => const Center();
 }

@@ -19,25 +19,24 @@ Future<List<Book>> fetchBooks(String responseBody) async {
 }
 
 Future<EventObject> getSongbooks() async {
+  String apiUrl = APIConstants.baseUrl + APIOperations.booksSelect;
+  var request = http.Request('GET', Uri.parse(apiUrl));
   try {
-    String apiUrl = APIConstants.baseUrl + APIOperations.booksSelect;
-    var request = http.Request('GET', Uri.parse(apiUrl));
-
     http.StreamedResponse response = await request.send();
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == APIResponseCode.scOK) {
       String apiResponse = await response.stream.bytesToString();
 
-      List<Map<String, dynamic>> books = 
-        List<Map<String, dynamic>>.from(json.decode(apiResponse)["results"]);
-      return EventObject(
-          id: EventConstants.requestSuccessful, object: books);
+      List<Map<String, dynamic>> books =
+          List<Map<String, dynamic>>.from(json.decode(apiResponse)["results"]);
+      return EventObject(id: EventConstants.requestSuccessful, object: books);
     } else {
       return EventObject(id: EventConstants.requestUnsuccessful);
     }
-  } 
-  catch (Exception) {
+  } catch (Exception) {
     return EventObject();
+  } on TimeoutException catch (_) {
+    return EventObject(id: EventConstants.requestUnsuccessful);
   }
 }
 
@@ -51,24 +50,25 @@ Future<List<Song>> fetchSongs(String responseBody) async {
 }
 
 Future<EventObject> getSongs(String books) async {
+  String apiUrl =
+      APIConstants.baseUrl + APIOperations.postsSelect + "?books=" + books;
+  print("Url: " + apiUrl);
+  var request = http.Request('GET', Uri.parse(apiUrl));
   try {
-    String apiUrl = APIConstants.baseUrl + APIOperations.postsSelect+ "?books=" + books;
-    var request = http.Request('GET', Uri.parse(apiUrl));
-
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
       String apiResponse = await response.stream.bytesToString();
 
-      List<Map<String, dynamic>> songs = 
-        List<Map<String, dynamic>>.from(json.decode(apiResponse)["results"]);
-      return EventObject(
-          id: EventConstants.requestSuccessful, object: songs);
+      List<Map<String, dynamic>> songs =
+          List<Map<String, dynamic>>.from(json.decode(apiResponse)["results"]);
+      return EventObject(id: EventConstants.requestSuccessful, object: songs);
     } else {
       return EventObject(id: EventConstants.requestUnsuccessful);
     }
-  } 
-  catch (Exception) {
+  } catch (Exception) {
     return EventObject();
+  } on TimeoutException catch (_) {
+    return EventObject(id: EventConstants.requestUnsuccessful);
   }
 }

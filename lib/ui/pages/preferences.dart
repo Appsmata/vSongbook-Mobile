@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../utils/colors.dart';
-import '../utils/app_utils.dart';
-import '../services/app_settings.dart';
+import '../../utils/colors.dart';
+import '../../utils/app_utils.dart';
+import '../../services/app_settings.dart';
 
 class Preferences extends StatefulWidget {
   @override
@@ -15,7 +15,6 @@ class PreferencesState extends State<Preferences> {
 
   @override
   Widget build(BuildContext context) {
-    
     return WillPopScope(
       onWillPop: () {
         moveToLastScreen();
@@ -23,28 +22,27 @@ class PreferencesState extends State<Preferences> {
       child: Scaffold(
         key: globalKey,
         appBar: AppBar(
-          title: Text(LangStrings.appName + LangStrings.appSettings),
+          title: Text(AppStrings.appName + AppStrings.appSettings),
         ),
-        body: ListView(
-          children: <Widget>[
-            settingOption1(),
-            Divider(),
-            settingOption2(),
-            Divider(),
-          ]
-        ),
+        body: ListView(children: <Widget>[
+          settingOption1(),
+          Divider(),
+          settingOption2(),
+          Divider(),
+        ]),
       ),
     );
   }
 
-  Widget settingOption1()
-  {
+  Widget settingOption1() {
     return Consumer<AppSettings>(builder: (context, AppSettings settings, _) {
       return ListTile(
-        leading: Icon(settings.isDarkMode ? Icons.brightness_4 : Icons.brightness_7),
-        title: Text(LangStrings.appTheme),
-        subtitle: Text((settings.isDarkMode ? LangStrings.darkMode : LangStrings.lightMode)),
-        onTap: () { },
+        leading:
+            Icon(settings.isDarkMode ? Icons.brightness_4 : Icons.brightness_7),
+        title: Text(AppStrings.appTheme),
+        subtitle: Text(
+            (settings.isDarkMode ? AppStrings.darkMode : AppStrings.lightMode)),
+        onTap: () {},
         trailing: Switch(
           onChanged: (bool value) => settings.setDarkMode(value),
           value: settings.isDarkMode,
@@ -53,14 +51,15 @@ class PreferencesState extends State<Preferences> {
     });
   }
 
-  Widget settingOption2()
-  {
+  Widget settingOption2() {
     return Consumer<AppSettings>(builder: (context, AppSettings settings, _) {
       return ListTile(
         onTap: () {},
         leading: Icon(Icons.settings_applications),
-        title: Text(LangStrings.screenAwake),
-        subtitle: Text((settings.isScreenAwake ? LangStrings.screenAwakeOn : LangStrings.screenAwakeOff)),
+        title: Text(AppStrings.screenAwake),
+        subtitle: Text((settings.isScreenAwake
+            ? AppStrings.screenAwakeOn
+            : AppStrings.screenAwakeOff)),
         trailing: Switch(
           onChanged: (bool value) => settings.setScreenAwake(value),
           value: settings.isScreenAwake,

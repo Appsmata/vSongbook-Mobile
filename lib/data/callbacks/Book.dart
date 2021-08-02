@@ -2,15 +2,12 @@ class Book {
   String categoryid, title, tags, qcount, content, backpath;
 
   Book(
-      {
-        this.categoryid,
-        this.title,
-        this.tags,
-        this.qcount,
-        this.content,
-        this.backpath
-      }
-    );
+      {this.categoryid,
+      this.title,
+      this.tags,
+      this.qcount,
+      this.content,
+      this.backpath});
 
   Book.fromJson(Map<String, dynamic> json) {
     categoryid = json['categoryid'];
@@ -30,5 +27,9 @@ class Book {
     data['content'] = this.content;
     data['backpath'] = this.backpath;
     return data;
+  }
+
+  static List<Book> fromData(List<Map<String, dynamic>> data) {
+    return data.map((cat) => Book.fromJson(cat)).toList();
   }
 }

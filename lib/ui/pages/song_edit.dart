@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../services/app_settings.dart';
-import '../data/app_database.dart';
-import '../data/models/song_model.dart';
-import '../utils/app_utils.dart';
+import '../../services/app_settings.dart';
+import '../../data/app_database.dart';
+import '../../data/models/song_model.dart';
+import '../../utils/app_utils.dart';
 
 class SongEdit extends StatefulWidget {
   final String appBarTitle;
@@ -97,8 +97,8 @@ class SongEditState extends State<SongEdit> {
                     updateTitle();
                   },
                   decoration: InputDecoration(
-                      labelText: LangStrings.songTitle,
-                      hintText: LangStrings.songTitle,
+                      labelText: AppStrings.songTitle,
+                      hintText: AppStrings.songTitle,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0))),
                 ),
@@ -112,9 +112,9 @@ class SongEditState extends State<SongEdit> {
                     updateContent();
                   },
                   decoration: InputDecoration(
-                      labelText: LangStrings.songContent,
-                      hintText: LangStrings.songContent,
-                      //helperText: LangStrings.SongContent,
+                      labelText: AppStrings.songContent,
+                      hintText: AppStrings.songContent,
+                      //helperText: AppStrings.SongContent,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0))),
                   maxLines: 15,
@@ -151,8 +151,8 @@ class SongEditState extends State<SongEdit> {
                     updateKey();
                   },
                   decoration: InputDecoration(
-                      labelText: LangStrings.songKey,
-                      hintText: LangStrings.songKey,
+                      labelText: AppStrings.songKey,
+                      hintText: AppStrings.songKey,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0))),
                 ),
@@ -166,9 +166,9 @@ class SongEditState extends State<SongEdit> {
                     updateContent();
                   },
                   decoration: InputDecoration(
-                      labelText: LangStrings.songNotes,
-                      hintText: LangStrings.songNotes,
-                      //helperText: LangStrings.SongContent,
+                      labelText: AppStrings.songNotes,
+                      hintText: AppStrings.songNotes,
+                      //helperText: AppStrings.SongContent,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0))),
                   maxLines: 3,
@@ -183,8 +183,8 @@ class SongEditState extends State<SongEdit> {
                     updateAlias();
                   },
                   decoration: InputDecoration(
-                      labelText: LangStrings.songNotes,
-                      hintText: LangStrings.songNotes,
+                      labelText: AppStrings.songNotes,
+                      hintText: AppStrings.songNotes,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0))),
                 ),

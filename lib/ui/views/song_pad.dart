@@ -3,33 +3,34 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:anisi_controls/anisi_controls.dart';
 
-import '../services/app_settings.dart';
-import '../data/models/book_model.dart';
-import '../data/models/song_model.dart';
-import '../data/app_database.dart';
-import '../views/song_edit.dart';
-import '../widgets/song_item.dart';
-import '../utils/app_utils.dart';
-import '../utils/db_utils.dart';
-import '../utils/colors.dart';
+import '../../services/app_settings.dart';
+import '../../data/models/book_model.dart';
+import '../../data/models/song_model.dart';
+import '../../data/app_database.dart';
+import '../../utils/app_utils.dart';
+import '../../utils/db_utils.dart';
+import '../../utils/colors.dart';
+import '../widgets/as_informer.dart';
+import '../widgets/as_loader.dart';
+import '../pages/song_edit.dart';
+import 'song_item.dart';
 
 class SongPad extends StatefulWidget {
-	final List<BookModel> books;
+  final List<BookModel> books;
 
   const SongPad(this.books);
 
   @override
   createState() => SongPadState();
-
 }
 
 class SongPadState extends State<SongPad> {
   AppDatabase db = AppDatabase();
 
   AsLoader loader = AsLoader.setUp(ColorUtils.primaryColor);
-  AsInformer notice = AsInformer.setUp(3, LangStrings.noDrafts, Colors.red, Colors.transparent, Colors.white, 10);
+  AsInformer notice = AsInformer.setUp(
+      3, AppStrings.noDrafts, Colors.red, Colors.transparent, Colors.white, 10);
 
   SongPadState();
   Future<Database> dbFuture;
@@ -46,7 +47,7 @@ class SongPadState extends State<SongPad> {
   void initBuild(BuildContext context) async {
     loadListView();
   }
-  
+
   void loadListView() {
     loader.showWidget();
     dbFuture = db.initializeDatabase();
@@ -56,8 +57,10 @@ class SongPadState extends State<SongPad> {
         setState(() {
           songs = songList;
           loader.hideWidget();
-          if (songs.length == 0) notice.showWidget();
-          else notice.hideWidget();
+          if (songs.length == 0)
+            notice.show();
+          else
+            notice.hide();
         });
       });
     });
@@ -66,17 +69,17 @@ class SongPadState extends State<SongPad> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Stack(  
-        children: <Widget>[          
+      child: Stack(
+        children: <Widget>[
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 5),
             child: ListView.builder(
-              itemCount: songs.length,
-              //itemBuilder: songListView,
-              itemBuilder: (BuildContext context, int index) {
-                return SongItem('SongDraft_' + songs[index].songid.toString(), songs[index], widget.books, context);
-              }
-            ),
+                itemCount: songs.length,
+                //itemBuilder: songListView,
+                itemBuilder: (BuildContext context, int index) {
+                  return SongItem('SongDraft_' + songs[index].songid.toString(),
+                      songs[index], widget.books, context);
+                }),
           ),
           Container(
             height: 200,
@@ -95,7 +98,7 @@ class SongPadState extends State<SongPad> {
                 left: MediaQuery.of(context).size.width - 100),
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: FloatingActionButton(
-              tooltip: LangStrings.addASong,
+              tooltip: AppStrings.addASong,
               child: Icon(Icons.add),
               onPressed: newSong,
             ),
@@ -106,19 +109,19 @@ class SongPadState extends State<SongPad> {
   }
 
   void newSong() {
-    SongModel song = SongModel(0, Columns.ownsongs, "S", 0, "", "", "", "", "", 0, "");
-    navigateToDraft(song, LangStrings.draftASong);
+    SongModel song =
+        SongModel(0, Columns.ownsongs, "S", 0, "", "", "", "", "", 0, "");
+    navigateToDraft(song, AppStrings.draftASong);
   }
 
   void navigateToDraft(SongModel song, String title) async {
-      bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return SongEdit(song, title);
-      }
-    ));
+    bool result =
+        await Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return SongEdit(song, title);
+    }));
 
     if (result == true) {
       loadListView();
     }
   }
-
 }
