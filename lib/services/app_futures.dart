@@ -52,7 +52,6 @@ Future<List<Song>> fetchSongs(String responseBody) async {
 Future<EventObject> getSongs(String books) async {
   String apiUrl =
       APIConstants.baseUrl + APIOperations.postsSelect + "?books=" + books;
-  print("Url: " + apiUrl);
   var request = http.Request('GET', Uri.parse(apiUrl));
   try {
     http.StreamedResponse response = await request.send();

@@ -1,31 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-import '../../services/app_settings.dart';
-import '../../utils/app_utils.dart';
+import '../../../services/app_settings.dart';
+import '../../../utils/app_utils.dart';
 
-class HelpDesk extends StatefulWidget {
+class Donate extends StatefulWidget {
   @override
-  createState() => HelpDeskState();
+  createState() => DonateState();
 }
 
-class HelpDeskState extends State<HelpDesk> {
+class DonateState extends State<Donate> {
   final globalKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     final tabPages = <Widget>[
-      tabContent("help1", AppStrings.helpTab1Content),
-      tabContent("help2", AppStrings.helpTab2Content),
-      tabContent("help3", AppStrings.helpTab3Content),
+      tabContent("donation1", AppStrings.donateTab1Content),
+      tabContent("donation2", AppStrings.donateTab2Content),
+      tabContent("donation3", AppStrings.donateTab3Content),
+      tabContent("donation4", AppStrings.donateTab4Content),
     ];
     final tabTitles = <Tab>[
-      Tab(text: AppStrings.helpTab1Title),
-      Tab(text: AppStrings.helpTab2Title),
-      Tab(text: AppStrings.helpTab3Title),
+      Tab(text: AppStrings.donateTab1Title),
+      Tab(text: AppStrings.donateTab2Title),
+      Tab(text: AppStrings.donateTab3Title),
+      Tab(text: AppStrings.donateTab4Title),
     ];
 
     return WillPopScope(
@@ -37,7 +36,7 @@ class HelpDeskState extends State<HelpDesk> {
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text(AppStrings.helpTabPage),
+            title: Text(AppStrings.donateTabPage),
             bottom: TabBar(
               tabs: tabTitles,
             ),
@@ -69,7 +68,6 @@ class HelpDeskState extends State<HelpDesk> {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: Image(
                 image: AssetImage("assets/images/" + image + ".png"),
-                height: 200.0,
               ),
             ),
           ),
@@ -79,14 +77,9 @@ class HelpDeskState extends State<HelpDesk> {
               child: Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Html(
-                  data: strText,
-                  style: {
-                    "html": Style(
-                      fontSize: FontSize(30.0),
-                    ),
-                  },
-                  onLinkTap: (url) => launchURL(url),
+                child: Text(
+                  strText,
+                  style: TextStyle(fontSize: 30),
                 ),
               ),
             ),
@@ -94,10 +87,6 @@ class HelpDeskState extends State<HelpDesk> {
         ],
       ),
     );
-  }
-
-  launchURL(String url) async {
-    if (await canLaunch(url)) await launch(url);
   }
 
   /// Go back to the screen before the current one

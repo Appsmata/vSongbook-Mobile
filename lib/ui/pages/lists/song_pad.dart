@@ -4,17 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../../services/app_settings.dart';
-import '../../data/models/book_model.dart';
-import '../../data/models/song_model.dart';
-import '../../data/app_database.dart';
-import '../../utils/app_utils.dart';
-import '../../utils/db_utils.dart';
-import '../../utils/colors.dart';
-import '../widgets/as_informer.dart';
-import '../widgets/as_loader.dart';
-import '../pages/song_edit.dart';
-import 'song_item.dart';
+import '../../../services/app_settings.dart';
+import '../../../data/models/book_model.dart';
+import '../../../data/models/song_model.dart';
+import '../../../data/app_database.dart';
+import '../../../utils/app_utils.dart';
+import '../../../utils/db_utils.dart';
+import '../../../utils/colors.dart';
+import '../../widgets/as_informer.dart';
+import '../../widgets/as_loader.dart';
+import '../songs/song_edit.dart';
+import '../songs/song_item.dart';
 
 class SongPad extends StatefulWidget {
   final List<BookModel> books;

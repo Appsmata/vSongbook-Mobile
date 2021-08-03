@@ -13,9 +13,9 @@ import '../../data/models/book_model.dart';
 import '../../data/models/song_model.dart';
 import '../../data/app_database.dart';
 import '../../services/app_search_delegate.dart';
-import '../views/favorites.dart';
-import '../views/song_list.dart';
-import '../views/song_pad.dart';
+import '../pages/lists/favorites.dart';
+import '../pages/lists/song_list.dart';
+import 'lists/song_pad.dart';
 import '../views/nav_drawer.dart';
 
 class HomeView extends StatefulWidget {
@@ -225,7 +225,10 @@ class HomeViewState extends State<HomeView> {
           ],
         ),
         body: Container(
-          child: TabBarView(children: appPages),
+          child: TabBarView(
+            children: appPages,
+            physics: NeverScrollableScrollPhysics(),
+          ),
         ),
         drawer: Drawer(child: navDrawer),
       ),

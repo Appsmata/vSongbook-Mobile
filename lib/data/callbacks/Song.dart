@@ -57,4 +57,8 @@ class Song {
     data['userid'] = this.userid;
     return data;
   }
+  
+  static List<Song> fromData(List<Map<String, dynamic>> data) {
+    return data.map((cat) => Song.fromJson(cat)).toList();
+  }
 }

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../services/app_settings.dart';
-import '../utils/app_base.dart';
+import '../services/app_helper.dart';
 import '../utils/colors.dart';
 import '../utils/app_utils.dart';
 import '../data/models/book_model.dart';
 import '../data/models/song_model.dart';
-import '../ui/views/song_item.dart';
+import '../ui/pages/songs/song_item.dart';
 
 class AppSearchDelegate extends SearchDelegate<List> {
   String searchStr;

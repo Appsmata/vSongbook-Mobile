@@ -3,10 +3,10 @@ import 'package:provider/provider.dart';
 
 import '../../utils/app_utils.dart';
 import '../../services/app_settings.dart';
-import '../pages/song_books.dart';
-import '../pages/about_app.dart';
-import '../pages/donate.dart';
-import '../pages/help_desk.dart';
+import '../pages/lists/song_books.dart';
+import '../pages/info/about_app.dart';
+import '../pages/info/donate.dart';
+import '../pages/info/help_desk.dart';
 import '../pages/preferences.dart';
 
 class NavDrawer extends StatefulWidget {

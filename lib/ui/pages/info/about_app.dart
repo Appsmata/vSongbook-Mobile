@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 
-import '../../utils/app_utils.dart';
+import '../../../utils/app_utils.dart';
 
 class AboutApp extends StatefulWidget {
   @override

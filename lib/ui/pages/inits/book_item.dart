@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../data/models/list_item.dart';
-import '../../services/app_settings.dart';
-import '../../utils/app_utils.dart';
-import '../../data/callbacks/Book.dart';
+import '../../../data/models/list_item.dart';
+import '../../../services/app_settings.dart';
+import '../../../utils/app_utils.dart';
+import '../../../data/callbacks/Book.dart';
 
 // ignore: must_be_immutable
 class BookItem extends StatelessWidget {

@@ -42,7 +42,7 @@ class _MyApplication extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: AppStrings.appName,
-      debugShowCheckedModeBanner: false,
+      //debugShowCheckedModeBanner: false,
       theme: Provider.of<AppSettings>(context).isDarkMode
           ? asDarkTheme
           : asLightTheme,

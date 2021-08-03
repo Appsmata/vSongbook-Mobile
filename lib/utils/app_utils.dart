@@ -16,6 +16,7 @@ class AppStrings {
   static const String appName = "vSongBook";
   static const String appVersion = " v1.8.2";
   static const String appSlogan = "Freedom to sing anywhere";
+  static const String appBgImage = "assets/images/bg.jpg";
 
   static const String appTheme = "Display Theme";
   static const String darkMode = "Dark Mode";

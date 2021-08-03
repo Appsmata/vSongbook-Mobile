@@ -1,19 +1,18 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:provider/provider.dart';
 
-import '../../utils/colors.dart';
-import '../../services/app_settings.dart';
-import '../../data/models/book_model.dart';
-import '../../data/models/song_model.dart';
-import '../../data/app_database.dart';
-import '../../utils/app_utils.dart';
-import '../widgets/as_informer.dart';
-import '../widgets/as_loader.dart';
-import '../pages/song_view.dart';
-import 'song_item.dart';
+import '../../../utils/colors.dart';
+import '../../../services/app_settings.dart';
+import '../../../data/models/book_model.dart';
+import '../../../data/models/song_model.dart';
+import '../../../data/app_database.dart';
+import '../../../utils/app_utils.dart';
+import '../../widgets/as_informer.dart';
+import '../../widgets/as_loader.dart';
+import '../songs/song_view.dart';
+import '../songs/song_item.dart';
 
 class Favorites extends StatefulWidget {
   final List<BookModel> books;

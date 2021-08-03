@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../services/app_settings.dart';
-import '../../data/app_database.dart';
-import '../../data/models/song_model.dart';
-import '../../utils/app_utils.dart';
+import '../../../services/app_settings.dart';
+import '../../../data/app_database.dart';
+import '../../../data/models/song_model.dart';
+import '../../../utils/app_utils.dart';
 
 class SongEdit extends StatefulWidget {
   final String appBarTitle;

@@ -1,22 +1,22 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-import '../../services/app_futures.dart';
-import '../../data/base/event_object.dart';
-import '../../utils/preferences.dart';
-import '../../utils/api_utils.dart';
-import '../../utils/app_utils.dart';
-import '../../utils/colors.dart';
-import '../../data/app_database.dart';
-import '../../data/callbacks/Song.dart';
-import '../../data/models/song_model.dart';
-import '../widgets/as_line_progress.dart';
-import '../widgets/as_informer.dart';
-import '../widgets/as_loader.dart';
-import '../widgets/alerts/alert.dart';
-import '../widgets/alerts/alert_button.dart';
-import '../widgets/alerts/alert_style.dart';
-import 'app_start.dart';
+import '../../../services/app_futures.dart';
+import '../../../data/base/event_object.dart';
+import '../../../utils/preferences.dart';
+import '../../../utils/api_utils.dart';
+import '../../../utils/app_utils.dart';
+import '../../../utils/colors.dart';
+import '../../../data/app_database.dart';
+import '../../../data/callbacks/Song.dart';
+import '../../../data/models/song_model.dart';
+import '../../widgets/as_line_progress.dart';
+import '../../widgets/as_informer.dart';
+import '../../widgets/as_loader.dart';
+import '../../widgets/alerts/alert.dart';
+import '../../widgets/alerts/alert_button.dart';
+import '../../widgets/alerts/alert_style.dart';
+import '../app_start.dart';
 
 class SongsLoad extends StatefulWidget {
   @override
@@ -61,8 +61,9 @@ class SongsLoadState extends State<SongsLoad> {
       setState(() {
         switch (eventObject.id) {
           case EventConstants.requestSuccessful:
-            songs = eventObject.object;
-            _goToNextScreen();
+            songs = [];
+            songs = Song.fromData(eventObject.object);
+            goToNextScreen();
             break;
 
           case EventConstants.requestUnsuccessful:
@@ -217,7 +218,7 @@ class SongsLoadState extends State<SongsLoad> {
   }
 
   /// Proceed to a newer screen
-  Future<void> _goToNextScreen() async {
+  Future<void> goToNextScreen() async {
     await saveData();
     Preferences.setSongsLoaded(true);
     Navigator.pushReplacement(

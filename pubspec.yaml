@@ -11,6 +11,7 @@ dependencies:
 
   animated_floatactionbuttons: ^0.1.0
   async: ^2.5.0
+  card_swiper: ^1.0.2
   change_app_package_name: ^0.1.2
   cupertino_icons: ^1.0.2
   firebase_analytics: ^7.1.1
@@ -39,7 +40,6 @@ dependencies:
   swipedetector: ^1.2.0
   test: ^1.15.7
   url_launcher: ^6.0.3
-  vertical_tabs: ^0.2.0
   wakelock: ^0.2.1
 
 dev_dependencies:

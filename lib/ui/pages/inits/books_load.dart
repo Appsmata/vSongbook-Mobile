@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../services/app_settings.dart';
-import '../../services/app_db_helper.dart';
-import '../../services/app_futures.dart';
-import '../../data/models/list_item.dart';
-import '../../data/base/event_object.dart';
-import '../../data/callbacks/Book.dart';
-import '../../utils/api_utils.dart';
-import '../../utils/app_utils.dart';
-import '../../utils/colors.dart';
-import '../../ui/views/book_item.dart';
-import '../widgets/as_informer.dart';
-import '../widgets/alerts/alert.dart';
-import '../widgets/alerts/alert_button.dart';
-import '../widgets/alerts/alert_style.dart';
+import '../../../services/app_settings.dart';
+import '../../../services/app_helper.dart';
+import '../../../services/app_futures.dart';
+import '../../../data/models/list_item.dart';
+import '../../../data/base/event_object.dart';
+import '../../../data/callbacks/Book.dart';
+import '../../../utils/api_utils.dart';
+import '../../../utils/app_utils.dart';
+import '../../../utils/colors.dart';
+import '../../widgets/as_informer.dart';
+import '../../widgets/alerts/alert.dart';
+import '../../widgets/alerts/alert_button.dart';
+import '../../widgets/alerts/alert_style.dart';
+import '../info/about_app.dart';
+import '../info/donate.dart';
+import '../info/help_desk.dart';
+import 'book_item.dart';
 import 'songs_load.dart';
-import 'about_app.dart';
-import 'donate.dart';
-import 'help_desk.dart';
 
 class BooksLoad extends StatefulWidget {
   @override
@@ -32,8 +32,7 @@ class BooksLoadState extends State<BooksLoad> {
   AsInformer informer = AsInformer.setUp(1, AppStrings.fetchingData,
       ColorUtils.primaryColor, Colors.transparent, Colors.white, 10);
 
-  List<ListItem<Book>> selected = [];
-  List<ListItem<Book>> bookList;
+  List<ListItem<Book>> selected = [], bookList = [];
   List<Book> books = [];
 
   @override
@@ -409,8 +408,7 @@ class BooksLoadState extends State<BooksLoad> {
   /// Proceed to a newer screen
   Future<void> goToNextScreen() async {
     informer.show();
-    AppDbHelper dbHelper = new AppDbHelper();
-    await dbHelper.saveBooks(selected);
+    await saveBooks(selected);
     informer.hide();
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => SongsLoad()));

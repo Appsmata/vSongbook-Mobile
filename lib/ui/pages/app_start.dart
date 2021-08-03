@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../utils/preferences.dart';
-import 'books_load.dart';
-import 'songs_load.dart';
+import 'inits/books_load.dart';
+import 'inits/songs_load.dart';
 import 'home_view.dart';
 
 class AppStart extends StatefulWidget {
