@@ -103,11 +103,13 @@ class SongViewState extends State<SongView> {
         (int index) {
           return Tab(
             child: Center(
-              child: Text(verseInfos[index],
-                  style: TextStyle(
-                      fontSize: 35,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black)),
+              child: Text(
+                verseInfos[index],
+                style: TextStyle(
+                    fontSize: 35,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
+              ),
             ),
           );
         },
@@ -139,7 +141,9 @@ class SongViewState extends State<SongView> {
         verseTitle(verseTitles[index]),
         Container(
           margin: EdgeInsets.only(
-              top: MediaQuery.of(context).size.height - 165, left: 15),
+            top: MediaQuery.of(context).size.height - 165,
+            left: 15,
+          ),
           child: Row(children: [
             copyVerse(index, lyrics, context),
             shareVerse(song, index, lyrics),

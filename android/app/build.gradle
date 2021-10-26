@@ -58,7 +58,7 @@ android {
         versionCode keystoreProperties['versionCode'].toInteger()
         versionName keystoreProperties['versionName']
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 30
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
